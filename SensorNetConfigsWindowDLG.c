@@ -1,5 +1,6 @@
 #include "GUILogic.h"
 #include "DIALOG.h"
+#include "qspi.h"
 
 #define ID_WINDOW_0  (GUI_ID_USER + 0x06)
 #define ID_TEXT_0  (GUI_ID_USER + 0x07)

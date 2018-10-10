@@ -18,7 +18,6 @@ extern void QSPI_read_qspi_aRxBuffer (void);
 extern void QSPI_write_qspi_aTxBuffer (void);
 extern void QSPI_check (void);
 
-
 #endif /* __QSPI_H */
 
 

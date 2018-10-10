@@ -1,6 +1,7 @@
 /*------------------------------------------------------------------*/
 #include "qspi.h"
 #include "global_var.h"
+#include "string.h"
 
 static QSPI_Info pQSPI_Info;
 unsigned char status;
@@ -12,25 +13,6 @@ unsigned char qspi_aTxBuffer[BUFFER_SIZE];
 unsigned char qspi_aRxBuffer[BUFFER_SIZE];
 
 /* Private function prototypes -----------------------------------------------*/
-void ApplyReadData(void)
-{
-	#define FillNetData(arr, x) arr[0] = qspi_aRxBuffer[x]; \
-						arr[1] = qspi_aRxBuffer[x + 1]; \
-						arr[2] = qspi_aRxBuffer[x + 2]; \
-						arr[3] = qspi_aRxBuffer[x + 3];
-
-	FillNetData(LocM.IpAddr, 0);
-	
-	FillNetData(LocM.NetMask, 4);	
-	
-  FillNetData(LocM.DefGW, 8);
-
-	FillNetData(LocM.PriDNS, 12);
-
-	FillNetData(LocM.SecDNS, 16);
-	
-	FillNetData(DatIP, 20);
-}
 
 /* Private functions ---------------------------------------------------------*/
 void QSPI_read_qspi_aRxBuffer (void)/* read buffer*/
@@ -38,10 +20,7 @@ void QSPI_read_qspi_aRxBuffer (void)/* read buffer*/
 	if(BSP_QSPI_Read(qspi_aRxBuffer, WRITE_READ_ADDR, BUFFER_SIZE) != QSPI_OK)
 	{
 		nor_status = 6;
-	}	
-
-	// применить прочитанные данные
-	
+	}
 }
 
 void QSPI_write_qspi_aTxBuffer (void)/* write buffer*/
@@ -52,11 +31,8 @@ void QSPI_write_qspi_aTxBuffer (void)/* write buffer*/
 	}
 	else
 	{
-		/* QSPI memory read/write access  #################################*/   
+		// QSPI memory read/write access  #################################
 		//заполнить буфер перед записью 
-		
-
-		//Fill_Buffer(qspi_aTxBuffer, BUFFER_SIZE, Offset);  //заполнить буфер перед записью 
 		if(BSP_QSPI_Write(qspi_aTxBuffer, WRITE_READ_ADDR, BUFFER_SIZE) != QSPI_OK)/* Write data to the QSPI memory */
 		{
 			nor_status = 5;
