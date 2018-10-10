@@ -124,7 +124,7 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
     case tcpEventConnect:
       // Remote host is trying to connect to our TCP socket. 
       // 'buf' points to Remote IP, 'len' holds the remote port. 
-//			soc_state = 2;
+			// soc_state = 2;
 			__nop();
       // Return 1 to accept connection, or 0 to reject connection 
       return (1);
@@ -149,8 +149,7 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
     case tcpEventData:
       // TCP data frame has been received, 'buf' points to data 
       // Data length is 'len' bytes
-			if(len > 0xff) n = 0xff;
-			else n = len;
+			n = (len > 0xff) ? 0xff : len;
 			for(i = 0; i < n; i++)//for(i = 0; i <= len; i++)
 			{
 				Recive_WORK[i] = *buf;
@@ -217,7 +216,3 @@ void send_data (void) //датчик
 			}
 	}
 }
-
-
-
-

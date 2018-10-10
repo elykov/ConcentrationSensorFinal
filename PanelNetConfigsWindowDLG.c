@@ -7,17 +7,17 @@
 #define ID_WINDOW_0         (GUI_ID_USER + 0x06)
 #define ID_TEXT_0         (GUI_ID_USER + 0x07)
 #define ID_TEXT_1         (GUI_ID_USER + 0x08)
-#define ID_EDIT_0         (GUI_ID_USER + 0x09)
-#define ID_EDIT_1         (GUI_ID_USER + 0x0A)
+#define ID_EDIT_IP         (GUI_ID_USER + 0x09)
+#define ID_EDIT_MASK         (GUI_ID_USER + 0x0A)
 #define ID_TEXT_2         (GUI_ID_USER + 0x0B)
 #define ID_TEXT_3         (GUI_ID_USER + 0x0C)
-#define ID_EDIT_2         (GUI_ID_USER + 0x0D)
-#define ID_EDIT_3         (GUI_ID_USER + 0x0E)
+#define ID_EDIT_GW         (GUI_ID_USER + 0x0D)
+#define ID_EDIT_DNS1         (GUI_ID_USER + 0x0E)
 #define ID_TEXT_4         (GUI_ID_USER + 0x0F)
 #define ID_BUTTON_0         (GUI_ID_USER + 0x10)
 #define ID_BUTTON_1         (GUI_ID_USER + 0x11)
 #define ID_TEXT_5         (GUI_ID_USER + 0x13)
-#define ID_EDIT_4         (GUI_ID_USER + 0x15)
+#define ID_EDIT_DNS2         (GUI_ID_USER + 0x15)
 
 void RefreshPanelNetConfigsWindow(void)
 {
@@ -30,7 +30,7 @@ void RefreshPanelNetConfigsWindow(void)
 			LocM.IpAddr[0], LocM.IpAddr[1],
 			LocM.IpAddr[2], LocM.IpAddr[3]);
 		
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_0), tempStr);
+		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_IP), tempStr);
 	}
 	// mask                                        
 	{
@@ -38,7 +38,7 @@ void RefreshPanelNetConfigsWindow(void)
 			LocM.NetMask[0], LocM.NetMask[1],
 			LocM.NetMask[2], LocM.NetMask[3]);
 	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_1), tempStr);
+		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_MASK), tempStr);
 	}
 	// gateway
   {
@@ -46,7 +46,7 @@ void RefreshPanelNetConfigsWindow(void)
 			LocM.DefGW[0], LocM.DefGW[1],
 			LocM.DefGW[2], LocM.DefGW[3]);
 	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_2), tempStr);
+		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_GW), tempStr);
 	}
 	// dns1
   {
@@ -54,7 +54,7 @@ void RefreshPanelNetConfigsWindow(void)
 			LocM.PriDNS[0], LocM.PriDNS[1],
 			LocM.PriDNS[2], LocM.PriDNS[3]);
 	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_3), tempStr);
+		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS1), tempStr);
 	}
 	// dns2
   {
@@ -62,7 +62,7 @@ void RefreshPanelNetConfigsWindow(void)
 			LocM.SecDNS[0], LocM.SecDNS[1],
 			LocM.SecDNS[2], LocM.SecDNS[3]);
 	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_4), tempStr);
+		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS2), tempStr);
 	}
 }
 
@@ -72,23 +72,23 @@ int SetNetConfigs()
 	uint8_t currentIP[4], currentMask[4], currentGW[4], currentDNS1[4], currentDNS2[4];
 	char iptxt[25];
 
-  EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_0), iptxt, 24); // ip
+  EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_IP), iptxt, 24); // ip
 	if (get_IP(iptxt, currentIP) > 0)
 		return 1;
 	
-	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_1), iptxt, 24); // mask
+	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_MASK), iptxt, 24); // mask
 	if (get_IP(iptxt, currentMask) > 0)
 		return 2;
 	
-	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_2), iptxt, 24); // gateway
+	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_GW), iptxt, 24); // gateway
 	if (get_IP(iptxt, currentGW) > 0)
 		return 3;
 	
-	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_3), iptxt, 24); // dms1
+	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_DNS1), iptxt, 24); // dms1
 	if (get_IP(iptxt, currentDNS1) > 0)
 		return 4;
 	
-	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_4), iptxt, 24); // dns2
+	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_DNS2), iptxt, 24); // dns2
 	if (get_IP(iptxt, currentDNS2) > 0)
 		return 5;
 
@@ -110,17 +110,17 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "PanelNetConfigsWindow", ID_WINDOW_0, 0, 0, 480, 272, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Header", ID_TEXT_0, 90, 5, 300, 30, 0, 0x64, 0 },
   { TEXT_CreateIndirect, "TextTIP", ID_TEXT_1, 35, 60, 40, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditIP", ID_EDIT_0, 80, 60, 150, 30, 0, 0x14, 0 },
-  { EDIT_CreateIndirect, "EditMask", ID_EDIT_1, 320, 60, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "EditIP", ID_EDIT_IP, 80, 60, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "EditMask", ID_EDIT_MASK, 320, 60, 150, 30, 0, 0x14, 0 },
   { TEXT_CreateIndirect, "TextTMask", ID_TEXT_2, 235, 60, 80, 30, 0, 0x64, 0 },
   { TEXT_CreateIndirect, "TextTDNS1", ID_TEXT_3, 10, 170, 65, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit", ID_EDIT_2, 80, 170, 150, 30, 0, 0x14, 0 },
-  { EDIT_CreateIndirect, "Edit", ID_EDIT_3, 320, 170, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "Edit", ID_EDIT_DNS1, 80, 170, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "Edit", ID_EDIT_DNS2, 320, 170, 150, 30, 0, 0x14, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_4, 245, 170, 70, 30, 0, 0x64, 0 },
   { BUTTON_CreateIndirect, "ButtonOK", ID_BUTTON_0, 310, 235, 80, 30, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "ButtonCancel", ID_BUTTON_1, 395, 235, 80, 30, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_5, 130, 115, 100, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "Edit", ID_EDIT_4, 250, 115, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "Edit", ID_EDIT_GW, 250, 115, 150, 30, 0, 0x14, 0 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -154,13 +154,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     // Initialization of 'EditIP'
     //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_IP);
     EDIT_SetFont(hItem, GUI_FONT_20_1);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     //
     // Initialization of 'EditMask'
     //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_1);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_MASK);
     EDIT_SetFont(hItem, GUI_FONT_20_1);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     //
@@ -182,13 +182,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     // Initialization of 'Edit'
     //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_2);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_GW);
     EDIT_SetFont(hItem, GUI_FONT_20_1);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     //
     // Initialization of 'Edit'
     //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_3);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS1);
     EDIT_SetFont(hItem, GUI_FONT_20_1);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     //
@@ -222,7 +222,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     // Initialization of 'Edit'
     //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_4);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS2);
     EDIT_SetFont(hItem, GUI_FONT_20_1);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     
@@ -255,10 +255,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			  break;
       }
       break;
-    case ID_EDIT_0: // Notifications sent by 'EditIP'
+    case ID_EDIT_IP: // Notifications sent by 'EditIP'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_IP));
         break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -266,10 +266,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       }
       break;
-    case ID_EDIT_1: // Notifications sent by 'EditMask'
+    case ID_EDIT_MASK: // Notifications sent by 'EditMask'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_MASK));
 				break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -277,10 +277,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       }
       break;
-    case ID_EDIT_2: // Notifications sent by 'Edit'
+    case ID_EDIT_GW: // Notifications sent by 'Edit'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_GW));
 			  break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -288,10 +288,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       }
       break;
-    case ID_EDIT_3: // Notifications sent by 'Edit'
+    case ID_EDIT_DNS1: // Notifications sent by 'Edit'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS1));
         break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -299,10 +299,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       }
       break;
-		case ID_EDIT_4: // Notifications sent by 'Edit'
+		case ID_EDIT_DNS2: // Notifications sent by 'Edit'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-    		ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4));
+    		ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS2));
         break;
       case WM_NOTIFICATION_RELEASED:
         break;
