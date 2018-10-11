@@ -124,7 +124,6 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
     case tcpEventConnect:
       // Remote host is trying to connect to our TCP socket. 
       // 'buf' points to Remote IP, 'len' holds the remote port. 
-			// soc_state = 2;
 			__nop();
       // Return 1 to accept connection, or 0 to reject connection 
       return (1);
@@ -188,7 +187,6 @@ void send_data (void) //датчик
 {
 	uint32_t max;
 	uint8_t *sendbuf;
-//	unsigned char temp;
 	
 	if(soc_state == 0)
 	{
@@ -197,11 +195,11 @@ void send_data (void) //датчик
 			soc_state = 1;		
 	}
 	
-	if(soc_state == 2)
+	if(soc_state == 2) // установлено соединение
 	{
-			if (wait_ack != true)
+			if (wait_ack != true) // не ожидаем ответа
 			{				
-				if(Flags.answer_work)
+				if(Flags.answer_work) // желаем отправить пакет
 				{
 					max = tcp_max_data_size (tcp_soc_WORK);
 					maxlen_work = (max > 0xff) ? 0xff : max;

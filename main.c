@@ -97,16 +97,6 @@ int main (void)
   HAL_Init();                               /* Initialize the HAL Library     */
   BSP_SDRAM_Init();                         /* Initialize BSP SDRAM           */
   SystemClock_Config();                     /* Configure the System Clock     */
-
-	{  // old GUI init (doesn't work)
-		//GUI_Init();
-		//GUI_Clear();
-		//WM_MULTIBUF_Enable(1);
-		//Init_GUIThread();
-
-		//myWin = CreateStartWindow();
-		//WM_ShowWindow(myWin);
-	}
 	
 	#if GUI_WINSUPPORT
     WM_SetCreateFlags(WM_CF_MEMDEV);
@@ -127,13 +117,6 @@ int main (void)
 	NET_init ();
 	Read_settings ();
 
-/*	
-	ip1 = LocM.IpAddr[0];
-	ip2 = LocM.IpAddr[1];
-	ip3 = LocM.IpAddr[2];
-	ip4 = LocM.IpAddr[3];		
-*/
-		
   for (;;)
 	{
 

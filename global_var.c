@@ -79,9 +79,10 @@ float of = -0.001;
 float og = 0;
 float oh = 0;
 
-
-
+// ==============================================
 
 struct GUILogic logic;             
 struct KeyBoard keyBoard = {0};
+
+float out_Cb, out_Output_I;
 

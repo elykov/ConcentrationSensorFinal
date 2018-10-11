@@ -13,7 +13,6 @@ extern  LOCALM localm[];
 void Read_settings (void);
 void Write_settings (void);
 
-
 void float_to_buf_tx (float data)
 {
 	tempBuf[3]= ((unsigned char*)&(data))[3]; 
@@ -31,8 +30,7 @@ float buf_tx_to_float (void)
 		return tempf;
 }
 
-
-void Read_settings (void)
+void Read_settings (void) // читает из qspi и записывает в сетевые переменные
 {
 
 	if(nor_status == 0)//читаем настройки
@@ -74,7 +72,7 @@ void Read_settings (void)
 	}
 }
 
-void Write_settings (void)
+void Write_settings (void) // записывает в qspi сетевые переменные
 {
 	qspi_aTxBuffer[0] = LocM.IpAddr[0];
 	qspi_aTxBuffer[1] = LocM.IpAddr[1];
@@ -272,7 +270,7 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 }
 
 
-void Form_package_WORK (void)//сборка посылки в датчик
+void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outПеременных)
 {
 	Send_WORK[0] =  outDatIP[0];
 	Send_WORK[1] =  outDatIP[1];	
@@ -378,6 +376,22 @@ void Form_package_WORK (void)//сборка посылки в датчик
 	Send_WORK[89] = tempBuf[2];
 	Send_WORK[90] = tempBuf[3];
 	Send_WORK[91] = (Flags.udp_enable) ? 255 : 0;
+
+	// ======================================
+	
+	/*
+	float_to_buf_tx (out_Cb);
+	Send_WORK[] = tempBuf[0];
+	Send_WORK[] = tempBuf[1];
+	Send_WORK[] = tempBuf[2];
+	Send_WORK[] = tempBuf[3];
+  
+	float_to_buf_tx (out_Output_I);
+	Send_WORK[] = tempBuf[0];
+	Send_WORK[] = tempBuf[1];
+	Send_WORK[] = tempBuf[2];
+	Send_WORK[] = tempBuf[3];
+	*/
 }
 
 
@@ -487,12 +501,32 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 
 	if(!Flags.ch_ref) {	out_referens = referens;	}
 	else Flags.ch_ref = 0;
+
+	// =======================================
 	
+	if (!Flags.ch_Cb) 
+		out_Cb = Cb;
+	else 
+		Flags.ch_Cb = 0;
+
+	if (!Flags.ch_Output_I) 
+		out_Output_I = Output_I;
+	else 
+		Flags.ch_Output_I = 0;
+	
+	// =======================================
+
 	OUTremUDPip[0] = remUDPip[0];
 	OUTremUDPip[1] = remUDPip[1];
 	OUTremUDPip[2] = remUDPip[2];
-	OUTremUDPip[3] = remUDPip[3];	
-	
+	OUTremUDPip[3] = remUDPip[3];
 }
+
+/*
+	Добавить в пакет на отправление заданную концентрацию и ток.
+	Посмотреть другие данные, которые должны быть отправлены в пакете.
+	
+	Form_package_WORK
+*/
 
 

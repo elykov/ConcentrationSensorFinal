@@ -1,6 +1,7 @@
 #include "GUILogic.h"
 #include "DIALOG.h"
 #include "Net_User.h"
+#include "settings.h"
 
 #define ID_WINDOW_0  (GUI_ID_USER + 0x06)
 #define ID_TEXT_0  (GUI_ID_USER + 0x07)
@@ -34,7 +35,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { EDIT_CreateIndirect, "Edit", ID_EDIT_GW, 250, 115, 150, 30, 0, 0x14, 0 },
 };
 
-void RefreshSensorNetConfigsWindow(void)
+// показывает только IP для подключения если датчик не подключен
+void RefreshSensorNetConfigsWindow(void) // сделано
 {
 	WM_HWIN window = logic.window;
 	char tempStr[25];
@@ -97,9 +99,72 @@ void RefreshSensorNetConfigsWindow(void)
 	}
 }
 
-void SaveNetData(void)
+int SaveNetData(void)
 {
+	WM_HWIN window = logic.window;
+	uint8_t sensIP[4];
+	char iptxt[25];
 	
+	EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_IP), iptxt, 24); // ip
+	if (strlen(iptxt) < 1)
+		return 11;
+	if (get_IP(iptxt, sensIP) > 0)
+		return 1;
+	
+	if (tcp_get_state(tcp_soc_WORK) == tcpStateESTABLISHED)
+	{
+		uint8_t sensMask[4], sensGW[4], sensDNS1[4], sensDNS2[4];
+		
+		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_MASK), iptxt, 24); // mask
+		if (strlen(iptxt) < 1)
+		return 12;
+		if (get_IP(iptxt, sensMask) > 0)
+			return 2;
+		
+		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_GW), iptxt, 24); // gateway
+		if (strlen(iptxt) < 1)
+			return 13;
+		if (get_IP(iptxt, sensGW) > 0)
+			return 3;
+
+		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_DNS1), iptxt, 24); // dns1
+		if (strlen(iptxt) < 1)
+			return 14;
+		if (get_IP(iptxt, sensDNS1) > 0)
+			return 4;
+
+		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_DNS2), iptxt, 24); // dns2
+		if (strlen(iptxt) < 1)
+			return 15;
+		if (get_IP(iptxt, sensDNS2) > 0)
+			return 5;
+
+		for(int i = 0; i < 4; i++)
+		{
+			DatIP[i] = sensIP[i];
+			DatMask[i] = sensMask[i];
+			DatDefGW[i] = sensGW[i];
+			DatPriDNS[i] = sensDNS1[i];
+			DatSecDNS[i] = sensDNS2[i];
+		}
+	}
+
+	for(int i = 0; i < 4; i++)
+		rem_ip[i] = sensIP[i];
+	
+	Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
+	Flags.ch_dump_i = Flags.ch_Cb = Flags.ch_Output_I = 1; // change other PID params
+
+	Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = 1; // change amperage params
+
+	Flags.ch_20mA = Flags.ch_4mA = 1; // change amperage	
+	Flags.ch_a = Flags.ch_b = Flags.ch_c = Flags.ch_d = Flags.ch_e = 
+	Flags.ch_f = Flags.ch_g = Flags.ch_h = Flags.ch_n = 1; // change params
+	Flags.ch_period = Flags.ch_ref = 1; // change other
+  
+	// save to qspi
+	Write_settings();
+	return 0;
 }
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -255,7 +320,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         HideKeyBoard();
-				WindowChange(MenuWindow);
+				if (SaveNetData() == 0)
+					WindowChange(MenuWindow);
 				break;
       }
       break;

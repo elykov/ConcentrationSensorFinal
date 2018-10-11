@@ -41,7 +41,9 @@ struct TFlags
 	unsigned int ch_I:								1;
 	unsigned int ch_D:								1;
 	unsigned int ch_dump_i:						1;
-	unsigned int ch_ref:							1;	
+	unsigned int ch_ref:							1;
+	unsigned int ch_Cb:								1;
+	unsigned int ch_Output_I:					1;
 //	unsigned int tmp:									1;
 
 };
@@ -126,8 +128,12 @@ extern float of;
 extern float og;
 extern float oh;
 
+// ==============================================
+
 extern  LOCALM localm[];
 #define LocM   localm[NETIF_ETH]
+
+extern float out_Cb, out_Output_I;
 
 #endif /* GLOBAL_VAR_H_ */
 
