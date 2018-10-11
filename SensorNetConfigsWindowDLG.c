@@ -141,27 +141,33 @@ int SaveNetData(void)
 
 		for(int i = 0; i < 4; i++)
 		{
-			DatIP[i] = sensIP[i];
-			DatMask[i] = sensMask[i];
-			DatDefGW[i] = sensGW[i];
-			DatPriDNS[i] = sensDNS1[i];
-			DatSecDNS[i] = sensDNS2[i];
+			outDatIP[i] = sensIP[i];
+			outDatMask[i] = sensMask[i];
+			outDatDefGW[i] = sensGW[i];
+			outDatPriDNS[i] = sensDNS1[i];
+			outDatSecDNS[i] = sensDNS2[i];
 		}
+		
+		Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1;
+		
+		Flags.answer_work = 1;
 	}
 
 	for(int i = 0; i < 4; i++)
 		rem_ip[i] = sensIP[i];
 	
-	Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
-	Flags.ch_dump_i = Flags.ch_Cb = Flags.ch_Output_I = 1; // change other PID params
+	//Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
+	//Flags.ch_dump_i = Flags.ch_Cb = Flags.ch_Output_I = 1; // change other PID params
 
-	Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = 1; // change amperage params
+	//Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = 1; // change amperage params
 
-	Flags.ch_20mA = Flags.ch_4mA = 1; // change amperage	
-	Flags.ch_a = Flags.ch_b = Flags.ch_c = Flags.ch_d = Flags.ch_e = 
-	Flags.ch_f = Flags.ch_g = Flags.ch_h = Flags.ch_n = 1; // change params
-	Flags.ch_period = Flags.ch_ref = 1; // change other
+	//Flags.ch_20mA = Flags.ch_4mA = 1; // change amperage	
+	//Flags.ch_a = Flags.ch_b = Flags.ch_c = Flags.ch_d = Flags.ch_e = 
+	//Flags.ch_f = Flags.ch_g = Flags.ch_h = Flags.ch_n = 1; // change params
+	//Flags.ch_period = Flags.ch_ref = 1; // change other
   
+	
+	
 	// save to qspi
 	Write_settings();
 	return 0;
