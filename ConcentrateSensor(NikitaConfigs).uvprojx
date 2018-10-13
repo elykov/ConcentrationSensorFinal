@@ -492,14 +492,14 @@
               <FilePath>.\MenuWindowDLG.c</FilePath>
             </File>
             <File>
-              <FileName>SensorNetConfigsWindowDLG.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\SensorNetConfigsWindowDLG.c</FilePath>
-            </File>
-            <File>
               <FileName>PanelNetConfigsWindowDLG.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\PanelNetConfigsWindowDLG.c</FilePath>
+            </File>
+            <File>
+              <FileName>SensorNetConfigsWindowDLG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SensorNetConfigsWindowDLG.c</FilePath>
             </File>
             <File>
               <FileName>PIDConfigsWindowDLG.c</FileName>

@@ -529,4 +529,16 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	Form_package_WORK
 */
 
+//Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1; // change panel configs
+	
+		//Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
+	//Flags.ch_dump_i = Flags.ch_Cb = Flags.ch_Output_I = 1; // change other PID params
+
+	//Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = 1; // change amperage params
+
+	//Flags.ch_20mA = Flags.ch_4mA = 1; // change amperage	
+	//Flags.ch_a = Flags.ch_b = Flags.ch_c = Flags.ch_d = Flags.ch_e = 
+	//Flags.ch_f = Flags.ch_g = Flags.ch_h = Flags.ch_n = 1; // change params
+	//Flags.ch_period = Flags.ch_ref = 1; // change other
+
 

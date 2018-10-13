@@ -19,7 +19,6 @@
 */
 
 // USER START (Optionally insert additional includes)
-#include "GUILogic.h"
 // USER END
 
 #include "DIALOG.h"
@@ -30,12 +29,10 @@
 *
 **********************************************************************
 */
-#define ID_WINDOW_0    (GUI_ID_USER + 0x00)
-#define ID_BUTTON_0    (GUI_ID_USER + 0x01)
-#define ID_BUTTON_1    (GUI_ID_USER + 0x02)
-#define ID_BUTTON_2    (GUI_ID_USER + 0x03)
-#define ID_BUTTON_3    (GUI_ID_USER + 0x04)
-#define ID_BUTTON_4    (GUI_ID_USER + 0x05)
+#define ID_FRAMEWIN_0         (GUI_ID_USER + 0x00)
+#define ID_BUTTON_0         (GUI_ID_USER + 0x01)
+#define ID_BUTTON_1         (GUI_ID_USER + 0x02)
+#define ID_EDIT_0         (GUI_ID_USER + 0x03)
 
 
 // USER START (Optionally insert additional defines)
@@ -49,7 +46,6 @@
 */
 
 // USER START (Optionally insert additional static data)
-extern GUI_CONST_STORAGE GUI_FONT GUI_FontVerdana20;
 // USER END
 
 /*********************************************************************
@@ -57,12 +53,10 @@ extern GUI_CONST_STORAGE GUI_FONT GUI_FontVerdana20;
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { WINDOW_CreateIndirect, "MenuWindow", ID_WINDOW_0, 0, 0, 480, 272, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "ButtonToStart", ID_BUTTON_0, 275, 230, 200, 35, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "ButtonPanelConf", ID_BUTTON_2, 90, 20, 300, 35, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "ButtonSensorConf", ID_BUTTON_1, 90, 70, 300, 35, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "ButtonPIDConf", ID_BUTTON_3, 90, 120, 300, 35, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "ButtonParams", ID_BUTTON_4, 90, 170, 300, 35, 0, 0x0, 0 },
+  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 82, 480, 190, 0, 0x64, 0 },
+  { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 5, 110, 50, 50, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 100, 55, 50, 50, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 90, 10, 300, 30, 0, 0x64, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -91,40 +85,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   switch (pMsg->MsgId) {
   case WM_INIT_DIALOG:
     //
-    // Initialization of 'MenuWindow'
+    // Initialization of 'Framewin'
     //
     hItem = pMsg->hWin;
-    WINDOW_SetBkColor(hItem, GUI_MAKE_COLOR(0x00FF2100));
+    FRAMEWIN_SetText(hItem, "Изменение маски");
+    FRAMEWIN_SetFont(hItem, GUI_FONT_20_1);
     //
-    // Initialization of 'ButtonToStart'
+    // Initialization of 'Edit'
     //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-    BUTTON_SetFont(hItem, &GUI_FontVerdana20);
-    BUTTON_SetText(hItem, "К главному экрану");
-    //
-    // Initialization of 'ButtonSensorConf'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-    BUTTON_SetFont(hItem, &GUI_FontVerdana20);
-    BUTTON_SetText(hItem, "Настроить датчик (сеть)");
-    //
-    // Initialization of 'ButtonPanelConf'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
-    BUTTON_SetFont(hItem, &GUI_FontVerdana20);
-    BUTTON_SetText(hItem, "Настроить панель (сеть)");
-    //
-    // Initialization of 'ButtonPIDConf'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
-    BUTTON_SetFont(hItem, &GUI_FontVerdana20);
-    BUTTON_SetText(hItem, "Настроить ПИД");
-    //
-    // Initialization of 'ButtonParams'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
-    BUTTON_SetFont(hItem, &GUI_FontVerdana20);
-    BUTTON_SetText(hItem, "Настроить параметры");
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
+    EDIT_SetText(hItem, "123");
     // USER START (Optionally insert additional code for further widget initialization)
     // USER END
     break;
@@ -132,7 +102,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
     switch(Id) {
-    case ID_BUTTON_0: // Notifications sent by 'ButtonToStart'
+    case ID_BUTTON_0: // Notifications sent by 'Button'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
@@ -140,14 +110,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-				WindowChange(StartWindow);
         // USER END
         break;
       // USER START (Optionally insert additional code for further notification handling)
       // USER END
       }
       break;
-    case ID_BUTTON_1: // Notifications sent by 'ButtonSensorConf'
+    case ID_BUTTON_1: // Notifications sent by 'Button'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
@@ -155,14 +124,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-				WindowChange(SensorNetConfigsWindow);
         // USER END
         break;
       // USER START (Optionally insert additional code for further notification handling)
       // USER END
       }
       break;
-    case ID_BUTTON_2: // Notifications sent by 'ButtonPanelConf'
+    case ID_EDIT_0: // Notifications sent by 'Edit'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
@@ -170,37 +138,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-				WindowChange(PanelNetConfigsWindow);
         // USER END
         break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    case ID_BUTTON_3: // Notifications sent by 'ButtonPIDConf'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
+      case WM_NOTIFICATION_VALUE_CHANGED:
         // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-        WindowChange(PIDConfigsWindow);
-				// USER END
-        break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    case ID_BUTTON_4: // Notifications sent by 'ButtonParams'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-				WindowChange(ParamsConfigsWindow);
         // USER END
         break;
       // USER START (Optionally insert additional code for further notification handling)
@@ -227,10 +168,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 */
 /*********************************************************************
 *
-*       CreateMenuWindow
+*       CreateFramewin
 */
-WM_HWIN CreateMenuWindow(void);
-WM_HWIN CreateMenuWindow(void) {
+WM_HWIN CreateFramewin(void);
+WM_HWIN CreateFramewin(void) {
   WM_HWIN hWin;
 
   hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);

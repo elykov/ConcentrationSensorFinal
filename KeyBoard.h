@@ -1,6 +1,7 @@
 #ifndef __KEYBOARD__
 	#define __KEYBOARD__
 	#include "dialog.h"
+	#include "stdbool.h"
 	
 	struct KeyBoard
 	{
