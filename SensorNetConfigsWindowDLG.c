@@ -3,6 +3,7 @@
 #include "Net_User.h"
 #include "settings.h"
 
+
 #define ID_WINDOW_0         (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0         (GUI_ID_USER + 0x01)
 #define ID_BUTTON_1         (GUI_ID_USER + 0x02)
@@ -50,8 +51,19 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 245, 160, 220, 60, 0, 0x64, 0 },
 };
 
+void RefreshSensorNetConfigsWindow(void)
+{
+	if (isTextErrChangable)
+	{
+		if (tcp_get_state(tcp_soc_WORK) == tcpStateESTABLISHED)
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
+		else
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
+	}
+}
+
 // показывает только IP для подключения если датчик не подключен
-void RefreshSensorNetConfigsWindow(void) // сделано
+static void SetSensorNetEdits(void) // сделано
 {
 	WM_HWIN window = logic.window;
 	char tempStr[25];
@@ -98,7 +110,7 @@ void RefreshSensorNetConfigsWindow(void) // сделано
 
 			EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS2), tempStr);
 		}
-		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "");
+		//TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "");
 	}
 	else
 	{
@@ -113,7 +125,7 @@ void RefreshSensorNetConfigsWindow(void) // сделано
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS1), "");
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS2), "");
 
-		TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
+		//TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
 	}
 }
 
@@ -299,7 +311,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
     
-		RefreshSensorNetConfigsWindow();
+		SetSensorNetEdits();
 		break;
   case WM_NOTIFY_PARENT:
 		if (keyBoard._keyboard != 0)
@@ -338,6 +350,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан DNS2.");
 							break;
 					}
+					TimerStart();
 					break;
 				}
       }
@@ -347,7 +360,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        //HideKeyBoard();
+        TimerStop();
 				WindowChange(MenuWindow);
 				break;
       }
@@ -357,8 +370,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        //HideKeyBoard();
-				RefreshSensorNetConfigsWindow();
+        TimerStop();
+				SetSensorNetEdits();
 				break;
       }
       break;

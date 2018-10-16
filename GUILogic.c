@@ -1,6 +1,7 @@
 #include "GuiLogic.h"
 #include "qspi.h"
 #include "global_var.h"
+#include "timer6.h"
 
 extern WM_HWIN CreateStartWindow(void);
 extern WM_HWIN CreateMenuWindow(void);
@@ -13,6 +14,9 @@ extern WM_HWIN CreateParamsConfigsWindow(void);
 // RefreshWindow
 extern void RefreshStartWindow(void);
 extern void RefreshPIDWindow(void);
+extern void RefreshParamsWindow(void);
+extern void RefreshSensorNetConfigsWindow(void);
+extern void RefreshPanelNetConfigsWindow(void);
 
 extern struct GUILogic logic;
 WM_HWIN (*fWindowCreators[WindowsCount])(void);
@@ -26,6 +30,15 @@ void RefreshWindow(void)
 			break;
 		case PIDConfigsWindow:
 			RefreshPIDWindow();
+			break;
+		case ParamsConfigsWindow:
+			RefreshParamsWindow();
+      break;
+		case SensorNetConfigsWindow:
+			RefreshSensorNetConfigsWindow();
+			break;
+    case PanelNetConfigsWindow:
+		  RefreshPanelNetConfigsWindow();
 			break;
 		default:
 			break;
@@ -41,6 +54,8 @@ void StartLogic(void)
 	fWindowCreators[MenuWindow] = CreateMenuWindow;
 	fWindowCreators[StartWindow] = CreateStartWindow;
 	WindowChange(StartWindow);
+
+	InitTimer6();
 	//InitData();
 }
 

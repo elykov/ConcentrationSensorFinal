@@ -23,8 +23,13 @@
 #define ID_EDIT_DNS2      	(GUI_ID_USER + 0x0E)
 #define ID_TEXT_ERR         	(GUI_ID_USER + 0x0F)
 
-
 void RefreshPanelNetConfigsWindow(void)
+{
+	if (isTextErrChangable)
+		TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
+}
+
+void SetPanelNetEdits(void)
 {
 	WM_HWIN window = logic.window;
 	char tempStr[25];
@@ -253,7 +258,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
 
-		RefreshPanelNetConfigsWindow();
+		SetPanelNetEdits();
     break;
   case WM_NOTIFY_PARENT:
 		if (keyBoard._keyboard != 0)
@@ -291,6 +296,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан DNS2.");
 							break;
 					}
+					TimerStart();
 					break;
 				}        
       }
@@ -300,7 +306,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        //HideKeyBoard();
+        TimerStop();
 				WindowChange(MenuWindow);
 			  break;
       }
@@ -310,8 +316,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        //HideKeyBoard();
-				RefreshPanelNetConfigsWindow();
+        TimerStop();
+				SetPanelNetEdits();
 				break;
       }
       break;

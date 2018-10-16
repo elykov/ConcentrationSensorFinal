@@ -4,6 +4,7 @@
 	#include "global_var.h"
 	#include <string.h>
   #include "stdio.h"
+	#include "timer6.h"
 	
 	#define StartWindow		 							0
 	#define MenuWindow									1

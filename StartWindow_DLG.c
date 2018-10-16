@@ -199,7 +199,10 @@ void RefreshStartWindow(void)
 {
 	char tempStr[10];
 	{ // set big concentracion
-		sprintf(tempStr, "%1.2f", Cb);
+		if (Cb <= 0)
+			sprintf(tempStr, "---");
+		else
+			sprintf(tempStr, "%1.2f", Cb);
 		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_0), tempStr);	
 	}
 	

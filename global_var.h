@@ -133,8 +133,6 @@ extern float oh;
 extern  LOCALM localm[];
 #define LocM   localm[NETIF_ETH]
 
-extern float out_Cb, out_Output_I;
-
 #endif /* GLOBAL_VAR_H_ */
 
 

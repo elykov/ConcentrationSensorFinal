@@ -129,6 +129,9 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
       return (1);
     case tcpEventAbort:
       // Connection was aborted 
+			i_trowel = i_revers = dump = period_answer = 
+			referens = Cb = Output_I = dump_i = 
+			P_factor = I_factor = D_factor = 0;
 			__nop();
       break;
     case tcpEventEstablished:
@@ -138,6 +141,9 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
       break;
     case tcpEventClosed:
       // Connection has been closed 
+			i_trowel = i_revers = dump = period_answer = 
+			referens = Cb = Output_I = dump_i = 
+			P_factor = I_factor = D_factor = 0;
 			__nop();
       break;
     case tcpEventACK:

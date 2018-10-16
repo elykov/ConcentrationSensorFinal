@@ -431,6 +431,11 @@
               <FileType>1</FileType>
               <FilePath>.\KeyBoardWindowDLG.c</FilePath>
             </File>
+            <File>
+              <FileName>timer6.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\timer6.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -475,6 +480,11 @@
               <FileName>KeyBoard.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\KeyBoard.h</FilePath>
+            </File>
+            <File>
+              <FileName>timer6.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\timer6.h</FilePath>
             </File>
           </Files>
         </Group>

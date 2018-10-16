@@ -43,7 +43,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ TEXT_CreateIndirect, "TextConc", ID_TEXT_7, 160, 150, 110, 30, 0, 0x64, 0 },
 	{ TEXT_CreateIndirect, "TextTAmp", ID_TEXT_8, 10, 190, 140, 30, 0, 0x64, 0 },
 	{ TEXT_CreateIndirect, "TextAmp", ID_TEXT_9, 160, 190, 110, 30, 0, 0x64, 0 },
-	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 280, 165, 200, 60, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 270, 165, 210, 60, 0, 0x64, 0 },
 };
 
 void RefreshPIDWindow(void)
@@ -59,6 +59,14 @@ void RefreshPIDWindow(void)
 	// amp
 	sprintf(tempStr, "%.2f мА", Output_I);
 	TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_9), tempStr);
+                                                                                 
+	if (isTextErrChangable)
+	{  
+		if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
+			TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "Соединение\nне установлено.");   
+		else
+			TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "");
+	}
 }
 
 static void FillPID(void)
@@ -79,15 +87,12 @@ static void FillPID(void)
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_2), tempStr);
 
 	// Задание
-	sprintf(tempStr, "%.3f", Cb);
+	sprintf(tempStr, "%.3f", referens);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_3), tempStr);
 
 	// PID(dump_i)
 	sprintf(tempStr, "%u", dump_i);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_4), tempStr);
-
-	if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
-		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "Соединение\nне установлено.");
 }
 
 static int SavePIDParams(void)
@@ -165,7 +170,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
     TEXT_SetFont(hItem, &GUI_FontVerdana20);
-    TEXT_SetText(hItem, "Настройка ПИД");
+    TEXT_SetText(hItem, "Настроить ПИД");
     TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
     //
@@ -247,7 +252,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_5);
     TEXT_SetFont(hItem, &GUI_FontVerdana20);
-    TEXT_SetText(hItem, "Dump_i:");
+    TEXT_SetText(hItem, "Буфер:");
     TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
 		//
@@ -322,21 +327,22 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНет подключения.");
 							break;
 						case 1:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задано задание.");
 							break;
 						case 2:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан ");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан буфер.");
 							break;
 						case 3:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан ");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан P.");
 							break;
 						case 4:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан ");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан I.");
 							break;
-						case 5:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан ");
+						case 5:                                                                             
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан D.");
 							break;
 					}
+					TimerStart();
 					// USER END
 					break;
 				}
@@ -348,7 +354,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-        //HideKeyBoard();
+        TimerStop();
 				WindowChange(MenuWindow);
 				// USER END
         break;
@@ -359,6 +365,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
+				TimerStop();
         RefreshPIDWindow();
 				FillPID();
         break;

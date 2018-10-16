@@ -32,17 +32,17 @@ unsigned char tempBuf[4];
 unsigned char  P_factor, I_factor, D_factor;
 unsigned char  out_P_factor, out_I_factor, out_D_factor;
 
-unsigned short dump = 200;
-unsigned short out_dump = 200;
-unsigned short period_answer = 200;
-unsigned short out_period_answer = 200;
-unsigned short i_trowel = 0;
+unsigned short dump = 0;
+unsigned short out_dump = 0;
+unsigned short period_answer = 0;
+unsigned short out_period_answer = 0;
+unsigned short i_trowel = 0;   
 unsigned short i_revers = 500;
 unsigned short out_i_trowel = 0;
-unsigned short out_i_revers = 500;
+unsigned short out_i_revers = 0;
 unsigned short i_out = 0;
-unsigned short dump_i = 100;
-unsigned short out_dump_i = 100;
+unsigned short dump_i = 0;
+unsigned short out_dump_i = 0;
 unsigned short out = 0;
 
 unsigned int up;
@@ -60,22 +60,22 @@ float f = -0.001;
 float g = 0;
 float h = 0;
 float C;
-float i4mA = 1.0;
-float i20mA = 8.0;
-float out_i4mA = 1.0;
-float out_i20mA = 8.0;
+float i4mA = 0;
+float i20mA = 0;
+float out_i4mA = 0;
+float out_i20mA = 0;
 float Cb;
 float Ci;
 float p_term = 0, i_term = 0, d_term = 0;
 float Output_I, referens;
 float out_referens;
-float oa = -1.972;
+float oa = 0;
 float ob = 0;
-float oc = 0.00000000529;
+float oc = 0;
 float od = 0;
 float oe = 0;
 float on = 0;
-float of = -0.001;
+float of = 0;
 float og = 0;
 float oh = 0;
 
@@ -83,6 +83,4 @@ float oh = 0;
 
 struct GUILogic logic;             
 struct KeyBoard keyBoard = {0};
-
-float out_Cb, out_Output_I;
 

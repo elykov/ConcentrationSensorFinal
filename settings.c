@@ -486,20 +486,6 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	if(!Flags.ch_ref) {	out_referens = referens;	}
 	else Flags.ch_ref = 0;
 
-	// =======================================
-	
-	if (!Flags.ch_Cb) 
-		out_Cb = Cb;
-	else 
-		Flags.ch_Cb = 0;
-
-	if (!Flags.ch_Output_I) 
-		out_Output_I = Output_I;
-	else 
-		Flags.ch_Output_I = 0;
-	
-	// =======================================
-
 	OUTremUDPip[0] = remUDPip[0];
 	OUTremUDPip[1] = remUDPip[1];
 	OUTremUDPip[2] = remUDPip[2];

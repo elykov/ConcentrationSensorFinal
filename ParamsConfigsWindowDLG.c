@@ -40,7 +40,18 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 20, 170, 440, 30, 0, 0x0, 0 },
 };
 
-static void RefreshParamsWindow(void)
+void RefreshParamsWindow(void)
+{
+	if (isTextErrChangable)
+	{
+		if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение не установлено.");
+		else
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
+	}
+}
+
+void FillParamsEditsWindow(void)
 {
 	WM_HWIN window = logic.window; 
 	char tempStr[15];
@@ -66,6 +77,7 @@ static void RefreshParamsWindow(void)
 	else
 		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "");
 }
+
 
 static int SaveParams(void)
 {
@@ -134,7 +146,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
     TEXT_SetFont(hItem, &GUI_FontVerdana20);
-    TEXT_SetText(hItem, "Настройка параметров");
+    TEXT_SetText(hItem, "Настроить параметры");
     TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
     //
@@ -219,8 +231,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
 	  TEXT_SetText(hItem, "");
+		FillParamsEditsWindow();
 		RefreshParamsWindow();
-    //HideKeyBoard();
     break;
   case WM_NOTIFY_PARENT:
 		if (keyBoard._keyboard != 0)
@@ -243,21 +255,22 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Настройки применены.");
 							break;
 						case 10:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка: Нет подключения.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Нет подключения.");
 							break;
 						case 1:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка: Неверно задан ток хода.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан ток хода.");
 							break;
 						case 2:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка: Неверно задан ток реверса.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан ток реверса.");
 							break;
 						case 3:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка: Неверно задан буфер.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан буфер.");
 							break;
 						case 4:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка: Неверно задан период ответа.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан период ответа.");
 							break;
 					}
+					TimerStart();
 					break;
 				}
       }
@@ -268,7 +281,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-        //HideKeyBoard();
+        TimerStop();
 				WindowChange(MenuWindow);
 				// USER END
         break;
@@ -279,6 +292,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
+				TimerStop();
         RefreshParamsWindow();
 				break;
       }
