@@ -30,8 +30,6 @@
 	
 	extern void WindowChange(int windowNum); // меняет окна на указанные
 	
-	extern void ShowKeyBoard(WM_HWIN edit); // показывает клавиатуру привязанную к заданному edit'у
-
 	extern void RefreshWindow(void); // обновляет данные текущем окне
 		
 	// принимает строку с IP и записывает данные в resIP.

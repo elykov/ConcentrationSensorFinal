@@ -220,9 +220,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
 	  TEXT_SetText(hItem, "");
 		RefreshParamsWindow();
-    HideKeyBoard();
+    //HideKeyBoard();
     break;
   case WM_NOTIFY_PARENT:
+		if (keyBoard._keyboard != 0)
+			break;
+	
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
     switch(Id) {
@@ -265,7 +268,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-        HideKeyBoard();
+        //HideKeyBoard();
 				WindowChange(MenuWindow);
 				// USER END
         break;
@@ -284,7 +287,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-				ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0));
+				ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), "Изменение тока хода");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -297,7 +300,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), "Изменение тока реверса");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -310,7 +313,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2), "Изменение буфера");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -323,7 +326,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3), "Изменение периода ответа");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:

@@ -376,22 +376,6 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[89] = tempBuf[2];
 	Send_WORK[90] = tempBuf[3];
 	Send_WORK[91] = (Flags.udp_enable) ? 255 : 0;
-
-	// ======================================
-	
-	/*
-	float_to_buf_tx (out_Cb);
-	Send_WORK[] = tempBuf[0];
-	Send_WORK[] = tempBuf[1];
-	Send_WORK[] = tempBuf[2];
-	Send_WORK[] = tempBuf[3];
-  
-	float_to_buf_tx (out_Output_I);
-	Send_WORK[] = tempBuf[0];
-	Send_WORK[] = tempBuf[1];
-	Send_WORK[] = tempBuf[2];
-	Send_WORK[] = tempBuf[3];
-	*/
 }
 
 
@@ -521,13 +505,6 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	OUTremUDPip[2] = remUDPip[2];
 	OUTremUDPip[3] = remUDPip[3];
 }
-
-/*
-	Добавить в пакет на отправление заданную концентрацию и ток.
-	Посмотреть другие данные, которые должны быть отправлены в пакете.
-	
-	Form_package_WORK
-*/
 
 //Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1; // change panel configs
 	

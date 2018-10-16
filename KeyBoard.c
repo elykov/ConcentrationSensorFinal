@@ -4,41 +4,62 @@
 #include <stdbool.h>
 
 extern struct KeyBoard keyBoard;
+char oldEditText[25];
+char txt[25];
 
-void ShowKeyBoard(WM_HWIN edit)
+void ShowKeyBoard(WM_HWIN edit, char* title_text) // done
 {
+	/*
 	if (keyBoard._keyboard > 0)
 	{
 		if (edit != keyBoard.currentEdit)
 		{
 			keyBoard.currentEdit = edit;
+			EDIT_GetText(keyBoard.currentEdit, oldEditText, 29);
+			EDIT_SetText(keyBoard._this_edit, oldEditText); 
 		}                             
 		return;
 	}
-	
 	keyBoard._keyboard = CreateKeyBoardWindow();
 	keyBoard.currentEdit = edit;
+	*/
+	
+	
+	if (keyBoard._keyboard == 0)
+		keyBoard._keyboard = CreateKeyBoardWindow();
+	
+	keyBoard.currentEdit = edit;
+	EDIT_GetText(keyBoard.currentEdit, oldEditText, 24);
+	EDIT_SetText(keyBoard._this_edit, oldEditText);
+	TEXT_SetText(keyBoard._title_text, title_text);
 	WM_ShowWindow(keyBoard._keyboard);
 }
 
-void HideKeyBoard(void)
+void HideKeyBoard(void) // done
 {
 	WM_HideWindow(keyBoard._keyboard);
 	keyBoard._keyboard = 0;
 }
 
-void Button_HandlePush(int id)
+void Button_HandlePush(int id) // done
 {
 	char symb;
 	
-	if (id == ID_BUTTON_12)
+	if (id == ID_BUTTON_12) // OK
 	{
+		EDIT_GetText(keyBoard._this_edit, oldEditText, 24);
+		EDIT_SetText(keyBoard.currentEdit, oldEditText);
+		HideKeyBoard();
+		return;
+	}
+	else if (id == ID_BUTTON_14) // esc
+	{
+		EDIT_SetText(keyBoard.currentEdit, oldEditText);
 		HideKeyBoard();
 		return;
 	}
 	
-	char txt[20];
-	EDIT_GetText(keyBoard.currentEdit, txt, 19);
+	EDIT_GetText(keyBoard._this_edit, txt, 24);
 	size_t txtsize = strlen(txt);
 
 	switch(id)
@@ -70,7 +91,7 @@ void Button_HandlePush(int id)
 			if (txtsize > 0)
 			{
 				txt[txtsize - 1] = '\0';
-				EDIT_SetText(keyBoard.currentEdit, txt);
+				EDIT_SetText(keyBoard._this_edit, txt);
 			}
 			return;
 		}
@@ -78,6 +99,6 @@ void Button_HandlePush(int id)
 		
 	txt[txtsize] = symb;
 	txt[txtsize + 1] = '\0';
-	EDIT_SetText(keyBoard.currentEdit, txt);
+	EDIT_SetText(keyBoard._this_edit, txt);
 }
 

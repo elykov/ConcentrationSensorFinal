@@ -16,7 +16,7 @@
 	#define ID_BUTTON_12        (GUI_ID_USER + 0x0D)
   #define ID_BUTTON_13        (GUI_ID_USER + 0x0E)
 	#define ID_BUTTON_14        (GUI_ID_USER + 0x0F)
-	
+		
   #define ID_TEXT_TITLE       (GUI_ID_USER + 0x10)
-	#define ID_TEXT_STRING      (GUI_ID_USER + 0x11)
+	#define ID_EDIT_0						(GUI_ID_USER + 0x11)
 #endif

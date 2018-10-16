@@ -299,6 +299,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     FillPID();
     break;
   case WM_NOTIFY_PARENT:
+		if (keyBoard._keyboard != 0)
+			break;
+	
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
     switch(Id) {
@@ -345,7 +348,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-        HideKeyBoard();
+        //HideKeyBoard();
 				WindowChange(MenuWindow);
 				// USER END
         break;
@@ -367,7 +370,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), "Изменение параметра P в ПИД");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -380,7 +383,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-				ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1));
+				ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), "Изменение параметра I в ПИД");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -393,7 +396,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2), "Изменение параметра D в ПИД");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -406,7 +409,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3), "Изменение задания концентрации");
 				// USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -418,7 +421,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		case ID_EDIT_4: // Notifications sent by 'EditDumpI'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), "Изменение Dump_i");
 			  break;
       case WM_NOTIFICATION_RELEASED:
         break;

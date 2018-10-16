@@ -47,7 +47,7 @@ void StartLogic(void)
 void WindowChange(int windowNum)
 {
 	WM_HideWindow(logic.window);
-	GUI_Clear();
+	//GUI_Clear(); // экран горит красным
 	WM_DeleteWindow(logic.window);
 	logic.currentWindow = windowNum;
 	logic.window = fWindowCreators[logic.currentWindow]();

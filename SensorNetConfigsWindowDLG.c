@@ -302,6 +302,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		RefreshSensorNetConfigsWindow();
 		break;
   case WM_NOTIFY_PARENT:
+		if (keyBoard._keyboard != 0)
+			break;
+	
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
     switch(Id) {
@@ -312,7 +315,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					break;
 				case WM_NOTIFICATION_RELEASED:
 				{
-					HideKeyBoard();
+					//HideKeyBoard();
 					int res = SaveNetData();
 					switch(res)
 					{
@@ -344,7 +347,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        HideKeyBoard();
+        //HideKeyBoard();
 				WindowChange(MenuWindow);
 				break;
       }
@@ -354,7 +357,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        HideKeyBoard();
+        //HideKeyBoard();
 				RefreshSensorNetConfigsWindow();
 				break;
       }
@@ -362,7 +365,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_EDIT_IP: // Notifications sent by 'EditIP'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_IP));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_IP), "Изменение IP-адреса датчика");
 				break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -373,7 +376,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_EDIT_MASK: // Notifications sent by 'EditMask'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_MASK));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_MASK), "Изменение маски датчика");
 				break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -384,7 +387,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_EDIT_GW: // Notifications sent by 'EditGW'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_GW));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_GW), "Изменение шлюза датчика");
 				break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -395,7 +398,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_EDIT_DNS1: // Notifications sent by 'EditDNS1'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS1));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS1), "Изменение DNS1 датчика");
 				break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -406,7 +409,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_EDIT_DNS2: // Notifications sent by 'EditDNS2'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS2));
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS2), "Изменение DNS2 датчика");
 				break;
       case WM_NOTIFICATION_RELEASED:
         break;

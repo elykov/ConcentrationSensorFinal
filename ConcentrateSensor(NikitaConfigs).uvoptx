@@ -175,6 +175,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>Send_WORK,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>keyBoard,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
