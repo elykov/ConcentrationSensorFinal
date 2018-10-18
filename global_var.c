@@ -26,6 +26,8 @@ unsigned char Send_TECH[256];
 unsigned char Recive_TECH[256];
 unsigned char Send_PLC[256];
 unsigned char Recive_PLC[256];
+unsigned char Send_SERVER[256];
+unsigned char Recive_SERVER[256];
 unsigned char maxlen_work;
 
 unsigned char tempBuf[4];

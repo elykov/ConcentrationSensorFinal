@@ -155,7 +155,7 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
       // TCP data frame has been received, 'buf' points to data 
       // Data length is 'len' bytes
 			n = (len > 0xff) ? 0xff : len;
-			for(i = 0; i < n; i++)//for(i = 0; i <= len; i++)
+			for(i = 0; i < n; i++)
 			{
 				Recive_WORK[i] = *buf;
 				buf++;
@@ -182,7 +182,7 @@ void NET_init (void)
 	tcp_soc_PLC = tcp_get_socket (TCP_TYPE_SERVER, 0, 10, tcp_callback_PLC);
 	if (tcp_soc_PLC >= 0) 
 	{
-		tcp_listen (tcp_soc_PLC, 4000);
+		tcp_listen (tcp_soc_PLC, 4003);
 	}		
   tcp_soc_WORK = tcp_get_socket (TCP_TYPE_CLIENT, 0, 10, tcp_callback_WORK);
 	soc_state = 0;
@@ -196,27 +196,27 @@ void send_data (void) //датчик
 	
 	if(soc_state == 0)
 	{
-			tcp_connect (tcp_soc_WORK, rem_ip, 4000, 0);
+			tcp_connect (tcp_soc_WORK, rem_ip, 4000, 4002);
 			wait_ack  = false;
 			soc_state = 1;		
 	}
 	
 	if(soc_state == 2) // установлено соединение
 	{
-			if (wait_ack != true) // не ожидаем ответа
-			{				
-				if(Flags.answer_work) // желаем отправить пакет
-				{
-					max = tcp_max_data_size (tcp_soc_WORK);
-					maxlen_work = (max > 0xff) ? 0xff : max;
-					Change_Parameters();
-					Form_package_WORK();
-					sendbuf = tcp_get_buf(maxlen_work);
-					memcpy(sendbuf, Send_WORK, maxlen_work);
-					tcp_send(tcp_soc_WORK, sendbuf, maxlen_work);
-					wait_ack = true;
-					Flags.answer_work	= 0;				
-				}
+		if (wait_ack != true) // не ожидаем ответа
+		{				
+			if(Flags.answer_work) // желаем отправить пакет
+			{
+				max = tcp_max_data_size (tcp_soc_WORK);
+				maxlen_work = (max > 0xff) ? 0xff : max;
+				Change_Parameters();
+				Form_package_WORK();
+				sendbuf = tcp_get_buf(maxlen_work);
+				memcpy(sendbuf, Send_WORK, maxlen_work);
+				tcp_send(tcp_soc_WORK, sendbuf, maxlen_work);
+				wait_ack = true;
+				Flags.answer_work	= 0;				
 			}
+		}
 	}
 }

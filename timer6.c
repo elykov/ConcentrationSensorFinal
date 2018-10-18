@@ -1,7 +1,7 @@
 #include "stm32f7xx_hal.h"
 #include "timer6.h"
 
-bool isTextErrChangable = true;
+bool isTextErrChangable;
 
 void InitTimer6(void)
 {
@@ -14,6 +14,7 @@ void InitTimer6(void)
 	TIM6->DIER |= TIM_DIER_UIE; 		// fill timer event on
 	//
 	RCC->DCKCFGR1 |= RCC_DCKCFGR1_TIMPRE;
+	TIM6->CR1 |= TIM_CR1_CEN; // первое включение, почему-то без него не желает работать(сразу выключается, не проработав 3 секунды)
 }
 
 void TIM6_DAC_IRQHandler(void)
@@ -31,6 +32,5 @@ void TimerStop(void)
 {
 	TIM6->CR1 &= ~TIM_CR1_CEN; // timer off
 	TIM6->SR &= ~TIM_SR_UIF; // reset interrupt fill-flag in timer6
-	TIM6->CNT = 0;
 	isTextErrChangable = true;
 }

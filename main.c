@@ -12,6 +12,7 @@
 #include "global_var.h"
 #include "settings.h"
 #include "GUILogic.h"
+#include "serverPart.h"
 
 static void SystemClock_Config (void);
 static void MPU_Config (void);
@@ -30,7 +31,7 @@ extern  LOCALM localm[];
 
 unsigned char flag = 0, read = 0;
 unsigned char Offset = 0;
-unsigned char s = 0, wr=0;
+//unsigned char s = 0, wr=0;
 unsigned int q, w, t = 0;
 
 int main (void) 
@@ -61,8 +62,10 @@ int main (void)
 	
 	NET_init ();
 	Read_settings ();
+	
+	server_init();
 
-  for (;;)
+  LOOPSTART:
 	{
 
 		GUI_Exec();                   /* Execute all GUI jobs ... Return 0 if nothing was done. */
@@ -73,6 +76,12 @@ int main (void)
 		tcp_st_PLC   = tcp_get_state (tcp_soc_PLC); 
 		tcp_st_WORK   = tcp_get_state (tcp_soc_WORK);
 		
+		if (tcp_st_WORK != tcpStateCLOSED) 
+		{ }
+		else
+			soc_state = 0;
+
+    /*
 		switch (tcp_st_WORK) 
 		{
 			case tcpStateUNUSED: //Socket is free and not allocated yet. The function cannot return this value.
@@ -112,8 +121,11 @@ int main (void)
 			default:
 				break;
 		}
-
+    */
+		;
 		send_data ();	
+
+		server_working();
 
 		if (Flags.incoming_work == 1) 
 		{ 
@@ -121,20 +133,37 @@ int main (void)
 			Flags.incoming_work = 0;	
 		} //если пришло от датчика
 		
-		q++;
+		if (Flags.incoming_server == 1) 
+		{ 
+			Parsing_package_SERVER (); 
+			Flags.incoming_server = 0;	
+      Flags.answer_work = 1;
+		} //если пришло от АСУТП
+
+		++q;
 		
 		if (q >= 3000)
 		{
 			RefreshWindow();			
 			q = 0;
 		}
-		
+		/*
 		if (flag) 
 		{
 			Write_settings(); 
 			flag = 0;
 		} // принудительная запись в NOR
+		*/
+		;
+		goto LOOPSTART;
 	}
+}
+
+void HardFault_Handler(void)
+{
+	SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos)    |
+                           (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) |
+                            SCB_AIRCR_SYSRESETREQ_Msk);
 }
 
 /*************************** End of file ****************************/

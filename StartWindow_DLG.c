@@ -68,7 +68,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "Text", ID_TEXT_1, 390, 234, 80, 31, 0, 0x64, 0 },
 	{ TEXT_CreateIndirect, "Заслонка:", ID_TEXT_2, 300, 241, 90, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_3, 90, 241, 80, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_4, 180, 234, 90, 31, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_4, 180, 234, 100, 31, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };

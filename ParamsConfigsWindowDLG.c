@@ -72,10 +72,8 @@ void FillParamsEditsWindow(void)
 	sprintf(tempStr, "%u", period_answer);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_3), tempStr);
 
-	if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
-		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "Соединение не установлено.");
-	else
-		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "");
+	isTextErrChangable = true;
+	RefreshParamsWindow();
 }
 
 
@@ -110,7 +108,7 @@ static int SaveParams(void)
 			return 4;
 		
 		out_i_trowel = (unsigned short)n_tr;	
-    out_i_revers = (unsigned short)n_tr;
+    out_i_revers = (unsigned short)n_rev;
 		out_dump = (unsigned short)n_dump;
 		out_period_answer = (unsigned short)n_period;
 	
@@ -293,7 +291,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
 				TimerStop();
-        RefreshParamsWindow();
+        FillParamsEditsWindow();
 				break;
       }
       break;

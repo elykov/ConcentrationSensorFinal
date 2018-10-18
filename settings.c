@@ -125,7 +125,7 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	i_revers = (Recive_WORK[23] << 8) + Recive_WORK[22];	
 	
 	dump = (Recive_WORK[25] << 8) + Recive_WORK[24];	
-	dump = (Recive_WORK[27] << 8) + Recive_WORK[26];
+	//dump = (Recive_WORK[27] << 8) + Recive_WORK[26];
 	period_answer = (Recive_WORK[27] << 8) + Recive_WORK[26];
 	
 	tempBuf[0] = Recive_WORK[28];
@@ -215,11 +215,11 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	tempBuf[2] = Recive_WORK[100];
 	tempBuf[3] = Recive_WORK[101];
   i20mA = buf_tx_to_float();
-//	tempBuf[0] = Recive_WORK[102];
-//	tempBuf[1] = Recive_WORK[103];
-//	tempBuf[2] = Recive_WORK[104];
-//	tempBuf[3] = Recive_WORK[105];
-//  i_out = buf_tx_to_float();
+	tempBuf[0] = Recive_WORK[102];
+	tempBuf[1] = Recive_WORK[103];
+	tempBuf[2] = Recive_WORK[104];
+	tempBuf[3] = Recive_WORK[105];
+  i_out = buf_tx_to_float();
 		
 	if(Recive_WORK[106] == 255) Flags.udp_enable = 1;
 	else Flags.udp_enable = 0;
@@ -378,7 +378,6 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[91] = (Flags.udp_enable) ? 255 : 0;
 }
 
-
 void Change_Parameters (void)//внесение изменений в отправляемую посылку
 {
 	if(!Flags.ch_IP)
@@ -494,7 +493,7 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 
 //Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1; // change panel configs
 	
-		//Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
+	//Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
 	//Flags.ch_dump_i = Flags.ch_Cb = Flags.ch_Output_I = 1; // change other PID params
 
 	//Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = 1; // change amperage params

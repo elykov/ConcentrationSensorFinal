@@ -9,6 +9,8 @@
 
 struct TFlags 
 {
+	unsigned int answer_server;
+	unsigned int incoming_server;
 	unsigned int answer_work:					1;
 	unsigned int incoming_work:				1;		
 	unsigned int answer_tech:					1;
@@ -74,6 +76,8 @@ extern unsigned char Send_TECH[256];
 extern unsigned char Recive_TECH[256];
 extern unsigned char Send_PLC[256];
 extern unsigned char Recive_PLC[256];
+extern unsigned char Send_SERVER[256];
+extern unsigned char Recive_SERVER[256];
 
 extern unsigned char tempBuf[4];
 extern unsigned char  P_factor, I_factor, D_factor;

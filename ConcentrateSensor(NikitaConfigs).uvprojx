@@ -427,14 +427,19 @@
               <FilePath>.\KeyBoard.c</FilePath>
             </File>
             <File>
-              <FileName>KeyBoardWindowDLG.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\KeyBoardWindowDLG.c</FilePath>
-            </File>
-            <File>
               <FileName>timer6.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\timer6.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer7.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\timer7.c</FilePath>
+            </File>
+            <File>
+              <FileName>serverPart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\serverPart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -486,6 +491,16 @@
               <FileType>5</FileType>
               <FilePath>.\timer6.h</FilePath>
             </File>
+            <File>
+              <FileName>timer7.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\timer7.h</FilePath>
+            </File>
+            <File>
+              <FileName>serverPart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\serverPart.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -520,6 +535,11 @@
               <FileName>ParamsConfigsWindowDLG.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\ParamsConfigsWindowDLG.c</FilePath>
+            </File>
+            <File>
+              <FileName>KeyBoardWindowDLG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\KeyBoardWindowDLG.c</FilePath>
             </File>
           </Files>
         </Group>
