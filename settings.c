@@ -114,18 +114,13 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
   C = buf_tx_to_float();
 	
 	up = ((Recive_WORK[7] << 24) + (Recive_WORK[6] << 16) + (Recive_WORK[5] << 8) + Recive_WORK[4]);
-	
 	down = ((Recive_WORK[11] << 24) + (Recive_WORK[10] << 16) + (Recive_WORK[9] << 8) + Recive_WORK[8]);
-	
 	sum = ((Recive_WORK[15] << 24) + (Recive_WORK[14] << 16) + (Recive_WORK[13] << 8) + Recive_WORK[12]);
-	
 	DumpSum = ((Recive_WORK[19] << 24) + (Recive_WORK[18] << 16) + (Recive_WORK[17] << 8) + Recive_WORK[16]);
 	
 	i_trowel = (Recive_WORK[21] << 8) + Recive_WORK[20];
 	i_revers = (Recive_WORK[23] << 8) + Recive_WORK[22];	
-	
 	dump = (Recive_WORK[25] << 8) + Recive_WORK[24];	
-	//dump = (Recive_WORK[27] << 8) + Recive_WORK[26];
 	period_answer = (Recive_WORK[27] << 8) + Recive_WORK[26];
 	
 	tempBuf[0] = Recive_WORK[28];
@@ -267,8 +262,13 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	tempBuf[2] = Recive_WORK[142];
 	tempBuf[3] = Recive_WORK[143];
   Output_I = buf_tx_to_float();	
+	
+	damper = (Output_I - 4.f) / ((20.f - 4.f) / 100.f);		
+	if (damper > 100) 
+		damper = 100;
+	else if (damper < 0) 
+		damper = 0;
 }
-
 
 void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outПеременных)
 {

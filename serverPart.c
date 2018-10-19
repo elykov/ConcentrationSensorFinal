@@ -1,6 +1,9 @@
+#include "stm32f7xx_hal.h"
 #include "serverPart.h"
 #include "global_var.h"
 #include <string.h>
+#include "Net_User.h"
+#include "settings.h"
 #include "timer7.h"
 
 int32_t tcp_soc_SERVER, clientsCount = 0;  
@@ -32,7 +35,10 @@ void Form_package_SERVER(void) // копирует принятый пакет данных, добавляет данн
 		Send_SERVER[i + 1] = x[1]; \
 		Send_SERVER[i + 2] = x[2]; \
 		Send_SERVER[i + 3] = x[3];
-	                   
+	
+	converter.fdata = damper;
+	CopyNetDataToBuf(converter.cdata, 146);
+
 	CopyNetDataToBuf(LocM.IpAddr, 150);
   CopyNetDataToBuf(LocM.NetMask, 154);
 	CopyNetDataToBuf(LocM.DefGW, 158);
@@ -123,6 +129,50 @@ void Parsing_package_SERVER(void)
 
 	{
 		// сетевые настройки панели
+		int i = 0;
+		LOCALM newLocM;
+		uint8_t newRemIp[4];
+
+		while (i < 4)
+		{
+			newLocM.IpAddr[i] = Recive_SERVER[150 + i];
+			newLocM.NetMask[i] = Recive_SERVER[154 + i];
+			newLocM.DefGW[i] = Recive_SERVER[158 + i];
+			newLocM.PriDNS[i] = Recive_SERVER[162 + i];
+			newLocM.SecDNS[i] = Recive_SERVER[166 + i];
+			newRemIp[i] = Recive_SERVER[170 + i];
+			++i;
+		}
+
+		i = 0;
+		while (i < 4)
+		{
+			if (newLocM.IpAddr[i] != LocM.IpAddr[i]
+					|| newLocM.NetMask[i] != LocM.NetMask[i]
+					|| newLocM.DefGW[i] != LocM.DefGW[i]
+					|| newLocM.PriDNS[i] != LocM.PriDNS[i]
+					|| newLocM.SecDNS[i] != LocM.SecDNS[i]
+					|| newRemIp[i] != rem_ip[i])
+			{
+				// запись настроек и затем перезапуск
+				i = 0;
+				while (i < 4)
+				{
+					LocM.IpAddr[i] = newLocM.IpAddr[i];
+					LocM.NetMask[i] = newLocM.NetMask[i];
+					LocM.DefGW[i] = newLocM.DefGW[i];
+					LocM.PriDNS[i] = newLocM.PriDNS[i];
+					LocM.SecDNS[i] = newLocM.SecDNS[i];
+					rem_ip[i] = newRemIp[i];
+					++i;
+				}
+				
+				Write_settings();
+				SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos)    |
+				 (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) | SCB_AIRCR_SYSRESETREQ_Msk);
+			}
+			++i;
+		}
 	}
 
 	Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1; // change panel configs

@@ -137,6 +137,8 @@ extern float oh;
 extern  LOCALM localm[];
 #define LocM   localm[NETIF_ETH]
 
+extern float damper;
+
 #endif /* GLOBAL_VAR_H_ */
 
 

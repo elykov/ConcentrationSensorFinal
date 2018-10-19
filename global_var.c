@@ -85,4 +85,4 @@ float oh = 0;
 
 struct GUILogic logic;             
 struct KeyBoard keyBoard = {0};
-
+float damper;

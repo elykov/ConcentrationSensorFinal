@@ -213,15 +213,7 @@ void RefreshStartWindow(void)
 	}
 		
 	{ //заслонка
-		float aaa = Output_I;
-		float b = (aaa - 4.f) / ((20.f - 4.f) / 100.f);
-		
-		if (b > 100) 
-			b = 100;
-		else if (b < 0) 
-			b = 0;
-		
-		sprintf(tempStr, "%3.0f %%", b);
+		sprintf(tempStr, "%3.0f %%", damper);
 		WM_HWIN hItem = WM_GetDialogItem(window, ID_TEXT_1);
 		TEXT_SetText(hItem, tempStr);	
 	}
