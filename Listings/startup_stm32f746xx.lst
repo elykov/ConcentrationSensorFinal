@@ -956,18 +956,20 @@ ARM Macro Assembler    Page 15
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.sp --apcs=
 interwork --depend=.\objects\startup_stm32f746xx.d -o.\objects\startup_stm32f74
-6xx.o -I.\RTE\Device\STM32F746NGHx -I.\RTE\_TriglaTouchScreen -ID:\Work\MDKKeil
-\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include -ID:\Work\MDKKeil\ARM\PACK\ARM\CMS
-IS\5.4.0\CMSIS\Driver\Include -ID:\Work\MDKKeil\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\
-RTOS\RTX\INC -ID:\Work\MDKKeil\ARM\PACK\Keil\MDK-Middleware\6.6.0\Board -ID:\Wo
-rk\MDKKeil\ARM\PACK\Keil\MDK-Middleware\6.6.0\Network\Include -ID:\Work\MDKKeil
-\ARM\PACK\Keil\MDK-Middleware\6.6.0\emWin\Include -ID:\Work\MDKKeil\ARM\PACK\Ke
-il\STM32F7xx_DFP\2.11.0\Drivers\BSP\STM32746G-Discovery -ID:\Work\MDKKeil\ARM\P
-ACK\Keil\STM32F7xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include -ID:\Wo
-rk\MDKKeil\ARM\PACK\Keil\STM32F7xx_DFP\2.11.0\Drivers\STM32F7xx_HAL_Driver\Inc 
---predefine="__RTX SETA 1" --predefine="__UVISION_VERSION SETA 525" --predefine
-="_RTE_ SETA 1" --predefine="STM32F746xx SETA 1" --list=.\listings\startup_stm3
-2f746xx.lst RTE\Device\STM32F746NGHx\startup_stm32f746xx.s
+6xx.o -I.\RTE\Device\STM32F746NGHx -I.\RTE\_TriglaTouchScreen -I"E:\Programs\In
+stalled\Keil 5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include" -I"E:\Programs\Inst
+alled\Keil 5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Driver\Include" -I"E:\Programs\Inst
+alled\Keil 5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\RTOS\RTX\INC" -I"E:\Programs\Instal
+led\Keil 5\ARM\PACK\Keil\MDK-Middleware\6.6.0\Board" -I"E:\Programs\Installed\K
+eil 5\ARM\PACK\Keil\MDK-Middleware\6.6.0\Network\Include" -I"E:\Programs\Instal
+led\Keil 5\ARM\PACK\Keil\MDK-Middleware\6.6.0\emWin\Include" -I"E:\Programs\Ins
+talled\Keil 5\ARM\PACK\Keil\STM32F7xx_DFP\2.11.0\Drivers\BSP\STM32746G-Discover
+y" -I"E:\Programs\Installed\Keil 5\ARM\PACK\Keil\STM32F7xx_DFP\2.11.0\Drivers\C
+MSIS\Device\ST\STM32F7xx\Include" -I"E:\Programs\Installed\Keil 5\ARM\PACK\Keil
+\STM32F7xx_DFP\2.11.0\Drivers\STM32F7xx_HAL_Driver\Inc" --predefine="__RTX SETA
+ 1" --predefine="__UVISION_VERSION SETA 525" --predefine="_RTE_ SETA 1" --prede
+fine="STM32F746xx SETA 1" --list=.\listings\startup_stm32f746xx.lst RTE\Device\
+STM32F746NGHx\startup_stm32f746xx.s
 
 
 

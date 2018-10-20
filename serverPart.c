@@ -57,6 +57,55 @@ void Parsing_package_SERVER(void)
 		converter.cdata[2] = s[ind + 2]; \
 		converter.cdata[3] = s[ind + 3];
 	
+	// если меняются сетевые настройки - перезапуск панели
+	{
+		// сетевые настройки панели
+		int i = 0;
+		LOCALM newLocM;
+		uint8_t newRemIp[4];
+
+		while (i < 4)
+		{
+			newLocM.IpAddr[i] = Recive_SERVER[150 + i];
+			newLocM.NetMask[i] = Recive_SERVER[154 + i];
+			newLocM.DefGW[i] = Recive_SERVER[158 + i];
+			newLocM.PriDNS[i] = Recive_SERVER[162 + i];
+			newLocM.SecDNS[i] = Recive_SERVER[166 + i];
+			newRemIp[i] = Recive_SERVER[170 + i];
+			++i;
+		}
+
+		i = 0;
+		while (i < 4)
+		{
+			if (newLocM.IpAddr[i] != LocM.IpAddr[i]
+					|| newLocM.NetMask[i] != LocM.NetMask[i]
+					|| newLocM.DefGW[i] != LocM.DefGW[i]
+					|| newLocM.PriDNS[i] != LocM.PriDNS[i]
+					|| newLocM.SecDNS[i] != LocM.SecDNS[i]
+					|| newRemIp[i] != rem_ip[i])
+			{
+				// запись настроек и затем перезапуск
+				i = 0;
+				while (i < 4)
+				{
+					LocM.IpAddr[i] = newLocM.IpAddr[i];
+					LocM.NetMask[i] = newLocM.NetMask[i];
+					LocM.DefGW[i] = newLocM.DefGW[i];
+					LocM.PriDNS[i] = newLocM.PriDNS[i];
+					LocM.SecDNS[i] = newLocM.SecDNS[i];
+					rem_ip[i] = newRemIp[i];
+					++i;
+				}
+				
+				Write_settings();
+				SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos)    |
+				 (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) | SCB_AIRCR_SYSRESETREQ_Msk);
+			}
+			++i;
+		}
+	}
+	
 	outDatIP[0] = Recive_SERVER[64];
 	outDatIP[1] = Recive_SERVER[65];	
 	outDatIP[2] = Recive_SERVER[66];
@@ -126,54 +175,6 @@ void Parsing_package_SERVER(void)
 	out_referens = converter.fdata;
 
 	Flags.udp_enable = (Recive_SERVER[106] == 255) ? 1 : 0;
-
-	{
-		// сетевые настройки панели
-		int i = 0;
-		LOCALM newLocM;
-		uint8_t newRemIp[4];
-
-		while (i < 4)
-		{
-			newLocM.IpAddr[i] = Recive_SERVER[150 + i];
-			newLocM.NetMask[i] = Recive_SERVER[154 + i];
-			newLocM.DefGW[i] = Recive_SERVER[158 + i];
-			newLocM.PriDNS[i] = Recive_SERVER[162 + i];
-			newLocM.SecDNS[i] = Recive_SERVER[166 + i];
-			newRemIp[i] = Recive_SERVER[170 + i];
-			++i;
-		}
-
-		i = 0;
-		while (i < 4)
-		{
-			if (newLocM.IpAddr[i] != LocM.IpAddr[i]
-					|| newLocM.NetMask[i] != LocM.NetMask[i]
-					|| newLocM.DefGW[i] != LocM.DefGW[i]
-					|| newLocM.PriDNS[i] != LocM.PriDNS[i]
-					|| newLocM.SecDNS[i] != LocM.SecDNS[i]
-					|| newRemIp[i] != rem_ip[i])
-			{
-				// запись настроек и затем перезапуск
-				i = 0;
-				while (i < 4)
-				{
-					LocM.IpAddr[i] = newLocM.IpAddr[i];
-					LocM.NetMask[i] = newLocM.NetMask[i];
-					LocM.DefGW[i] = newLocM.DefGW[i];
-					LocM.PriDNS[i] = newLocM.PriDNS[i];
-					LocM.SecDNS[i] = newLocM.SecDNS[i];
-					rem_ip[i] = newRemIp[i];
-					++i;
-				}
-				
-				Write_settings();
-				SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos)    |
-				 (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) | SCB_AIRCR_SYSRESETREQ_Msk);
-			}
-			++i;
-		}
-	}
 
 	Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1; // change panel configs
 	Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
