@@ -2,7 +2,9 @@
 #include "stm32f7xx_hal.h"
 #include "DIALOG.h"
 #include "qspi.h"
-#include "settings.h"
+#include "settings.h"  
+#include "serverPart.h"
+#include "Net_User.h"
 
 #define ID_WINDOW_0         (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0         (GUI_ID_USER + 0x01)
@@ -112,7 +114,16 @@ int SetPanelNetConfigs()
 	}
 
 	// save to qspi
-	Write_settings();
+	Write_settings(); 
+	
+	tcp_close(tcp_soc_WORK);
+	tcp_close(tcp_soc_SERVER);
+	tcp_close(tcp_soc_PLC);
+	tcp_close(tcp_soc_TECH);
+
+	SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+		(SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) | SCB_AIRCR_SYSRESETREQ_Msk);
+
 	return 0;
 }
 
