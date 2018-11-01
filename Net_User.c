@@ -1,14 +1,10 @@
-/********************************************************************************
-
-********************************************************************************/
-
 #include "stm32f746xx.h"
 #include "rl_net.h"
 #include <string.h>
 #include "global_var.h"
 #include "settings.h"
 
-
+int sendCount = 0;
 int tcp_soc_TECH, tcp_soc_PLC, tcp_soc_WORK;
 
 unsigned char rem_ip[4] = {192,168,99,140};
@@ -16,7 +12,6 @@ int eth_st, net_st, tcp_st_TECH, tcp_st_PLC, tcp_st_WORK;
 unsigned char state_socket_TECH = 0, state_socket_PLC = 0, state_socket_WORK = 0;
 unsigned char soc_state = 0;
 bool wait_ack;
-
 
 unsigned int tcp_callback_TECH (int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len) 
 {
@@ -52,10 +47,10 @@ unsigned int tcp_callback_TECH (int32_t soc, tcpEvent event, const uint8_t *buf,
       // Data length is 'len' bytes
 			if(len > 0xff) n = 0xff;
 			else n = len;
-			for(i = 0; i < n; i++)//for(i = 0; i <= len; i++)
+			for(i = 0; i < n; ++i)//for(i = 0; i <= len; i++)
 			{
 				Recive_TECH[i] = *buf;
-				buf++;
+				++buf;
 			}
 			Flags.incoming_tech = 1;		
 			tcp_reset_window (soc);
@@ -101,10 +96,10 @@ unsigned int tcp_callback_PLC (int32_t soc, tcpEvent event, const uint8_t *buf, 
       // Data length is 'len' bytes
 			n = (len > 0xff) ? 0xff : len;
 			
-			for(i = 0; i < n; i++)//for(i = 0; i <= len; i++)
+			for(i = 0; i < n; ++i)//for(i = 0; i <= len; i++)
 			{
 				Recive_PLC[i] = *buf;
-				buf++;
+				++buf;
 			}
 			Flags.incoming_plc = 1;
 			tcp_reset_window (soc);		
@@ -143,7 +138,8 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
       // Connection has been closed 
 			i_trowel = i_revers = dump = period_answer = 
 			referens = Cb = Output_I = dump_i = 
-			P_factor = I_factor = D_factor = 0;
+			P_factor = I_factor = D_factor = 
+			offset = gain = damper = 0;
 			__nop();
       break;
     case tcpEventACK:
@@ -155,10 +151,10 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
       // TCP data frame has been received, 'buf' points to data 
       // Data length is 'len' bytes
 			n = (len > 0xff) ? 0xff : len;
-			for(i = 0; i < n; i++)
+			for(i = 0; i < n; ++i)
 			{
 				Recive_WORK[i] = *buf;
-				buf++;
+				++buf;
 			}
 			Flags.incoming_work = 1;
 			tcp_reset_window (soc);		
@@ -215,7 +211,9 @@ void send_data (void) //датчик
 				memcpy(sendbuf, Send_WORK, maxlen_work);
 				tcp_send(tcp_soc_WORK, sendbuf, maxlen_work);
 				wait_ack = true;
-				Flags.answer_work	= 0;				
+				Flags.answer_work	= 0;
+			  sendParam = 0;
+				++sendCount;
 			}
 		}
 	}

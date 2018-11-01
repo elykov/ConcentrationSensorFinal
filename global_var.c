@@ -85,4 +85,12 @@ float oh = 0;
 
 struct GUILogic logic;             
 struct KeyBoard keyBoard = {0};
-float damper;
+float damper, out_damper;
+uint8_t workMode = 1;
+float offset = 0, gain = 0;
+float out_offset, out_gain;
+uint8_t out_workMode;
+float damper_manual = 50.f;
+
+uint8_t sendParam = 0;
+

@@ -193,10 +193,10 @@ unsigned int tcp_callback_SERVER (int32_t soc, tcpEvent event, const uint8_t *bu
 		case tcpEventData:
 		{
 			int n = (len > 0xff) ? 0xff : len;
-			for(int i = 0; i < n; i++)
+			for(int i = 0; i < n; ++i)
 			{
 				Recive_SERVER[i] = *buf;
-				buf++;
+				++buf;
 			}
 			Flags.incoming_server = 1;
 			tcp_reset_window (soc);

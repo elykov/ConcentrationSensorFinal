@@ -44,7 +44,7 @@
 
 //     <o>Address byte 6 <0x00-0xff>
 //     <i>Default: 0x5E
-#define ETH0_MAC6               0xF1
+#define ETH0_MAC6               0xF5
 //   </h>
 
 //   <h>IP Address
@@ -61,11 +61,11 @@
 
 //     <o>Address byte 3 <0-255>
 //     <i>Default: 0
-#define ETH0_IP3                99
+#define ETH0_IP3                82
 
 //     <o>Address byte 4 <0-255>
 //     <i>Default: 100
-#define ETH0_IP4                185
+#define ETH0_IP4                199
 //   </h>
 
 //   <h>Subnet mask
@@ -99,49 +99,49 @@
 
 //     <o>Address byte 3 <0-255>
 //     <i>Default: 0
-#define ETH0_GW3                0
+#define ETH0_GW3                82
 
 //     <o>Address byte 4 <0-255>
 //     <i>Default: 254
-#define ETH0_GW4                254
+#define ETH0_GW4                198
 //   </h>
 
 //   <h>Primary DNS Server
 //   <i>Primary DNS Server IP Address
 //     <o>Address byte 1 <0-255>
 //     <i>Default: 194
-#define ETH0_PRI_DNS1           194
+#define ETH0_PRI_DNS1           192
 
 //     <o>Address byte 2 <0-255>
 //     <i>Default: 25
-#define ETH0_PRI_DNS2           25
+#define ETH0_PRI_DNS2           168
 
 //     <o>Address byte 3 <0-255>
 //     <i>Default: 2
-#define ETH0_PRI_DNS3           2
+#define ETH0_PRI_DNS3           82
 
 //     <o>Address byte 4 <0-255>
 //     <i>Default: 129
-#define ETH0_PRI_DNS4           129
+#define ETH0_PRI_DNS4           198
 //   </h>
 
 //   <h>Secondary DNS Server
 //   <i>Secondary DNS Server IP Address
 //     <o>Address byte 1 <0-255>
 //     <i>Default: 194
-#define ETH0_SEC_DNS1           194
+#define ETH0_SEC_DNS1           192
 
 //     <o>Address byte 2 <0-255>
 //     <i>Default: 25
-#define ETH0_SEC_DNS2           25
+#define ETH0_SEC_DNS2           168
 
 //     <o>Address byte 3 <0-255>
 //     <i>Default: 2
-#define ETH0_SEC_DNS3           2
+#define ETH0_SEC_DNS3           82
 
 //     <o>Address byte 4 <0-255>
 //     <i>Default: 130
-#define ETH0_SEC_DNS4           130
+#define ETH0_SEC_DNS4           198
 //   </h>
 
 //   <h>ARP Definitions

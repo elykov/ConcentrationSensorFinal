@@ -387,6 +387,16 @@
               <FilePath>.\global_var.c</FilePath>
             </File>
             <File>
+              <FileName>GUILogic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\GUILogic.c</FilePath>
+            </File>
+            <File>
+              <FileName>KeyBoard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\KeyBoard.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
@@ -402,29 +412,14 @@
               <FilePath>.\qspi.c</FilePath>
             </File>
             <File>
+              <FileName>serverPart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\serverPart.c</FilePath>
+            </File>
+            <File>
               <FileName>settings.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\settings.c</FilePath>
-            </File>
-            <File>
-              <FileName>Verdana20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Verdana20.c</FilePath>
-            </File>
-            <File>
-              <FileName>Verdana200asc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Verdana200asc.c</FilePath>
-            </File>
-            <File>
-              <FileName>GUILogic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\GUILogic.c</FilePath>
-            </File>
-            <File>
-              <FileName>KeyBoard.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\KeyBoard.c</FilePath>
             </File>
             <File>
               <FileName>timer6.c</FileName>
@@ -437,9 +432,19 @@
               <FilePath>.\timer7.c</FilePath>
             </File>
             <File>
-              <FileName>serverPart.c</FileName>
+              <FileName>Verdana20.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\serverPart.c</FilePath>
+              <FilePath>.\Verdana20.c</FilePath>
+            </File>
+            <File>
+              <FileName>Verdana40.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Verdana40.c</FilePath>
+            </File>
+            <File>
+              <FileName>Verdana220.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Verdana220.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -452,6 +457,21 @@
               <FilePath>.\global_var.h</FilePath>
             </File>
             <File>
+              <FileName>GUILogic.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\GUILogic.h</FilePath>
+            </File>
+            <File>
+              <FileName>KeyBoard.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\KeyBoard.h</FilePath>
+            </File>
+            <File>
+              <FileName>KeyBoardWindowDLG.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\KeyBoardWindowDLG.h</FilePath>
+            </File>
+            <File>
               <FileName>main.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\main.h</FilePath>
@@ -462,29 +482,19 @@
               <FilePath>.\Net_User.h</FilePath>
             </File>
             <File>
-              <FileName>settings.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\settings.h</FilePath>
-            </File>
-            <File>
               <FileName>qspi.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\qspi.h</FilePath>
             </File>
             <File>
-              <FileName>GUILogic.h</FileName>
+              <FileName>serverPart.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\GUILogic.h</FilePath>
+              <FilePath>.\serverPart.h</FilePath>
             </File>
             <File>
-              <FileName>KeyBoardWindowDLG.h</FileName>
+              <FileName>settings.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\KeyBoardWindowDLG.h</FilePath>
-            </File>
-            <File>
-              <FileName>KeyBoard.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\KeyBoard.h</FilePath>
+              <FilePath>.\settings.h</FilePath>
             </File>
             <File>
               <FileName>timer6.h</FileName>
@@ -495,11 +505,6 @@
               <FileName>timer7.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\timer7.h</FilePath>
-            </File>
-            <File>
-              <FileName>serverPart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\serverPart.h</FilePath>
             </File>
           </Files>
         </Group>

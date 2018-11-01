@@ -104,7 +104,7 @@ int SetPanelNetConfigs()
 	if (get_IP(iptxt, currentDNS2) > 0)
 		return 5;
 
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 4; ++i)
 	{
 		LocM.IpAddr[i] = currentIP[i];
 		LocM.NetMask[i] = currentMask[i];
@@ -308,6 +308,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							break;
 					}
 					TimerStart();
+					keyBoard.IsFieldChanged = false;
 					break;
 				}        
       }
@@ -317,7 +318,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        TimerStop();
+        keyBoard.IsFieldChanged = false;
+				TimerStop();
 				WindowChange(MenuWindow);
 			  break;
       }
@@ -327,6 +329,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
+				keyBoard.IsFieldChanged = false;
         TimerStop();
 				SetPanelNetEdits();
 				break;

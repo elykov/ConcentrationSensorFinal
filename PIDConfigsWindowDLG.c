@@ -139,14 +139,11 @@ static int SavePIDParams(void)
     Flags.ch_P = Flags.ch_I = Flags.ch_D = // change PID 
 			Flags.ch_dump_i = Flags.ch_ref = 1; // change other PID params
 		
+		sendParam = 0x02;
 		Flags.answer_work = 1; 
+		keyBoard.IsFieldChanged = false;
 		return 0;
 	}
-
-	//Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = Flags.ch_period = 1; // change amperage params
-	//Flags.ch_20mA = Flags.ch_4mA = 1; // change amperage	
-	//Flags.ch_a = Flags.ch_b = Flags.ch_c = Flags.ch_d = Flags.ch_e = 
-	//Flags.ch_f = Flags.ch_g = Flags.ch_h = Flags.ch_n = 1; // change params	
 	
 	return 10;
 }
@@ -343,7 +340,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							break;
 					}
 					TimerStart();
-					// USER END
 					break;
 				}
       }
@@ -354,7 +350,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
-        TimerStop();
+        TimerStop(); 
+				keyBoard.IsFieldChanged = false;
 				WindowChange(MenuWindow);
 				// USER END
         break;
@@ -366,11 +363,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
 				TimerStop();
+				keyBoard.IsFieldChanged = false;
         RefreshPIDWindow();
 				FillPID();
         break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
       }
       break;
     case ID_EDIT_0: // Notifications sent by 'EditP'
@@ -429,7 +425,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), "Изменение Dump_i");
-			  break;
+				break;
       case WM_NOTIFICATION_RELEASED:
         break;
       case WM_NOTIFICATION_VALUE_CHANGED:

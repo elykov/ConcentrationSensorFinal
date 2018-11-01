@@ -1643,14 +1643,14 @@ void LCD_X_Config(void) {
   //
   // Setting up VRam address and remember pixel size
   //
-  for (i = 0; i < GUI_NUM_LAYERS; i++) {
+  for (i = 0; i < GUI_NUM_LAYERS; ++i) {
     LCD_SetVRAMAddrEx(i, (void *)(_aAddr[i]));                                                 // Setting up VRam address
     _aBytesPerPixels[i] = LCD_GetBitsPerPixelEx(i) >> 3;                                       // Remember pixel size
   }
   //
   // Setting up custom functions
   //
-  for (i = 0; i < GUI_NUM_LAYERS; i++) {
+  for (i = 0; i < GUI_NUM_LAYERS; ++i) {
     if (_aOrientation[i] == ROTATION_0) {
       LCD_SetDevFunc(i, LCD_DEVFUNC_COPYBUFFER, (void(*)(void))_LCD_CopyBuffer);               // Set custom function for copying complete buffers (used by multiple buffering) using DMA2D
       LCD_SetDevFunc(i, LCD_DEVFUNC_COPYRECT, (void(*)(void))_LCD_CopyRect);                   // Set custom function for copy recxtangle areas (used by GUI_CopyRect()) using DMA2D

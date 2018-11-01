@@ -1,7 +1,3 @@
-/***********************************************************************
-
-***********************************************************************/
-
 #include "qspi.h"
 #include "global_var.h"
 #include "rl_net_lib.h"
@@ -118,10 +114,10 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	sum = ((Recive_WORK[15] << 24) + (Recive_WORK[14] << 16) + (Recive_WORK[13] << 8) + Recive_WORK[12]);
 	DumpSum = ((Recive_WORK[19] << 24) + (Recive_WORK[18] << 16) + (Recive_WORK[17] << 8) + Recive_WORK[16]);
 	
-	i_trowel = (Recive_WORK[21] << 8) + Recive_WORK[20];
-	i_revers = (Recive_WORK[23] << 8) + Recive_WORK[22];	
-	dump = (Recive_WORK[25] << 8) + Recive_WORK[24];	
-	period_answer = (Recive_WORK[27] << 8) + Recive_WORK[26];
+	i_trowel = Recive_WORK[20] + (Recive_WORK[21] << 8);
+	i_revers = Recive_WORK[22] + (Recive_WORK[23] << 8);	
+	dump = Recive_WORK[24] + (Recive_WORK[25] << 8);	
+	period_answer = Recive_WORK[26] + (Recive_WORK[27] << 8);
 	
 	tempBuf[0] = Recive_WORK[28];
 	tempBuf[1] = Recive_WORK[29];
@@ -263,11 +259,30 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	tempBuf[3] = Recive_WORK[143];
   Output_I = buf_tx_to_float();	
 	
-	damper = (Output_I - 4.f) / ((20.f - 4.f) / 100.f);		
+	workMode = Recive_WORK[144];
+
+	tempBuf[0] = Recive_WORK[145];
+	tempBuf[1] = Recive_WORK[146];
+	tempBuf[2] = Recive_WORK[147];
+	tempBuf[3] = Recive_WORK[148];
+  damper = buf_tx_to_float();
+	tempBuf[0] = Recive_WORK[149];
+	tempBuf[1] = Recive_WORK[150];
+	tempBuf[2] = Recive_WORK[151];
+	tempBuf[3] = Recive_WORK[152];
+  offset = buf_tx_to_float();
+	tempBuf[0] = Recive_WORK[153];
+	tempBuf[1] = Recive_WORK[154];
+	tempBuf[2] = Recive_WORK[155];
+	tempBuf[3] = Recive_WORK[156];
+  gain = buf_tx_to_float();
+
+	/*
 	if (damper > 100) 
 		damper = 100;
 	else if (damper < 0) 
 		damper = 0;
+	*/
 }
 
 void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outПеременных)
@@ -376,6 +391,30 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[89] = tempBuf[2];
 	Send_WORK[90] = tempBuf[3];
 	Send_WORK[91] = (Flags.udp_enable) ? 255 : 0;
+	float_to_buf_tx(out_damper);
+	Send_WORK[92] = tempBuf[0];
+	Send_WORK[93] = tempBuf[1];
+	Send_WORK[94] = tempBuf[2];
+	Send_WORK[95] = tempBuf[3];
+
+	Send_WORK[96] = out_workMode;
+
+	float_to_buf_tx (out_offset);
+	Send_WORK[97] = tempBuf[0];
+	Send_WORK[98] = tempBuf[1];
+	Send_WORK[99] = tempBuf[2];
+	Send_WORK[100] = tempBuf[3];
+	float_to_buf_tx (out_gain);
+	Send_WORK[101] = tempBuf[0];
+	Send_WORK[102] = tempBuf[1];
+	Send_WORK[103] = tempBuf[2];
+	Send_WORK[104] = tempBuf[3];
+
+	for(int i = 105; i < 253; i++)
+		Send_WORK[i] = 0;
+
+	Send_WORK[253] = 1;
+	Send_WORK[254] = sendParam;
 }
 
 void Change_Parameters (void)//внесение изменений в отправляемую посылку
@@ -398,7 +437,7 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	}
 	else Flags.ch_Mask = 0;		
 	
-	if(!Flags.ch_DefGW)
+	if (!Flags.ch_DefGW)
 	{
 		outDatDefGW[0] = DatDefGW[0];
 		outDatDefGW[1] = DatDefGW[1];
@@ -410,9 +449,9 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	if(!Flags.ch_PriDNS)
 	{
 		outDatPriDNS[0] = DatPriDNS[0];
-		outDatPriDNS[0] = DatPriDNS[0];
-		outDatPriDNS[0] = DatPriDNS[0];
-		outDatPriDNS[0] = DatPriDNS[0];
+		outDatPriDNS[1] = DatPriDNS[1];
+		outDatPriDNS[2] = DatPriDNS[2];
+		outDatPriDNS[3] = DatPriDNS[3];
 	}
 	else Flags.ch_PriDNS = 0;	
 
@@ -484,6 +523,15 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 
 	if(!Flags.ch_ref) {	out_referens = referens;	}
 	else Flags.ch_ref = 0;
+
+	if(!Flags.ch_damper) {	out_damper = damper;	}
+	else Flags.ch_damper = 0;
+
+	if(!Flags.ch_offset) { out_offset = offset; }
+	else Flags.ch_offset = 0;
+
+	if(!Flags.ch_gain) { out_gain = gain; }
+	else Flags.ch_gain = 0;
 
 	OUTremUDPip[0] = remUDPip[0];
 	OUTremUDPip[1] = remUDPip[1];

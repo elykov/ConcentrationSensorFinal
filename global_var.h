@@ -9,6 +9,7 @@
 
 struct TFlags 
 {
+	//uint8_t 
 	unsigned int answer_server;
 	unsigned int incoming_server;
 	unsigned int answer_work:					1;
@@ -46,8 +47,9 @@ struct TFlags
 	unsigned int ch_ref:							1;
 	unsigned int ch_Cb:								1;
 	unsigned int ch_Output_I:					1;
-//	unsigned int tmp:									1;
-
+	unsigned int ch_damper:						1;
+	unsigned int ch_offset:						1;
+	unsigned int ch_gain:							1;
 };
 
 extern struct TFlags Flags;
@@ -137,7 +139,12 @@ extern float oh;
 extern  LOCALM localm[];
 #define LocM   localm[NETIF_ETH]
 
-extern float damper;
+extern uint8_t sendParam;
+extern uint8_t workMode;
+extern float damper, offset, gain;
+extern float out_damper,out_offset, out_gain;
+extern uint8_t out_workMode;
+extern float damper_manual;
 
 #endif /* GLOBAL_VAR_H_ */
 

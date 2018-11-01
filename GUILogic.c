@@ -76,11 +76,11 @@ int get_IP(const char* ip_str, uint8_t* resIP)
 	
 	sscanf(ip_str, "%d.%d.%d.%d", &inputIP[0], &inputIP[1], &inputIP[2], &inputIP[3]);
 	
-	for	(int i = 0; i < 4; i++) // если какой-то элемент больше 255 - неверно
+	for	(int i = 0; i < 4; ++i) // если какой-то элемент больше 255 - неверно
 		if (inputIP[i] > 255)
 			return 1;
 	
-	for	(int i = 0; i < 4; i++)
+	for	(int i = 0; i < 4; ++i)
 		resIP[i] = (uint8_t)inputIP[i];
 
 	return 0;

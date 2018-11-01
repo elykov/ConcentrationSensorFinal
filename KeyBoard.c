@@ -9,22 +9,19 @@ char txt[25];
 
 void ShowKeyBoard(WM_HWIN edit, char* title_text) // done
 {
-	/*
-	if (keyBoard._keyboard > 0)
-	{
-		if (edit != keyBoard.currentEdit)
-		{
-			keyBoard.currentEdit = edit;
-			EDIT_GetText(keyBoard.currentEdit, oldEditText, 29);
-			EDIT_SetText(keyBoard._this_edit, oldEditText); 
-		}                             
-		return;
-	}
-	keyBoard._keyboard = CreateKeyBoardWindow();
+	if (keyBoard._keyboard == 0)
+		keyBoard._keyboard = CreateKeyBoardWindow();
+		
+	keyBoard.IsFieldChanged = false;
 	keyBoard.currentEdit = edit;
-	*/
-	
-	
+	EDIT_GetText(keyBoard.currentEdit, oldEditText, 24);
+	EDIT_SetText(keyBoard._this_edit, oldEditText);
+	TEXT_SetText(keyBoard._title_text, title_text);
+	WM_ShowWindow(keyBoard._keyboard);
+}
+
+void ShowKeyBoardSW(WM_HWIN edit, char* title_text, bool* isFieldChanged) 
+{
 	if (keyBoard._keyboard == 0)
 		keyBoard._keyboard = CreateKeyBoardWindow();
 	
@@ -49,12 +46,14 @@ void Button_HandlePush(int id) // done
 	{
 		EDIT_GetText(keyBoard._this_edit, oldEditText, 24);
 		EDIT_SetText(keyBoard.currentEdit, oldEditText);
+		keyBoard.IsFieldChanged = true;
 		HideKeyBoard();
 		return;
 	}
 	else if (id == ID_BUTTON_14) // esc
 	{
 		EDIT_SetText(keyBoard.currentEdit, oldEditText);
+		keyBoard.IsFieldChanged = false;
 		HideKeyBoard();
 		return;
 	}
@@ -101,4 +100,3 @@ void Button_HandlePush(int id) // done
 	txt[txtsize + 1] = '\0';
 	EDIT_SetText(keyBoard._this_edit, txt);
 }
-

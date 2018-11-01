@@ -169,7 +169,7 @@ int SaveNetData(void)
 		if (get_IP(iptxt, sensDNS2) > 0)
 			return 5;
 
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 4; ++i)
 		{
 			outDatIP[i] = sensIP[i];
 			outDatMask[i] = sensMask[i];
@@ -179,10 +179,11 @@ int SaveNetData(void)
 		}
 		
 		Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1;
+		sendParam = 0x08;
 		Flags.answer_work = 1;
 	}
 
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 4; ++i)
 		rem_ip[i] = sensIP[i];
 	  
 	// save to qspi
@@ -333,6 +334,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					{
 						case 0:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Настройки применены.");
+							keyBoard.IsFieldChanged = false;
 							break;
 						case 1:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан IP.");
@@ -361,6 +363,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         TimerStop();
+				keyBoard.IsFieldChanged = false;
 				WindowChange(MenuWindow);
 				break;
       }
@@ -371,6 +374,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         TimerStop();
+				keyBoard.IsFieldChanged = false;
 				SetSensorNetEdits();
 				break;
       }
