@@ -446,6 +446,11 @@
               <FileType>1</FileType>
               <FilePath>.\Verdana220.c</FilePath>
             </File>
+            <File>
+              <FileName>modbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\modbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -505,6 +510,11 @@
               <FileName>timer7.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\timer7.h</FilePath>
+            </File>
+            <File>
+              <FileName>modbus.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\modbus.h</FilePath>
             </File>
           </Files>
         </Group>

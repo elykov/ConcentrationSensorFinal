@@ -13,10 +13,18 @@
 #include "GUILogic.h"
 #include "serverPart.h"
 #include "Net_User.h"
+#include "modbus.h"
 
 static void SystemClock_Config (void);
 static void MPU_Config (void);
 static void CPU_CACHE_Enable (void);
+
+modbus_t mb;
+
+extern mb_in_packet incomingPack;
+extern mb_out_packet outcomingPack;
+extern bool isSend;
+extern uint8_t outBuffer[];
 
 #ifdef RTE_CMSIS_RTOS_RTX
 extern uint32_t os_time;
@@ -62,7 +70,10 @@ int main (void)
 	
 	NET_init ();
 	Read_settings ();
-	
+
+	mb.port = 5000;
+	initModbus(&mb);
+
 	server_init();
 
   LOOPSTART:
@@ -124,6 +135,12 @@ int main (void)
     */
 		;
 		send_data ();	
+
+    if (isSend)
+		{
+			modbus_send(outBuffer, &mb);
+			isSend = false;
+		}
 
 		server_working();
 

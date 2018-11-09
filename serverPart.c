@@ -8,12 +8,7 @@
 
 int32_t tcp_soc_SERVER, clientsCount = 0;  
 
-union Converter
-{
-	int idata;
-	float fdata;
-	char cdata[4];
-} converter;
+extern union Converter converter;
 
 int server_init(void)
 {

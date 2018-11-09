@@ -7,6 +7,14 @@
 //#include "type.h"
 #include "rl_net_lib.h"
 
+union Converter
+{
+	int idata;
+	short sdata;
+	float fdata;
+	char cdata[4];
+};
+
 struct TFlags 
 {
 	//uint8_t 
