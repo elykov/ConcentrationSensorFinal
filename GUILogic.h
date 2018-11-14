@@ -12,8 +12,9 @@
 	#define PanelNetConfigsWindow				3
 	#define PIDConfigsWindow						4
 	#define ParamsConfigsWindow					5
-	
-	#define WindowsCount 6
+	#define ModBusWindow								6
+
+	#define WindowsCount 7
 	
 	struct GUILogic
 	{

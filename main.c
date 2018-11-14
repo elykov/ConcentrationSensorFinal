@@ -92,48 +92,6 @@ int main (void)
 		else
 			soc_state = 0;
 
-    /*
-		switch (tcp_st_WORK) 
-		{
-			case tcpStateUNUSED: //Socket is free and not allocated yet. The function cannot return this value.
-				s = 1;
-				break;
-			case tcpStateCLOSED: //Socket is allocated to an application but the connection is closed.
-				soc_state = 0;
-				s = 2;
-				break;
-			case tcpStateLISTEN: //Socket is listening for incoming connections.
-				s = 3;
-				break;
-			case tcpStateSYN_RECEIVED: //Socket has received a TCP packet with the flag SYN set.
-				s = 4;
-				break;
-			case tcpStateSYN_SENT: //Socket has received a TCP packet with the flag SYN set.
-				s = 5;
-				break;
-			case tcpStateFIN_WAIT_1: //Socket has sent a FIN packet, to start the closing of the connection.
-				s = 6;
-				break;
-			case tcpStateFIN_WAIT_2: //Socket has received acknowledgement from the remote machine for the FIN packet it sent out from the local machine. Socket is now waiting for a FIN packet from the remote machine.
-				s = 7;
-				break;
-			case tcpStateCLOSING: //Socket has received a FIN packet from the remote machine independently
-				s = 8;
-				break;
-			case tcpStateLAST_ACK: //Socket is waiting for the last ACK packet to the FIN packet it sent out.
-				s = 9;
-				break;
-			case tcpStateTIME_WAIT: //Socket is waiting on a 2 ms timeout before closing the connection.
-				s = 10;
-				break;
-			case tcpStateESTABLISHED: //Socket has established a TCP connection. You can transfer data only in this state. 
-				s = 11;
-				break;
-			default:
-				break;
-		}
-    */
-		;
 		send_data ();	
 
     if (isSend)
@@ -178,9 +136,6 @@ void HardFault_Handler(void)
                            (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) |
                             SCB_AIRCR_SYSRESETREQ_Msk);
 }
-
-/*************************** End of file ****************************/
-
 
 /**
   * System Clock Configuration

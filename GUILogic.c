@@ -9,6 +9,7 @@ extern WM_HWIN CreateSensorNetConfigsWindow(void);
 extern WM_HWIN CreatePanelNetConfigsWindow(void);
 extern WM_HWIN CreatePIDConfigsWindow(void);
 extern WM_HWIN CreateParamsConfigsWindow(void);
+extern WM_HWIN CreateModBusWindow(void);
 
 // =======================================
 // RefreshWindow
@@ -47,6 +48,7 @@ void RefreshWindow(void)
 
 void StartLogic(void)
 {
+	fWindowCreators[ModBusWindow] = CreateModBusWindow;
 	fWindowCreators[ParamsConfigsWindow] = CreateParamsConfigsWindow;
   fWindowCreators[PIDConfigsWindow] = CreatePIDConfigsWindow;
 	fWindowCreators[PanelNetConfigsWindow] = CreatePanelNetConfigsWindow;

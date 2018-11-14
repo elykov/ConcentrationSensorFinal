@@ -556,6 +556,11 @@
               <FileType>1</FileType>
               <FilePath>.\KeyBoardWindowDLG.c</FilePath>
             </File>
+            <File>
+              <FileName>ModBusWindowDLG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ModBusWindowDLG.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

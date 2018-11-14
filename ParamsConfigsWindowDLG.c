@@ -4,11 +4,12 @@
 #include "global_var.h"
 #include "math.h"
 
-#define ID_WINDOW_0   (GUI_ID_USER + 0x00)
-#define ID_TEXT_0    	(GUI_ID_USER + 0x01)
-#define ID_BUTTON_0   (GUI_ID_USER + 0x02)
-#define ID_BUTTON_1   (GUI_ID_USER + 0x03)
-#define ID_BUTTON_2   (GUI_ID_USER + 0x04)
+#define ID_WINDOW_0   		(GUI_ID_USER + 0x00)
+#define ID_TEXT_0    			(GUI_ID_USER + 0x01)
+#define ID_BUTTON_0   		(GUI_ID_USER + 0x02)
+#define ID_BUTTON_1   		(GUI_ID_USER + 0x03)
+#define ID_BUTTON_2   		(GUI_ID_USER + 0x04)
+#define ID_BUTTON_3				(GUI_ID_USER + 0x12)
 
 #define ID_TEXT_Trow  		(GUI_ID_USER + 0x05)
 #define ID_TEXT_Rev    		(GUI_ID_USER + 0x06)
@@ -33,7 +34,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ BUTTON_CreateIndirect, "ButtonSave", ID_BUTTON_0, 165, 235, 100, 30, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "ButtonExit", ID_BUTTON_1, 270, 235, 100, 30, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "ButtonReset", ID_BUTTON_2, 375, 235, 100, 30, 0, 0x0, 0 },
-  
+
+	{ BUTTON_CreateIndirect, "ButtonToModbus", ID_BUTTON_3, 5, 235, 90, 30, 0, 0x0, 0 },
+
 	{ TEXT_CreateIndirect, "TextTrowel", ID_TEXT_Trow, 10, 50, 90, 30, 0, 0x64, 0 },
 	{ EDIT_CreateIndirect, "EditTrowel", ID_EDIT_Trow, 110, 50, 100, 30, 0, 0xa, 0 },
 
@@ -194,6 +197,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     BUTTON_SetText(hItem, "—брос");
     BUTTON_SetFont(hItem, &GUI_FontVerdana20);
     //
+    // Initialization of 'ButtonReset'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
+    BUTTON_SetText(hItem, "Modbus");
+    BUTTON_SetFont(hItem, &GUI_FontVerdana20);
+    //
     // Initialization of 'TextTTrowel'
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_Trow);
@@ -349,6 +358,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				TimerStop();
 				keyBoard.IsFieldChanged = false;
         FillParamsEditsWindow();
+				break;
+      }
+      break;
+    case ID_BUTTON_3: // Notifications sent by 'ButtonReset'
+      switch(NCode) {
+      case WM_NOTIFICATION_CLICKED:
+        break;
+      case WM_NOTIFICATION_RELEASED:
+				TimerStop();
+				keyBoard.IsFieldChanged = false;
+				WindowChange(ModBusWindow);
 				break;
       }
       break;
