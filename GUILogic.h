@@ -7,14 +7,15 @@
 	#include "timer6.h"
 	
 	#define StartWindow		 							0
-	#define MenuWindow									1
-	#define SensorNetConfigsWindow			2
-	#define PanelNetConfigsWindow				3
-	#define PIDConfigsWindow						4
-	#define ParamsConfigsWindow					5
-	#define ModBusWindow								6
+  #define PasswordWindow		 					1
+	#define MenuWindow									2
+	#define SensorNetConfigsWindow			3
+	#define PanelNetConfigsWindow				4
+	#define PIDConfigsWindow						5
+	#define ParamsConfigsWindow					6
+	#define ModBusWindow								7
 
-	#define WindowsCount 7
+	#define WindowsCount 8
 	
 	struct GUILogic
 	{

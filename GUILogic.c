@@ -4,6 +4,7 @@
 #include "timer6.h"
 
 extern WM_HWIN CreateStartWindow(void);
+extern WM_HWIN CreatePasswordWindow(void);
 extern WM_HWIN CreateMenuWindow(void);
 extern WM_HWIN CreateSensorNetConfigsWindow(void);
 extern WM_HWIN CreatePanelNetConfigsWindow(void);
@@ -54,6 +55,7 @@ void StartLogic(void)
 	fWindowCreators[PanelNetConfigsWindow] = CreatePanelNetConfigsWindow;
 	fWindowCreators[SensorNetConfigsWindow] = CreateSensorNetConfigsWindow;
 	fWindowCreators[MenuWindow] = CreateMenuWindow;
+	fWindowCreators[PasswordWindow] = CreatePasswordWindow;
 	fWindowCreators[StartWindow] = CreateStartWindow;
 	WindowChange(StartWindow);
 
