@@ -309,6 +309,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR);
     TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "");
     TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
     

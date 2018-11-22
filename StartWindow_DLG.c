@@ -31,6 +31,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ TEXT_CreateIndirect, "TextWorkMode", ID_TEXT_3, 115, 228, 250, 42, 0, 0x64, 0 },
 };
 
+uint8_t currWorkMode;
+
 static void _cbDialog(WM_MESSAGE * pMsg) {
   WM_HWIN hItem;
   int     NCode;
@@ -54,7 +56,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
     BUTTON_SetFont(hItem, &GUI_FontVerdana20);
-    //
+    currWorkMode = 127;
+		//
     // Initialization of 'TextBigValue'
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
@@ -148,7 +151,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        WindowChange(MenuWindow);
+        TimerStopForButton();
+				WindowChange(MenuWindow);
         break;
       }
       break;
@@ -171,6 +175,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				}
 				sendParam = 0x01;
 				Flags.answer_work = 1;
+				
+				TimerStartForButton();
         break;
       }
       break;
@@ -205,15 +211,25 @@ WM_HWIN CreateStartWindow(void) {
   return GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 
+void ModeChanging(void)
+{
+	TEXT_SetTextColor(WM_GetDialogItem(window, ID_TEXT_3), GUI_MAKE_COLOR(0x000090FF));
+}
+
+void ModeChanged(void)
+{
+	TEXT_SetTextColor(WM_GetDialogItem(window, ID_TEXT_3), GUI_MAKE_COLOR(0x00FFFFFF));
+}
+
 void RefreshStartWindow(void)
 {
 	char tempStr[10];
-	char tempStr2[60];
+	//char tempStr2[60];
 	{ // set big concentracion
 		if (isnan(Cb))
 			sprintf(tempStr, "A/0");
-		else if (Cb <= 0)
-			sprintf(tempStr, "---");
+		//else if (Cb <= 0)
+			//sprintf(tempStr, "---");
 		else
 			sprintf(tempStr, "%1.2f", Cb);
 		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_0), tempStr);	
@@ -232,18 +248,23 @@ void RefreshStartWindow(void)
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_2), tempStr);	
 	}
 
-	if (workMode == 0)
+	if (currWorkMode != workMode )
 	{
-		sprintf(tempStr2, "Ðåæèì: %s", "ÐÓ×Í"); 
-		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_3), tempStr2);
-		BUTTON_SetText(WM_GetDialogItem(window, ID_BUTTON_1), "Àâòîìàò");
-		EDIT_SetTextColor(WM_GetDialogItem(window, ID_EDIT_2), EDIT_CI_ENABLED, GUI_MAKE_COLOR(0x00000000));
+		if (workMode == 0)
+		{
+			//sprintf(tempStr2, "Ðåæèì: ÐÓ×Í"); 
+			TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_3), "Ðåæèì: ÐÓ×Í");
+			BUTTON_SetText(WM_GetDialogItem(window, ID_BUTTON_1), "Àâòîìàò");
+			EDIT_SetTextColor(WM_GetDialogItem(window, ID_EDIT_2), EDIT_CI_ENABLED, GUI_MAKE_COLOR(0x00000000));
+		}
+		else	
+		{
+			//sprintf(tempStr2, "Ðåæèì: ÀÂÒÎ"); 
+			TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_3), "Ðåæèì: ÀÂÒÎ");
+			BUTTON_SetText(WM_GetDialogItem(window, ID_BUTTON_1), "Ðó÷íîé");
+			EDIT_SetTextColor(WM_GetDialogItem(window, ID_EDIT_2), EDIT_CI_ENABLED, GUI_MAKE_COLOR(0x001000FF));
+		}	
+		TimerStopForButton();
+		currWorkMode = workMode;
 	}
-	else	
-	{
-		sprintf(tempStr2, "Ðåæèì: %s", "ÀÂÒÎ"); 
-		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_3), tempStr2);
-		BUTTON_SetText(WM_GetDialogItem(window, ID_BUTTON_1), "Ðó÷íîé");
-		EDIT_SetTextColor(WM_GetDialogItem(window, ID_EDIT_2), EDIT_CI_ENABLED, GUI_MAKE_COLOR(0x001000FF));
-	}	
 }

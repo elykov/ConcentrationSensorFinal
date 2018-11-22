@@ -104,6 +104,11 @@ int SetPanelNetConfigs()
 	if (get_IP(iptxt, currentDNS2) > 0)
 		return 5;
 
+	tcp_close(tcp_soc_WORK);
+	tcp_close(tcp_soc_SERVER);
+	tcp_close(tcp_soc_PLC);
+	tcp_close(tcp_soc_TECH);
+
 	for(int i = 0; i < 4; ++i)
 	{
 		LocM.IpAddr[i] = currentIP[i];
@@ -115,11 +120,6 @@ int SetPanelNetConfigs()
 
 	// save to qspi
 	Write_settings(); 
-	
-	tcp_close(tcp_soc_WORK);
-	tcp_close(tcp_soc_SERVER);
-	tcp_close(tcp_soc_PLC);
-	tcp_close(tcp_soc_TECH);
 
 	SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
 		(SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) | SCB_AIRCR_SYSRESETREQ_Msk);

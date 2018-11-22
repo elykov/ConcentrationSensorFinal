@@ -1,12 +1,13 @@
 #include "GUILogic.h"
 #include "DIALOG.h"
 #include "Net_User.h"
+#include "math.h"
 
-#define ID_WINDOW_0         (GUI_ID_USER + 0x00)
+#define ID_WINDOW_0       (GUI_ID_USER + 0x00)
 #define ID_TEXT_0         (GUI_ID_USER + 0x01)
-#define ID_BUTTON_0         (GUI_ID_USER + 0x02)
-#define ID_BUTTON_1         (GUI_ID_USER + 0x03)
-#define ID_BUTTON_2         (GUI_ID_USER + 0x04)
+#define ID_BUTTON_0       (GUI_ID_USER + 0x02)
+#define ID_BUTTON_1       (GUI_ID_USER + 0x03)
+#define ID_BUTTON_2       (GUI_ID_USER + 0x04)
 #define ID_TEXT_1         (GUI_ID_USER + 0x05)
 #define ID_EDIT_0         (GUI_ID_USER + 0x06)
 #define ID_TEXT_2         (GUI_ID_USER + 0x07)
@@ -21,7 +22,11 @@
 #define ID_TEXT_7         (GUI_ID_USER + 0x10)
 #define ID_TEXT_8         (GUI_ID_USER + 0x11)
 #define ID_TEXT_9         (GUI_ID_USER + 0x12)
-#define ID_TEXT_ERR       (GUI_ID_USER + 0x13)   
+#define ID_TEXT_10        (GUI_ID_USER + 0x13)
+#define ID_TEXT_11        (GUI_ID_USER + 0x14)
+#define ID_TEXT_12        (GUI_ID_USER + 0x15)
+#define ID_EDIT_5        	(GUI_ID_USER + 0x16)
+#define ID_TEXT_ERR       (GUI_ID_USER + 0x17)   
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "PIDConfigsWindow", ID_WINDOW_0, 0, 0, 480, 272, 0, 0x0, 0 },
@@ -29,37 +34,59 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "ButtonSave", ID_BUTTON_0, 165, 235, 100, 30, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "ButtonExit", ID_BUTTON_1, 270, 235, 100, 30, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "ButtonReset", ID_BUTTON_2, 375, 235, 100, 30, 0, 0x0, 0 },
-	{ TEXT_CreateIndirect, "TextTP", ID_TEXT_1, 340, 50, 30, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditP", ID_EDIT_0, 370, 50, 100, 30, 0, 0xa, 0 },
-  { TEXT_CreateIndirect, "TextTI", ID_TEXT_2, 340, 90, 30, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditI", ID_EDIT_1, 370, 90, 100, 30, 0, 0xa, 0 },
-  { TEXT_CreateIndirect, "TextTD", ID_TEXT_3, 340, 130, 30, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditD", ID_EDIT_2, 370, 130, 100, 30, 0, 0xa, 0 },
-	{ TEXT_CreateIndirect, "TextTReferens", ID_TEXT_4, 10, 50, 100, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditReferens", ID_EDIT_3, 120, 50, 140, 30, 0, 0x64, 0 },
-	{ TEXT_CreateIndirect, "TextTDumpI", ID_TEXT_5, 10, 90, 100, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditDumpI", ID_EDIT_4, 120, 90, 140, 30, 0, 0x64, 0 },
-  { TEXT_CreateIndirect, "TextTConc", ID_TEXT_6, 10, 150, 140, 30, 0, 0x64, 0 },
-	{ TEXT_CreateIndirect, "TextConc", ID_TEXT_7, 160, 150, 110, 30, 0, 0x64, 0 },
-	{ TEXT_CreateIndirect, "TextTAmp", ID_TEXT_8, 10, 190, 140, 30, 0, 0x64, 0 },
-	{ TEXT_CreateIndirect, "TextAmp", ID_TEXT_9, 160, 190, 110, 30, 0, 0x64, 0 },
-	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 270, 165, 210, 60, 0, 0x64, 0 },
+	
+	{ TEXT_CreateIndirect, "TextTReferens", ID_TEXT_4, 10, 45, 100, 27, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "EditReferens", ID_EDIT_3, 120, 45, 140, 27, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextTDumpI", ID_TEXT_5, 10, 78, 100, 27, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "EditDumpI", ID_EDIT_4, 120, 78, 140, 27, 0, 0x64, 0 },
+  { TEXT_CreateIndirect, "TextTPidPeriod", ID_TEXT_12, 10, 111, 100, 27, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "EditPidPeriod", ID_EDIT_5, 120, 111, 140, 27, 0, 0x64, 0 },
+
+  { TEXT_CreateIndirect, "TextTConc", ID_TEXT_6, 		10, 145, 140, 27, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextConc", ID_TEXT_7, 	 160, 145, 110, 27, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextTAmp", ID_TEXT_8,  		10, 172, 140, 27, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextAmp", ID_TEXT_9,  	 160, 172, 110, 27, 0, 0x64, 0 },
+  { TEXT_CreateIndirect, "TextTDamper", ID_TEXT_10, 10, 199, 140, 27, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextDamper", ID_TEXT_11, 160, 199, 110, 27, 0, 0x64, 0 },
+
+	{ TEXT_CreateIndirect, "TextTP", ID_TEXT_1, 320, 45, 30, 27, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "EditP", ID_EDIT_0, 350, 45, 120, 27, 0, 0xa, 0 },
+  { TEXT_CreateIndirect, "TextTI", ID_TEXT_2, 320, 78, 30, 27, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "EditI", ID_EDIT_1, 350, 78, 120, 27, 0, 0xa, 0 },
+  { TEXT_CreateIndirect, "TextTD", ID_TEXT_3, 320, 111, 30, 27, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "EditD", ID_EDIT_2, 350, 111, 120, 27, 0, 0xa, 0 },
+	
+  { TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 258, 165, 222, 60, 0, 0x64, 0 },
 };
 
 void RefreshPIDWindow(void)
 {
 	WM_HWIN window = logic.window; 
 	// функция работает только когда это окно текущее, а оно хранится в logic.window
-	char tempStr[15];
+	char tempStr[30];
 
 	// conc
-	sprintf(tempStr, "%.3f %%", Cb);
+	if (isnan(Cb))
+		sprintf(tempStr, "A/0       ");
+	else if (Cb < 0)
+		sprintf(tempStr, "0.000 %%  ");
+	else
+		sprintf(tempStr, "%.3f %%  ", Cb);
 	TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_7), tempStr);
 	
 	// amp
-	sprintf(tempStr, "%.2f мА", Output_I);
+	if (isnan(Output_I))
+		sprintf(tempStr, "A/0       ");
+	else
+		sprintf(tempStr, "%.2f мА", Output_I);
 	TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_9), tempStr);
-                                                                                 
+                         
+	if (isnan(damper))
+		sprintf(tempStr, "A/0      ");
+	else
+		sprintf(tempStr, "%.2f %%", damper);
+	TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_11), tempStr);
+                                                      
 	if (isTextErrChangable)
 	{  
 		if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
@@ -75,24 +102,30 @@ static void FillPID(void)
 	char tempStr[9];
 
 	// p
-	sprintf(tempStr, "%u", P_factor);
+	sprintf(tempStr, "%.3f", P_factor);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_0), tempStr);
 
 	// i
-	sprintf(tempStr, "%u", I_factor);
+	sprintf(tempStr, "%.3f", I_factor);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_1), tempStr);
 	
 	// d
-	sprintf(tempStr, "%u", D_factor);
+	sprintf(tempStr, "%.3f", D_factor);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_2), tempStr);
 
 	// Задание
-	sprintf(tempStr, "%.3f", referens);
+	if (isnan(referens))
+		sprintf(tempStr, "-");
+	else 
+		sprintf(tempStr, "%.3f", referens);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_3), tempStr);
 
 	// PID(dump_i)
 	sprintf(tempStr, "%u", dump_i);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_4), tempStr);
+
+	sprintf(tempStr, "%u", pid_period);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_5), tempStr);
 }
 
 static int SavePIDParams(void)
@@ -103,41 +136,48 @@ static int SavePIDParams(void)
 	
 	if (tcp_get_state(tcp_soc_WORK) == tcpStateESTABLISHED) // нет смысла что-то делать, если нет соединения
 	{
-		float n_ref; // задание
+		int32_t n_dump_i, n_pid_period;
+		float n_ref, n_P, n_I, n_D; // задание
+
 		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_3), tempTxt, 19);
 		len = strlen(tempTxt);
-		if ((len < 1) || (sscanf(tempTxt, "%f%s", &n_ref, err) != 1))
+		if ((len < 1) || (sscanf(tempTxt, "%f%s", &n_ref, err) != 1) || isnan(n_ref))
 			return 1;
 		
-		uint32_t n_dump_i, n_P, n_I, n_D;
     EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_4), tempTxt, 14);
 		len = strlen(tempTxt);
-		if ((len < 1) || (sscanf(tempTxt, "%u%s", &n_dump_i, err) != 1) || n_dump_i > 65535)
+		if ((len < 1) || (sscanf(tempTxt, "%u%s", &n_dump_i, err) != 1) || n_dump_i > 65535 || n_dump_i < 0)
 			return 2;
 		
 		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_0), tempTxt, 14);
 		len = strlen(tempTxt);
-		if ((len < 1) || (sscanf(tempTxt, "%u%s", &n_P, err) != 1) || n_P > 255)
+		if ((len < 1) || (sscanf(tempTxt, "%f%s", &n_P, err) != 1) || isnan(n_P))
 			return 3;
 		
 		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_1), tempTxt, 14);
 		len = strlen(tempTxt);
-		if ((len < 1) || (sscanf(tempTxt, "%u%s", &n_I, err) != 1) || n_I > 255)
+		if ((len < 1) || (sscanf(tempTxt, "%f%s", &n_I, err) != 1) || isnan(n_I))
 			return 4;
 
 		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_2), tempTxt, 14);
 		len = strlen(tempTxt);
-		if ((len < 1) || (sscanf(tempTxt, "%u%s", &n_D, err) != 1) || n_D > 255)
+		if ((len < 1) || (sscanf(tempTxt, "%f%s", &n_D, err) != 1) || isnan(n_D))
 			return 5;
 		
+		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_5), tempTxt, 14);
+		len = strlen(tempTxt);
+		if ((len < 1) || (sscanf(tempTxt, "%u%s", &n_pid_period, err) != 1) || n_pid_period > 65535 || n_pid_period < 0)
+			return 6;
+
 		out_referens = n_ref;
 		out_dump_i = (unsigned short)n_dump_i;
-    out_P_factor = (uint8_t)n_P;
-		out_I_factor = (uint8_t)n_I;
-    out_D_factor = (uint8_t)n_D;
+    out_P_factor = n_P;
+		out_I_factor = n_I;
+    out_D_factor = n_D;
+		out_pid_period = n_pid_period;
 
     Flags.ch_P = Flags.ch_I = Flags.ch_D = // change PID 
-			Flags.ch_dump_i = Flags.ch_ref = 1; // change other PID params
+			Flags.ch_dump_i = Flags.ch_ref = Flags.ch_pid_period = 1; // change other PID params
 		
 		sendParam = 0x02;
 		Flags.answer_work = 1; 
@@ -259,6 +299,20 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     EDIT_SetFont(hItem, &GUI_FontVerdana20);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
 		//
+    // Initialization of 'TextTPidPeriod'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_12);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "Период:");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+		//
+    // Initialization of 'EditPidPeriod'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_5);
+    EDIT_SetFont(hItem, &GUI_FontVerdana20);
+    EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+		//
     // Initialization of 'TextTConc'
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_6);
@@ -285,6 +339,21 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     // Initialization of 'TextAmp'
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_9);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+    //
+    // Initialization of 'TextTDamper'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_10);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "Заслонка:");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+		//
+    // Initialization of 'TextDamper'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_11);
     TEXT_SetFont(hItem, &GUI_FontVerdana20);
     TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
@@ -337,6 +406,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							break;
 						case 5:                                                                             
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан D.");
+							break;
+						case 6:                                                                             
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан период.");
 							break;
 					}
 					TimerStart();
@@ -424,7 +496,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		case ID_EDIT_4: // Notifications sent by 'EditDumpI'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), "Изменение Dump_i");
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), "Изменение буфера");
+				break;
+      case WM_NOTIFICATION_RELEASED:
+        break;
+      case WM_NOTIFICATION_VALUE_CHANGED:
+        break;
+      }
+      break;
+		case ID_EDIT_5: // Notifications sent by 'EditPidPeriod'
+      switch(NCode) {
+      case WM_NOTIFICATION_CLICKED:
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5), "Изменение периода ПИД");
 				break;
       case WM_NOTIFICATION_RELEASED:
         break;

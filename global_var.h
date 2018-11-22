@@ -58,6 +58,7 @@ struct TFlags
 	unsigned int ch_damper:						1;
 	unsigned int ch_offset:						1;
 	unsigned int ch_gain:							1;
+	unsigned int ch_pid_period:				1;
 };
 
 extern struct TFlags Flags;
@@ -90,8 +91,8 @@ extern unsigned char Send_SERVER[256];
 extern unsigned char Recive_SERVER[256];
 
 extern unsigned char tempBuf[4];
-extern unsigned char  P_factor, I_factor, D_factor;
-extern unsigned char  out_P_factor, out_I_factor, out_D_factor;
+extern float P_factor, I_factor, D_factor;
+extern float out_P_factor, out_I_factor, out_D_factor;
 extern unsigned char maxlen_work;
 
 extern unsigned short dump;
@@ -153,16 +154,6 @@ extern float damper, offset, gain;
 extern float out_damper,out_offset, out_gain;
 extern uint8_t out_workMode;
 extern float damper_manual;
+extern unsigned short pid_period, out_pid_period;
 
 #endif /* GLOBAL_VAR_H_ */
-
-
-
-
-
-
-
-
-
-
-

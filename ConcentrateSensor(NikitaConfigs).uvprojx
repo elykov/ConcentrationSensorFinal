@@ -527,6 +527,11 @@
               <FilePath>.\StartWindow_DLG.c</FilePath>
             </File>
             <File>
+              <FileName>PasswordWindowDLG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\PasswordWindowDLG.c</FilePath>
+            </File>
+            <File>
               <FileName>MenuWindowDLG.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\MenuWindowDLG.c</FilePath>

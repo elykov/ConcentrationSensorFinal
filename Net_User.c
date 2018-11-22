@@ -16,7 +16,7 @@ bool wait_ack;
 unsigned int tcp_callback_TECH (int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len) 
 {
   // This function is called on TCP event 
-	unsigned short i, n;
+	unsigned short i, _n;
   // ..
   switch (event) 
 	{
@@ -45,9 +45,9 @@ unsigned int tcp_callback_TECH (int32_t soc, tcpEvent event, const uint8_t *buf,
     case tcpEventData:
       // TCP data frame has been received, 'buf' points to data 
       // Data length is 'len' bytes
-			if(len > 0xff) n = 0xff;
-			else n = len;
-			for(i = 0; i < n; ++i)//for(i = 0; i <= len; i++)
+			if(len > 0xff) _n = 0xff;
+			else _n = len;
+			for(i = 0; i < _n; ++i)
 			{
 				Recive_TECH[i] = *buf;
 				++buf;
@@ -63,7 +63,6 @@ unsigned int tcp_callback_TECH (int32_t soc, tcpEvent event, const uint8_t *buf,
 unsigned int tcp_callback_PLC (int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len) 
 {
   // This function is called on TCP event 
-	unsigned short i, n;
   // ..
   switch (event) 
 	{
@@ -92,11 +91,15 @@ unsigned int tcp_callback_PLC (int32_t soc, tcpEvent event, const uint8_t *buf, 
 			__nop();
       break;
     case tcpEventData:
+		{
       // TCP data frame has been received, 'buf' points to data 
       // Data length is 'len' bytes
-			n = (len > 0xff) ? 0xff : len;
+			register unsigned short i;
+			unsigned short _n;
 			
-			for(i = 0; i < n; ++i)//for(i = 0; i <= len; i++)
+      _n = (len > 0xff) ? 0xff : len;
+			
+			for(i = 0; i < _n; ++i)
 			{
 				Recive_PLC[i] = *buf;
 				++buf;
@@ -105,6 +108,7 @@ unsigned int tcp_callback_PLC (int32_t soc, tcpEvent event, const uint8_t *buf, 
 			tcp_reset_window (soc);		
 			__nop();
       break;
+		}
   }
   return (0);
 }
@@ -112,7 +116,7 @@ unsigned int tcp_callback_PLC (int32_t soc, tcpEvent event, const uint8_t *buf, 
 unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len) 
 {
   // This function is called on TCP event
-	unsigned short i, n;
+	unsigned short i, _n;
   
   switch (event) 
 	{
@@ -150,8 +154,8 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
     case tcpEventData:
       // TCP data frame has been received, 'buf' points to data 
       // Data length is 'len' bytes
-			n = (len > 0xff) ? 0xff : len;
-			for(i = 0; i < n; ++i)
+			_n = (len > 0xff) ? 0xff : len;
+			for(i = 0; i < _n; ++i)
 			{
 				Recive_WORK[i] = *buf;
 				++buf;

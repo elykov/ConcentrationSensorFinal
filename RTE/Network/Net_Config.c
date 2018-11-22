@@ -47,6 +47,7 @@
 #endif
 
 #include "net_config.h"
+#include "stm32f7xx_hal.h"
 
 /**
 \addtogroup net_genFunc
@@ -57,6 +58,9 @@
   \ingroup     net_cores
   \brief       Network system error handler.
 */
+
+extern void Exit(void);
+
 void net_sys_error (ERROR_CODE error) {
   /* This function is called when a fatal error is encountered. */
   /* The normal program execution is not possible anymore.      */
@@ -92,8 +96,7 @@ void net_sys_error (ERROR_CODE error) {
       break;
   }
 
-  /* End-less loop */
-  while (1);
+  Exit();
 }
 /**
 @}

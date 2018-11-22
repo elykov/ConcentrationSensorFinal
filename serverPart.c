@@ -31,17 +31,17 @@ void Form_package_SERVER(void) // копирует принятый пакет данных, добавляет данн
 		Send_SERVER[i + 2] = x[2]; \
 		Send_SERVER[i + 3] = x[3];
 	
-	converter.fdata = damper;
-	CopyNetDataToBuf(converter.cdata, 146);
+	//converter.fdata = damper;
+	//CopyNetDataToBuf(converter.cdata, 146);
 
-	CopyNetDataToBuf(LocM.IpAddr, 150);
-  CopyNetDataToBuf(LocM.NetMask, 154);
-	CopyNetDataToBuf(LocM.DefGW, 158);
-	CopyNetDataToBuf(LocM.PriDNS, 162);
-	CopyNetDataToBuf(LocM.SecDNS, 166);
-	CopyNetDataToBuf(rem_ip, 170);
+	CopyNetDataToBuf(LocM.IpAddr, 170);
+  CopyNetDataToBuf(LocM.NetMask, 174);
+	CopyNetDataToBuf(LocM.DefGW, 178);
+	CopyNetDataToBuf(LocM.PriDNS, 182);
+	CopyNetDataToBuf(LocM.SecDNS, 186);
+	CopyNetDataToBuf(rem_ip, 190);
 	// есть ли коннект
-	Send_SERVER[174] = (soc_state != 2) ? 0 : 255;
+	Send_SERVER[194] = (soc_state != 2) ? 0 : 255;
 }
 
 void Parsing_package_SERVER(void)
@@ -160,9 +160,9 @@ void Parsing_package_SERVER(void)
 	WriteInConverter4Bytes(Recive_SERVER, 98);
 	out_i20mA = converter.fdata;
 
-	out_P_factor = Recive_SERVER[127];
-	out_I_factor = Recive_SERVER[128];
-	out_D_factor = Recive_SERVER[129];
+	//out_P_factor = Recive_SERVER[127];
+	//out_I_factor = Recive_SERVER[128];
+	//out_D_factor = Recive_SERVER[129];
 
 	out_dump_i = (Recive_SERVER[130] << 8) + Recive_SERVER[131];
 

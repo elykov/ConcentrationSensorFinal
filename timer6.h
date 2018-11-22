@@ -7,4 +7,7 @@
 	extern void TimerStart(void);
 	extern void TimerStop(void);
 
+	extern void TimerStartForButton(void);
+	extern void TimerStopForButton(void);
+
 #endif

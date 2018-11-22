@@ -126,7 +126,7 @@ int main (void)
 	}
 }
 
-void HardFault_Handler(void)
+void Exit(void)
 {
 	tcp_close(tcp_soc_WORK);
 	tcp_close(tcp_soc_SERVER);
@@ -135,6 +135,21 @@ void HardFault_Handler(void)
 	SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos)    |
                            (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) |
                             SCB_AIRCR_SYSRESETREQ_Msk);
+}
+
+void HardFault_Handler(void)
+{
+	Exit();
+}
+
+void MemManage_Handler(void)
+{
+	Exit();
+}
+
+void BusFault_Handler(void)
+{
+	Exit();
 }
 
 /**

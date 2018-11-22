@@ -31,8 +31,8 @@ unsigned char Recive_SERVER[256];
 unsigned char maxlen_work;
 
 unsigned char tempBuf[4];
-unsigned char  P_factor, I_factor, D_factor;
-unsigned char  out_P_factor, out_I_factor, out_D_factor;
+float P_factor, I_factor, D_factor;
+float out_P_factor, out_I_factor, out_D_factor;
 
 unsigned short dump = 0;
 unsigned short out_dump = 0;
@@ -69,8 +69,8 @@ float out_i20mA = 0;
 float Cb;
 float Ci;
 float p_term = 0, i_term = 0, d_term = 0;
-float Output_I, referens;
-float out_referens;
+float Output_I = 0, referens  = 0;
+float out_referens  = 0;
 float oa = 0;
 float ob = 0;
 float oc = 0;
@@ -85,12 +85,14 @@ float oh = 0;
 
 struct GUILogic logic;             
 struct KeyBoard keyBoard = {0};
-float damper, out_damper;
+float damper  = 0, out_damper = 0;
 uint8_t workMode = 1;
 float offset = 0, gain = 0;
-float out_offset, out_gain;
+float out_offset = 0, out_gain = 0;
 uint8_t out_workMode;
 float damper_manual = 50.f;
+unsigned short pid_period = 0, out_pid_period = 0;
+
 
 uint8_t sendParam = 0;
 

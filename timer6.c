@@ -1,7 +1,10 @@
 #include "stm32f7xx_hal.h"
 #include "timer6.h"
 
-bool isTextErrChangable;
+bool isTextErrChangable, isButton;
+
+extern void ModeChanging(void);
+extern void ModeChanged(void);
 
 void InitTimer6(void)
 {
@@ -19,14 +22,33 @@ void InitTimer6(void)
 
 void TIM6_DAC_IRQHandler(void)
 {
-	TimerStop();
+	if (isButton)
+		TimerStopForButton();
+	else
+		TimerStop();
 }
 
 void TimerStart(void) 
 {
+	isButton = false;
 	isTextErrChangable = false;
 	TIM6->CR1 |= TIM_CR1_CEN; // timer on
 }
+
+void TimerStartForButton(void)
+{
+	isButton = true;
+	TIM6->CR1 |= TIM_CR1_CEN; // timer on   
+	ModeChanging();
+}
+
+void TimerStopForButton(void)
+{
+	TIM6->CR1 &= ~TIM_CR1_CEN; // timer off
+	TIM6->SR &= ~TIM_SR_UIF; // reset interrupt fill-flag in timer6
+	ModeChanged();
+}
+
 
 void TimerStop(void)
 {

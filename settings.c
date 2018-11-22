@@ -240,9 +240,8 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	tempBuf[2] = Recive_WORK[125];
 	tempBuf[3] = Recive_WORK[126];
   d_term = buf_tx_to_float();	
-	P_factor = Recive_WORK[127];
-	I_factor = Recive_WORK[128];
-	D_factor = Recive_WORK[129];
+	
+	// 3 пустых бита (тут были ПИД)
 
 	dump_i = (Recive_WORK[130] << 8) + Recive_WORK[131];
 	out = (Recive_WORK[132] << 8) + Recive_WORK[133];
@@ -277,12 +276,26 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	tempBuf[3] = Recive_WORK[156];
   gain = buf_tx_to_float();
 
-	/*
-	if (damper > 100) 
-		damper = 100;
-	else if (damper < 0) 
-		damper = 0;
-	*/
+	// новое положение вещественного ПИДа
+  pid_period = (Recive_WORK[157] << 8) + Recive_WORK[158];
+
+	tempBuf[0] = Recive_WORK[159];
+	tempBuf[1] = Recive_WORK[160];
+	tempBuf[2] = Recive_WORK[161];
+	tempBuf[3] = Recive_WORK[162];
+  P_factor = buf_tx_to_float();
+	
+	tempBuf[0] = Recive_WORK[163];
+	tempBuf[1] = Recive_WORK[164];
+	tempBuf[2] = Recive_WORK[165];
+	tempBuf[3] = Recive_WORK[166];
+	I_factor = buf_tx_to_float();
+
+  tempBuf[0] = Recive_WORK[167];
+	tempBuf[1] = Recive_WORK[168];
+	tempBuf[2] = Recive_WORK[169];
+	tempBuf[3] = Recive_WORK[170];
+	D_factor = buf_tx_to_float();
 }
 
 void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outПеременных)
@@ -362,6 +375,7 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[63] = tempBuf[1];
 	Send_WORK[64] = tempBuf[2];
 	Send_WORK[65] = tempBuf[3];
+
 	Send_WORK[67] = (unsigned char)out_i_trowel;
 	Send_WORK[66] = (unsigned char)(out_i_trowel >> 8);
 	Send_WORK[69] = (unsigned char)out_i_revers;
@@ -380,9 +394,12 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[79] = tempBuf[1];
 	Send_WORK[80] = tempBuf[2];
 	Send_WORK[81] = tempBuf[3];
-	Send_WORK[82] = out_P_factor;
-	Send_WORK[83] = out_I_factor;
-	Send_WORK[84] = out_D_factor;
+
+	// Поддержка старых версий
+	//Send_WORK[82] = (uint8_t)out_P_factor;
+	//Send_WORK[83] = (uint8_t)out_I_factor;
+	//Send_WORK[84] = (uint8_t)out_D_factor;
+	
 	Send_WORK[86] = (unsigned char)out_dump_i;
 	Send_WORK[85] = (unsigned char)(out_dump_i >> 8);
 	float_to_buf_tx (out_referens);
@@ -410,7 +427,28 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[103] = tempBuf[2];
 	Send_WORK[104] = tempBuf[3];
 
-	for(int i = 105; i < 253; i++)
+  Send_WORK[105] = (unsigned char)(out_pid_period >> 8);
+	Send_WORK[106] = out_pid_period;
+
+	float_to_buf_tx (out_P_factor);
+	Send_WORK[107] = tempBuf[0];
+	Send_WORK[108] = tempBuf[1];
+	Send_WORK[109] = tempBuf[2];
+	Send_WORK[110] = tempBuf[3];
+
+	float_to_buf_tx (out_I_factor);
+	Send_WORK[111] = tempBuf[0];
+	Send_WORK[112] = tempBuf[1];
+	Send_WORK[113] = tempBuf[2];
+	Send_WORK[114] = tempBuf[3];
+
+	float_to_buf_tx (out_D_factor);
+	Send_WORK[115] = tempBuf[0];
+	Send_WORK[116] = tempBuf[1];
+	Send_WORK[117] = tempBuf[2];
+	Send_WORK[118] = tempBuf[3];
+  
+	for(int i = 119; i < 253; i++)
 		Send_WORK[i] = 0;
 
 	Send_WORK[253] = 1;
@@ -533,22 +571,14 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	if(!Flags.ch_gain) { out_gain = gain; }
 	else Flags.ch_gain = 0;
 
+	if(!Flags.ch_pid_period) { out_pid_period = pid_period; }
+	else Flags.ch_pid_period = 0;
+
+
 	OUTremUDPip[0] = remUDPip[0];
 	OUTremUDPip[1] = remUDPip[1];
 	OUTremUDPip[2] = remUDPip[2];
 	OUTremUDPip[3] = remUDPip[3];
 }
-
-//Flags.ch_IP = Flags.ch_Mask = Flags.ch_DefGW = Flags.ch_PriDNS = Flags.ch_SecDNS = 1; // change panel configs
-	
-	//Flags.ch_P = Flags.ch_I = Flags.ch_D = 1; // change PID 
-	//Flags.ch_dump_i = Flags.ch_Cb = Flags.ch_Output_I = 1; // change other PID params
-
-	//Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = 1; // change amperage params
-
-	//Flags.ch_20mA = Flags.ch_4mA = 1; // change amperage	
-	//Flags.ch_a = Flags.ch_b = Flags.ch_c = Flags.ch_d = Flags.ch_e = 
-	//Flags.ch_f = Flags.ch_g = Flags.ch_h = Flags.ch_n = 1; // change params
-	//Flags.ch_period = Flags.ch_ref = 1; // change other
 
 
