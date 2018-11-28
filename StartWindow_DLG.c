@@ -103,7 +103,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   case WM_NOTIFY_PARENT:
 		if (keyBoard._keyboard != 0)
 			break;
-		else if (keyBoard.IsFieldChanged)
+		else if (keyBoard.IsFieldChanged) // Просмотр изменились ли данные на главном экране
 		{
 			char tempTxt[20], err[20];
       size_t len;
@@ -152,7 +152,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         TimerStopForButton();
-				WindowChange(MenuWindow);
+				WindowChange(PasswordWindow);
         break;
       }
       break;
@@ -228,10 +228,10 @@ void RefreshStartWindow(void)
 	{ // set big concentracion
 		if (isnan(Cb))
 			sprintf(tempStr, "A/0");
-		//else if (Cb <= 0)
-			//sprintf(tempStr, "---");
+		else if (Cb < 0.4f || Cb > 8.5f)
+			sprintf(tempStr, "---");
 		else
-			sprintf(tempStr, "%1.2f", Cb);
+			sprintf(tempStr, "%1.2f", Cb);  // (round(Cb * 100) / 100) -  округление до тысячных
 		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_0), tempStr);	
 	}
 	

@@ -60,7 +60,6 @@ void StartLogic(void)
 	WindowChange(StartWindow);
 
 	InitTimer6();
-	//InitData();
 }
 
 void WindowChange(int windowNum)
@@ -89,3 +88,6 @@ int get_IP(const char* ip_str, uint8_t* resIP)
 
 	return 0;
 }
+
+
+

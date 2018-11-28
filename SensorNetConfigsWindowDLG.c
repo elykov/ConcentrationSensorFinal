@@ -33,19 +33,19 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "ButtonReset", ID_BUTTON_2, 375, 235, 100, 30, 0, 0x0, 0 },
 	
 	{ TEXT_CreateIndirect, "TextTIP", ID_TEXT_IP, 		10, 60, 40, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditIP", ID_EDIT_IP, 			80, 60, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "EditIP", ID_EDIT_IP, 			80, 60, 150, 30, 0, 0x10, 0 },
 
   { TEXT_CreateIndirect, "TextTMask", ID_TEXT_MASK, 10, 110, 60, 30, 0, 0x64, 0 },
-	{ EDIT_CreateIndirect, "EditMask", 	ID_EDIT_MASK, 80, 110, 150, 30, 0, 0x14, 0 },
+	{ EDIT_CreateIndirect, "EditMask", 	ID_EDIT_MASK, 80, 110, 150, 30, 0, 0x10, 0 },
   
   { TEXT_CreateIndirect, "TextTGW", ID_TEXT_GW, 		10, 160, 60, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditGW", 	ID_EDIT_GW, 		80, 160, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "EditGW", 	ID_EDIT_GW, 		80, 160, 150, 30, 0, 0x10, 0 },
 
 	{ TEXT_CreateIndirect, "TextTDNS1", ID_TEXT_DNS1, 245, 60, 65, 30, 0, 0x64, 0 },
-  { EDIT_CreateIndirect, "EditDNS1", 	ID_EDIT_DNS1, 320, 60, 150, 30, 0, 0x14, 0 },
+  { EDIT_CreateIndirect, "EditDNS1", 	ID_EDIT_DNS1, 320, 60, 150, 30, 0, 0x10, 0 },
   
 	{ TEXT_CreateIndirect, "TextTDNS2", ID_TEXT_DNS2, 245, 110, 65, 30, 0, 0x64, 0 },
-	{ EDIT_CreateIndirect, "EditDNS2", 	ID_EDIT_DNS2, 320, 110, 150, 30, 0, 0x14, 0 },
+	{ EDIT_CreateIndirect, "EditDNS2", 	ID_EDIT_DNS2, 320, 110, 150, 30, 0, 0x10, 0 },
 
 	{ TEXT_CreateIndirect, "TextTPortTCP", ID_TEXT_PORTTCP, 10, 200, 140, 30, 0, 0x64, 0 },
   { TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 245, 160, 220, 60, 0, 0x64, 0 },
@@ -198,6 +198,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
   switch (pMsg->MsgId) {
   case WM_INIT_DIALOG:
+	{
     // Initialization of 'SensorNetConfigsWindow'
     hItem = pMsg->hWin;
     WINDOW_SetBkColor(hItem, GUI_MAKE_COLOR(0x00FF2100));
@@ -315,6 +316,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     
 		SetSensorNetEdits();
 		break;
+	}
   case WM_NOTIFY_PARENT:
 		if (keyBoard._keyboard != 0)
 			break;
