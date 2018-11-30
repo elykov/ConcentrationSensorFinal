@@ -46,6 +46,7 @@ void TimerStopForButton(void)
 {
 	TIM6->CR1 &= ~TIM_CR1_CEN; // timer off
 	TIM6->SR &= ~TIM_SR_UIF; // reset interrupt fill-flag in timer6
+	TIM6->CNT = 0;
 	ModeChanged();
 }
 
@@ -53,6 +54,7 @@ void TimerStopForButton(void)
 void TimerStop(void)
 {
 	TIM6->CR1 &= ~TIM_CR1_CEN; // timer off
-	TIM6->SR &= ~TIM_SR_UIF; // reset interrupt fill-flag in timer6
+  TIM6->SR &= ~TIM_SR_UIF; // reset interrupt fill-flag in timer6
+	TIM6->CNT = 0;
 	isTextErrChangable = true;
 }

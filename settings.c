@@ -296,6 +296,23 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	tempBuf[2] = Recive_WORK[169];
 	tempBuf[3] = Recive_WORK[170];
 	D_factor = buf_tx_to_float();
+
+
+	tempBuf[0] = Recive_WORK[171];
+	tempBuf[1] = Recive_WORK[172];
+	tempBuf[2] = Recive_WORK[173];
+	tempBuf[3] = Recive_WORK[174];
+	km = buf_tx_to_float();
+
+	air = (Recive_WORK[175] + 
+		(Recive_WORK[176] << 8) +
+		(Recive_WORK[177] << 16) + 
+		(Recive_WORK[178] << 24));
+
+	water = (Recive_WORK[179] + 
+		(Recive_WORK[180] << 8) +
+		(Recive_WORK[181] << 16) + 
+		(Recive_WORK[182] << 24));
 }
 
 void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outПеременных)
@@ -447,8 +464,23 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[116] = tempBuf[1];
 	Send_WORK[117] = tempBuf[2];
 	Send_WORK[118] = tempBuf[3];
-  
-	for(int i = 119; i < 253; i++)
+
+	
+  Send_WORK[119] = (unsigned char)out_air;
+	Send_WORK[120] = (unsigned char)(out_air >> 8);
+	Send_WORK[121] = (unsigned char)(out_air >> 16);
+	Send_WORK[122] = (unsigned char)(out_air >> 24);
+
+	int qwe = out_water;
+	int qwe1 = out_water >> 8;
+
+	Send_WORK[123] = (unsigned char)out_water;
+	Send_WORK[124] = (unsigned char)(out_water >> 8);
+	Send_WORK[125] = (unsigned char)(out_water >> 16);
+	Send_WORK[126] = (unsigned char)(out_water >> 24);
+	
+
+	for(int i = 127; i < 253; i++)
 		Send_WORK[i] = 0;
 
 	Send_WORK[253] = 1;
@@ -574,11 +606,14 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	if(!Flags.ch_pid_period) { out_pid_period = pid_period; }
 	else Flags.ch_pid_period = 0;
 
+	if(!Flags.ch_air) { out_air = air; }
+	else Flags.ch_air = 0;
+
+	if(!Flags.ch_water) { out_water = water; }
+	else Flags.ch_water = 0;
 
 	OUTremUDPip[0] = remUDPip[0];
 	OUTremUDPip[1] = remUDPip[1];
 	OUTremUDPip[2] = remUDPip[2];
 	OUTremUDPip[3] = remUDPip[3];
 }
-
-

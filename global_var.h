@@ -59,6 +59,9 @@ struct TFlags
 	unsigned int ch_offset:						1;
 	unsigned int ch_gain:							1;
 	unsigned int ch_pid_period:				1;
+	unsigned int ch_water:						1;
+	unsigned int ch_air:							1;
+	unsigned int ch_km:								1;
 };
 
 extern struct TFlags Flags;
@@ -155,5 +158,9 @@ extern float out_damper,out_offset, out_gain;
 extern uint8_t out_workMode;
 extern float damper_manual;
 extern unsigned short pid_period, out_pid_period;
+
+extern uint32_t water, air;
+extern uint32_t out_water, out_air;
+extern float km, out_km;
 
 #endif /* GLOBAL_VAR_H_ */

@@ -19,7 +19,7 @@
 #define ID_MULTIEDIT_0     	(GUI_ID_USER + 0x0F)
 
 #define STAR_CHAR "*"
-#define PSWD "13467982"
+#define PSWD "2864"
 #define MAX_PSWD_CHAR_COUNT 10
 
 extern GUI_CONST_STORAGE GUI_FONT GUI_FontVerdana20;

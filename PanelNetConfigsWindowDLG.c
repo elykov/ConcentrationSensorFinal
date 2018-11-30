@@ -5,6 +5,7 @@
 #include "settings.h"  
 #include "serverPart.h"
 #include "Net_User.h"
+#include "modbus.h"
 
 #define ID_WINDOW_0         (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0         (GUI_ID_USER + 0x01)
@@ -24,6 +25,8 @@
 #define ID_EDIT_DNS1      	(GUI_ID_USER + 0x0D)
 #define ID_EDIT_DNS2      	(GUI_ID_USER + 0x0E)
 #define ID_TEXT_ERR         	(GUI_ID_USER + 0x0F)
+
+#define ID_TEXT_MODBUS 			(GUI_ID_USER + 0x11)
 
 void RefreshPanelNetConfigsWindow(void)
 {
@@ -127,6 +130,8 @@ int SetPanelNetConfigs()
 	return 0;
 }
 
+extern modbus_t mb;
+
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "PanelNetConfigsWindow", ID_WINDOW_0, 0, 0, 480, 272, 0, 0x0, 0 },
 	{ TEXT_CreateIndirect, "Header", ID_TEXT_HEADER, 90, 5, 300, 30, 0, 0x64, 0 },
@@ -148,6 +153,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   
 	{ TEXT_CreateIndirect, "TextTDNS2", ID_TEXT_DNS2, 245, 110, 65, 30, 0, 0x64, 0 },
 	{ EDIT_CreateIndirect, "EditDNS2", 	ID_EDIT_DNS2, 320, 110, 150, 30, 0, 0x10, 0 },
+	
+	{ TEXT_CreateIndirect, "TextPortModbus", ID_TEXT_MODBUS, 10, 200, 140, 30, 0, 0x64, 0 },
 	
 	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 245, 160, 220, 60, 0, 0x64, 0 },
 };
@@ -260,6 +267,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_DNS2);
     EDIT_SetFont(hItem, GUI_FONT_20_1);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    //
+    // Initialization of 'TextTDNS2'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MODBUS);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+		char qweqwe[40];
+		sprintf(qweqwe, "Порт Modbus: %u", mb.port);
+    TEXT_SetText(hItem, qweqwe);
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
     //
     // Initialization of 'TextErr'
     //

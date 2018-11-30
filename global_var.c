@@ -47,10 +47,7 @@ unsigned short dump_i = 0;
 unsigned short out_dump_i = 0;
 unsigned short out = 0;
 
-unsigned int up;
-unsigned int down;
-unsigned int sum;
-unsigned int DumpSum;
+unsigned int up = 0, down = 0, sum = 0, DumpSum = 0;
 
 float a = -1.972;
 float b = 0;
@@ -93,6 +90,9 @@ uint8_t out_workMode;
 float damper_manual = 50.f;
 unsigned short pid_period = 0, out_pid_period = 0;
 
+uint32_t water = 0, air = 0;
+uint32_t out_water = 0, out_air = 0;
+float km = 0, out_km = 0;
 
 uint8_t sendParam = 0;
 

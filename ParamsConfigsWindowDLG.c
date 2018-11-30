@@ -9,23 +9,30 @@
 #define ID_BUTTON_0   		(GUI_ID_USER + 0x02)
 #define ID_BUTTON_1   		(GUI_ID_USER + 0x03)
 #define ID_BUTTON_2   		(GUI_ID_USER + 0x04)
-#define ID_BUTTON_3				(GUI_ID_USER + 0x12)
+//#define ID_BUTTON_3				(GUI_ID_USER + 0x05)
 
-#define ID_TEXT_Trow  		(GUI_ID_USER + 0x05)
-#define ID_TEXT_Rev    		(GUI_ID_USER + 0x06)
-#define ID_TEXT_Dump    	(GUI_ID_USER + 0x07)
-#define ID_TEXT_Period  	(GUI_ID_USER + 0x08)
-#define ID_TEXT_Offset  	(GUI_ID_USER + 0x09)
-#define ID_TEXT_Gain  		(GUI_ID_USER + 0x0A)
+#define ID_TEXT_Trow  		(GUI_ID_USER + 0x11)
+#define ID_TEXT_Rev    		(GUI_ID_USER + 0x12)
+#define ID_TEXT_Dump    	(GUI_ID_USER + 0x13)
+#define ID_TEXT_Period  	(GUI_ID_USER + 0x14)
+#define ID_TEXT_Offset  	(GUI_ID_USER + 0x15)
+#define ID_TEXT_Gain  		(GUI_ID_USER + 0x16)
 
-#define ID_EDIT_Trow    	(GUI_ID_USER + 0x0B)
-#define ID_EDIT_Rev    		(GUI_ID_USER + 0x0C)
-#define ID_EDIT_Dump    	(GUI_ID_USER + 0x0D)
-#define ID_EDIT_Period    (GUI_ID_USER + 0x0E)
-#define ID_EDIT_Offset  	(GUI_ID_USER + 0x0F)
-#define ID_EDIT_Gain  		(GUI_ID_USER + 0x10)
+#define ID_TEXT_Water  		(GUI_ID_USER + 0x21)
+#define ID_TEXT_Air  			(GUI_ID_USER + 0x22)
+#define ID_TEXT_TKM		    (GUI_ID_USER + 0x23)
+#define ID_TEXT_KM  			(GUI_ID_USER + 0x24)
 
-#define ID_TEXT_ERR   		(GUI_ID_USER + 0x11)
+#define ID_EDIT_Trow    	(GUI_ID_USER + 0x31)
+#define ID_EDIT_Rev    		(GUI_ID_USER + 0x32)
+#define ID_EDIT_Dump    	(GUI_ID_USER + 0x33)
+#define ID_EDIT_Period    (GUI_ID_USER + 0x34)
+#define ID_EDIT_Offset  	(GUI_ID_USER + 0x35)
+#define ID_EDIT_Gain  		(GUI_ID_USER + 0x36)
+#define ID_EDIT_Water  		(GUI_ID_USER + 0x37)
+#define ID_EDIT_Air  			(GUI_ID_USER + 0x38)
+
+#define ID_TEXT_ERR   		(GUI_ID_USER + 0x20)
 
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
@@ -35,25 +42,47 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "ButtonExit", ID_BUTTON_1, 270, 235, 100, 30, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "ButtonReset", ID_BUTTON_2, 375, 235, 100, 30, 0, 0x0, 0 },
 
-	{ BUTTON_CreateIndirect, "ButtonToModbus", ID_BUTTON_3, 5, 235, 90, 30, 0, 0x0, 0 },
+	//{ BUTTON_CreateIndirect, "ButtonToModbus", ID_BUTTON_3, 5, 235, 90, 30, 0, 0x0, 0 },
 
-	{ TEXT_CreateIndirect, "TextTrowel", ID_TEXT_Trow, 10, 50, 90, 30, 0, 0x64, 0 },
-	{ EDIT_CreateIndirect, "EditTrowel", ID_EDIT_Trow, 110, 50, 100, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextTrowel", ID_TEXT_Trow, 10, 45, 140, 30, 0, 0x64, 0 },
+	{ EDIT_CreateIndirect, "EditTrowel", ID_EDIT_Trow, 150, 45, 100, 30, 0, 0xa, 0 },
 
-	{ TEXT_CreateIndirect, "TextRevers", ID_TEXT_Rev, 225, 50, 140, 30, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "EditRevers", ID_EDIT_Rev, 370, 50, 100, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextRevers", ID_TEXT_Rev, 10, 78, 140, 30, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "EditRevers", ID_EDIT_Rev, 150, 78, 100, 30, 0, 0xa, 0 },
 	
-	{ TEXT_CreateIndirect, "TextDump", ID_TEXT_Dump, 10, 95, 90, 30, 0, 0x0, 0 },
-	{ EDIT_CreateIndirect, "EditDump", ID_EDIT_Dump, 110, 95, 100, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextPeriod", ID_TEXT_Period, 10, 111, 140, 30, 0, 0x0, 0 },
+	{ EDIT_CreateIndirect, "EditPeriod", ID_EDIT_Period, 150, 111, 100, 30, 0, 0xa, 0 },	
 
-  { TEXT_CreateIndirect, "TextPeriod", ID_TEXT_Period, 225, 95, 140, 30, 0, 0x0, 0 },
-	{ EDIT_CreateIndirect, "EditPeriod", ID_EDIT_Period, 370, 95, 100, 30, 0, 0xa, 0 },	
 
-	{ TEXT_CreateIndirect, "TextOffset", ID_TEXT_Offset, 10, 140, 90, 30, 0, 0x0, 0 },
-	{ EDIT_CreateIndirect, "EditOffset", ID_EDIT_Offset, 110, 140, 100, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextDump", ID_TEXT_Dump, 265, 45, 100, 30, 0, 0x0, 0 },
+	{ EDIT_CreateIndirect, "EditDump", ID_EDIT_Dump, 370, 45, 100, 30, 0, 0xa, 0 },
 
-  { TEXT_CreateIndirect, "TextGain", ID_TEXT_Gain, 225, 140, 140, 30, 0, 0x0, 0 },
-	{ EDIT_CreateIndirect, "EditGain", ID_EDIT_Gain, 370, 140, 100, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextOffset", ID_TEXT_Offset, 265, 78, 100, 30, 0, 0x0, 0 },
+	{ EDIT_CreateIndirect, "EditOffset", ID_EDIT_Offset, 370, 78, 100, 30, 0, 0xa, 0 },
+
+  { TEXT_CreateIndirect, "TextGain", ID_TEXT_Gain, 265, 111, 100, 30, 0, 0x0, 0 },
+	{ EDIT_CreateIndirect, "EditGain", ID_EDIT_Gain, 370, 111, 100, 30, 0, 0xa, 0 },
+
+  /*
+  { TEXT_CreateIndirect, "TextWater", ID_TEXT_Water, 5, 150, 60, 30, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "EditWater", ID_EDIT_Water, 62, 150, 100, 30, 0, 0xa, 0 },
+
+  { TEXT_CreateIndirect, "TextAir", ID_TEXT_Air, 175, 150, 80, 30, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "EditAir", ID_EDIT_Air, 250, 150, 90, 30, 0, 0xa, 0 },
+
+	{ TEXT_CreateIndirect, "TextTKM", ID_TEXT_TKM, 355, 150, 50, 30, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "TextKM", ID_TEXT_KM, 395, 150, 75, 30, 0, 0xa, 0 },
+  */
+
+	{ TEXT_CreateIndirect, "TextWater", ID_TEXT_Water, 10, 144, 60, 30, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "EditWater", ID_EDIT_Water, 90, 144, 100, 30, 0, 0xa, 0 },
+
+  { TEXT_CreateIndirect, "TextAir", ID_TEXT_Air, 10, 177, 80, 30, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "EditAir", ID_EDIT_Air, 90, 177, 90, 30, 0, 0xa, 0 },
+
+	{ TEXT_CreateIndirect, "TextTKM", ID_TEXT_TKM, 10, 210, 50, 30, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "TextKM", ID_TEXT_KM, 90, 210, 75, 30, 0, 0xa, 0 },
+
 
 	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 20, 195, 440, 30, 0, 0x0, 0 },
 };
@@ -63,10 +92,27 @@ void RefreshParamsWindow(void)
 	if (isTextErrChangable)
 	{
 		if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
+		{
 			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение не установлено.");
+		}
 		else
 			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
 	}
+
+	/*
+	char tempStr[15];  
+	// Sum
+	sprintf(tempStr, "%u", sum);
+	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_Sum), tempStr);
+	// DumpSum
+	sprintf(tempStr, "%u", DumpSum);
+	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_DumpSum), tempStr);
+	*/
+
+	char tempStr[15];
+	// km
+	sprintf(tempStr, "%.3f", km);
+	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_KM), tempStr);
 }
 
 void FillParamsEditsWindow(void)
@@ -98,10 +144,17 @@ void FillParamsEditsWindow(void)
 	sprintf(tempStr, "%.2f", gain);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_Gain), tempStr);
 
+  // water
+	sprintf(tempStr, "%u", water);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_Water), tempStr);
+	
+	// air
+	sprintf(tempStr, "%u", air);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_Air), tempStr);
+
 	isTextErrChangable = true;
 	RefreshParamsWindow();
 }
-
 
 static int SaveParams(void)
 {
@@ -143,13 +196,24 @@ static int SaveParams(void)
 		if ((len < 1) || (sscanf(tempTxt, "%f%s", &out_gain, err) != 1) || isnan(out_gain))
 			return 6;
 
+		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_Air), tempTxt, 14);
+		len = strlen(tempTxt);
+		if ((len < 1) || (sscanf(tempTxt, "%u%s", &out_air, err) != 1))
+			return 7;
+
+		EDIT_GetText(WM_GetDialogItem(window, ID_EDIT_Water), tempTxt, 14);
+		len = strlen(tempTxt);
+		if ((len < 1) || (sscanf(tempTxt, "%u%s", &out_water, err) != 1))
+			return 8;
+
 		out_i_trowel = (unsigned short)n_tr;	
     out_i_revers = (unsigned short)n_rev;
 		out_dump = (unsigned short)n_dump;
 		out_period_answer = (unsigned short)n_period;
 
 		Flags.ch_i_tr = Flags.ch_i_rev = Flags.ch_dump = 
-		Flags.ch_period = Flags.ch_offset = Flags.ch_gain = 1; // change amperage params
+		Flags.ch_period = Flags.ch_offset = Flags.ch_gain =
+		Flags.ch_air = Flags.ch_water = 1; // change amperage params
 		sendParam = 0x01;
 		Flags.answer_work = 1; 
 		return 0;
@@ -199,9 +263,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     // Initialization of 'ButtonReset'
     //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
-    BUTTON_SetText(hItem, "Modbus");
-    BUTTON_SetFont(hItem, &GUI_FontVerdana20);
+    //hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
+    //BUTTON_SetText(hItem, "Modbus");
+    //BUTTON_SetFont(hItem, &GUI_FontVerdana20);
     //
     // Initialization of 'TextTTrowel'
     //
@@ -286,6 +350,83 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_Gain);
     EDIT_SetFont(hItem, &GUI_FontVerdana20);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+		/*
+		//
+    // Initialization of 'TextTSum'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TSum);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "М:");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+    //
+    // Initialization of 'TextSum'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_Sum);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+    //
+    // Initialization of 'TextTDumpSum'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TDumpSum);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "Б:");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+    //
+    // Initialization of 'TextDumpSum'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DumpSum);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+		*/
+		//
+    // Initialization of 'TextWater'
+    //
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_Water);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "Вода: ");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+		//
+    // Initialization of 'EditWater'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_Water);
+    EDIT_SetFont(hItem, &GUI_FontVerdana20);
+    EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+		//
+    // Initialization of 'TextAir'
+    //
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_Air);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "Воздух: ");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+		//
+    // Initialization of 'EditAir'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_Air);
+    EDIT_SetFont(hItem, &GUI_FontVerdana20);
+    EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+		//
+    // Initialization of 'TextTKM'
+    //
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TKM);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetText(hItem, "КМ: ");
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+		//
+    // Initialization of 'TextKM'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_KM);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
 		//
     // Initialization of 'TextErr'
     //
@@ -332,6 +473,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 						case 4:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан период ответа.");
 							break;
+						case 5:
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задано смещение.");
+							break;
+						case 6:
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задано усиление.");
+							break;	
+						case 7:
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан воздух.");
+							break;
+						case 8:
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задана вода.");
+							break;
 					}
 					TimerStart();
 					keyBoard.IsFieldChanged = false;
@@ -361,6 +514,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				break;
       }
       break;
+		/*
     case ID_BUTTON_3: // Notifications sent by 'ButtonReset'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
@@ -372,6 +526,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				break;
       }
       break;
+		*/
     case ID_EDIT_Trow: // Notifications sent by 'EditTrowel'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
@@ -444,6 +599,28 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_Gain), "Изменение усиления");
 				// USER END
         break;
+      case WM_NOTIFICATION_RELEASED:
+        break;
+      case WM_NOTIFICATION_VALUE_CHANGED:
+        break;
+      }
+      break;
+		case ID_EDIT_Air: // Notifications sent by 'EditAir'
+      switch(NCode) {
+      case WM_NOTIFICATION_CLICKED:
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_Air), "Изменение воздуха");
+				break;
+      case WM_NOTIFICATION_RELEASED:
+        break;
+      case WM_NOTIFICATION_VALUE_CHANGED:
+        break;
+      }
+      break;
+		case ID_EDIT_Water: // Notifications sent by 'EditWater'
+      switch(NCode) {
+      case WM_NOTIFICATION_CLICKED:
+        ShowKeyBoard(WM_GetDialogItem(pMsg->hWin, ID_EDIT_Water), "Изменение воды");
+				break;
       case WM_NOTIFICATION_RELEASED:
         break;
       case WM_NOTIFICATION_VALUE_CHANGED:

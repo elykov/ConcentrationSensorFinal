@@ -8,7 +8,7 @@ mb_in_packet incomingPack;
 mb_out_packet outcomingPack;
 bool isSend;
 uint8_t outBuffer[260];
-bool isReversInput = true, isReversOutput = false;
+bool isReversInput = false, isReversOutput = false;
 
 unsigned int modbus_callback(int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len);
 
@@ -26,7 +26,7 @@ int initModbus(modbus_t* mb)
 void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp)
 {
 	uint8_t junByte, sinByte;
-	if (isReversInput)
+	if (!isReversInput)
 	{
 		junByte = 1;
 		sinByte = 0;
@@ -65,7 +65,7 @@ void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp)
 void mb_out_packet_form(uint8_t* data, mb_out_packet* mbp)
 {
 	uint8_t junByte, sinByte;
-	if (isReversOutput) // реверсивная ли передача данных назад
+	if (!isReversOutput) // реверсивная ли передача данных назад
 	{
 		junByte = 1;
 		sinByte = 0;
@@ -81,35 +81,29 @@ void mb_out_packet_form(uint8_t* data, mb_out_packet* mbp)
 	data[sinByte] = converter.cdata[1]; 
 
 	converter.sdata = mbp->header.protocolID;
-	data[junByte] = converter.cdata[0];
-	data[sinByte] = converter.cdata[1]; 
+	data[junByte + 2] = converter.cdata[0];
+	data[sinByte + 2] = converter.cdata[1]; 
 
 	converter.sdata = mbp->header.length;
-	data[junByte] = converter.cdata[0];
-	data[sinByte] = converter.cdata[1]; 
+	data[junByte + 4] = converter.cdata[0];
+	data[sinByte + 4] = converter.cdata[1]; 
 	
 	data[6] = mbp->header.unitID;
   data[7] = mbp->commandCode;
+	
 	data[8] = mbp->answerLength;
 	
 	if (isReversOutput)
 	{
-		int cnt = mbp->answerLength / 4;
-		for(int i = 0; i < cnt; i++)	
-		{
-			for(int j = 0; j < 4; j++)
-				data[i * 4 + j + 9] = mbp->data[3 - j];
-    }
-		
-		int ost = mbp->answerLength % 4;
-		for(int i = 0; i < ost; i++)
-			data[cnt * 4 + i + 9] = 0;
+		for(int i = 0; i < mbp->answerLength; i++)	
+			data[i + 9] = mbp->data[i];
 	}
 	else
 	{
 		for(int i = 0; i < mbp->answerLength; i++)	
 			data[i + 9] = mbp->data[i];	
 	}
+
 
 	isSend = true;
 }
@@ -136,6 +130,7 @@ void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 	outPack->header.unitID = inPack->header.unitID;
 	outPack->commandCode = inPack->commandCode;
 	
+	// Формирование массива данных в панели
 	uint8_t arr[12];
 	converter.fdata = Cb;
 	for(int i = 0; i < 4; i++)
@@ -151,7 +146,6 @@ void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 
 	outPack->answerLength = inPack->registersCount * 2;
 	outPack->header.length = outPack->answerLength + 3;
-
 
 	// Если пришел запрос на считывание данных и регистры данных в указанных пределах 
 	if (inPack->commandCode == 3 && 

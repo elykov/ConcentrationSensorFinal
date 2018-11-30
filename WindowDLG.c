@@ -29,8 +29,7 @@
 *
 **********************************************************************
 */
-#define ID_WINDOW_0         (GUI_ID_USER + 0x00)
-#define ID_TEXT_0         (GUI_ID_USER + 0x01)
+#define ID_WINDOW_0    (GUI_ID_USER + 0x00)
 
 
 // USER START (Optionally insert additional defines)
@@ -52,7 +51,6 @@
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 480, 272, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "TextTitle", ID_TEXT_0, 90, 5, 300, 30, 0, 0x64, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -72,28 +70,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *       _cbDialog
 */
 static void _cbDialog(WM_MESSAGE * pMsg) {
-  WM_HWIN hItem;
   // USER START (Optionally insert additional variables)
   // USER END
 
   switch (pMsg->MsgId) {
-  case WM_INIT_DIALOG:
-    //
-    // Initialization of 'Window'
-    //
-    hItem = pMsg->hWin;
-    WINDOW_SetBkColor(hItem, GUI_MAKE_COLOR(0x00FF2100));
-    //
-    // Initialization of 'TextTitle'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
-    TEXT_SetFont(hItem, GUI_FONT_20_1);
-    TEXT_SetText(hItem, "Configurations ModBus");
-    TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
-    // USER START (Optionally insert additional code for further widget initialization)
-    // USER END
-    break;
   // USER START (Optionally insert additional message handling)
   // USER END
   default:

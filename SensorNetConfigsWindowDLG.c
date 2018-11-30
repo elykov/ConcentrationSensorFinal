@@ -47,7 +47,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ TEXT_CreateIndirect, "TextTDNS2", ID_TEXT_DNS2, 245, 110, 65, 30, 0, 0x64, 0 },
 	{ EDIT_CreateIndirect, "EditDNS2", 	ID_EDIT_DNS2, 320, 110, 150, 30, 0, 0x10, 0 },
 
-	{ TEXT_CreateIndirect, "TextTPortTCP", ID_TEXT_PORTTCP, 10, 200, 140, 30, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextTPortTCP", ID_TEXT_PORTTCP, 10, 200, 180, 30, 0, 0x64, 0 },
   { TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 245, 160, 220, 60, 0, 0x64, 0 },
 };
 

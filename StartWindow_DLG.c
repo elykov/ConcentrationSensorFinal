@@ -248,7 +248,7 @@ void RefreshStartWindow(void)
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_2), tempStr);	
 	}
 
-	if (currWorkMode != workMode )
+	if (currWorkMode != workMode)
 	{
 		if (workMode == 0)
 		{
