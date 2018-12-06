@@ -69,6 +69,7 @@ void WindowChange(int windowNum)
 	WM_DeleteWindow(logic.window);
 	logic.currentWindow = windowNum;
 	logic.window = fWindowCreators[logic.currentWindow]();
+	keyBoard.isRefreshableFields = true;
 	WM_ShowWindow(logic.window);
 }
 

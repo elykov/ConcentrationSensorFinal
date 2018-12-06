@@ -304,15 +304,15 @@ void Parsing_package_WORK (void)//разбор посылки от датчика
 	tempBuf[3] = Recive_WORK[174];
 	km = buf_tx_to_float();
 
-	air = (Recive_WORK[175] + 
-		(Recive_WORK[176] << 8) +
-		(Recive_WORK[177] << 16) + 
-		(Recive_WORK[178] << 24));
+	air = (Recive_WORK[178] + 
+		(Recive_WORK[177] << 8) +
+		(Recive_WORK[176] << 16) + 
+		(Recive_WORK[175] << 24));
 
-	water = (Recive_WORK[179] + 
-		(Recive_WORK[180] << 8) +
-		(Recive_WORK[181] << 16) + 
-		(Recive_WORK[182] << 24));
+	water = (Recive_WORK[182] + 
+		(Recive_WORK[181] << 8) +
+		(Recive_WORK[180] << 16) + 
+		(Recive_WORK[179] << 24));
 }
 
 void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outПеременных)
@@ -466,18 +466,15 @@ void Form_package_WORK (void)//сборка посылки в датчик (копирует в буфер из outП
 	Send_WORK[118] = tempBuf[3];
 
 	
-  Send_WORK[119] = (unsigned char)out_air;
-	Send_WORK[120] = (unsigned char)(out_air >> 8);
-	Send_WORK[121] = (unsigned char)(out_air >> 16);
-	Send_WORK[122] = (unsigned char)(out_air >> 24);
+  Send_WORK[122] = (unsigned char)out_air;
+	Send_WORK[121] = (unsigned char)(out_air >> 8);
+	Send_WORK[120] = (unsigned char)(out_air >> 16);
+	Send_WORK[119] = (unsigned char)(out_air >> 24);
 
-	int qwe = out_water;
-	int qwe1 = out_water >> 8;
-
-	Send_WORK[123] = (unsigned char)out_water;
-	Send_WORK[124] = (unsigned char)(out_water >> 8);
-	Send_WORK[125] = (unsigned char)(out_water >> 16);
-	Send_WORK[126] = (unsigned char)(out_water >> 24);
+	Send_WORK[126] = (unsigned char)out_water;
+	Send_WORK[125] = (unsigned char)(out_water >> 8);
+	Send_WORK[124] = (unsigned char)(out_water >> 16);
+	Send_WORK[123] = (unsigned char)(out_water >> 24);
 	
 
 	for(int i = 127; i < 253; i++)

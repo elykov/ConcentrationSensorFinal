@@ -9,7 +9,7 @@
 		WM_HWIN _keyboard;
 		WM_HWIN _this_edit;
 		WM_HWIN _title_text;
-		bool IsFieldChanged;
+		bool isRefreshableFields: true;
 	};
 	
 	extern void HideKeyBoard(void);

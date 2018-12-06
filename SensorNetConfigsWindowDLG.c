@@ -51,17 +51,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 245, 160, 220, 60, 0, 0x64, 0 },
 };
 
-void RefreshSensorNetConfigsWindow(void)
-{
-	if (isTextErrChangable)
-	{
-		if (tcp_get_state(tcp_soc_WORK) == tcpStateESTABLISHED)
-			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
-		else
-			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
-	}
-}
-
 // показывает только IP для подключения если датчик не подключен
 static void SetSensorNetEdits(void) // сделано
 {
@@ -127,6 +116,20 @@ static void SetSensorNetEdits(void) // сделано
 
 		//TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
 	}
+}
+
+void RefreshSensorNetConfigsWindow(void)
+{
+	if (isTextErrChangable)
+	{
+		if (tcp_get_state(tcp_soc_WORK) == tcpStateESTABLISHED)
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
+		else
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
+	}
+
+	if (keyBoard.isRefreshableFields)
+		SetSensorNetEdits();
 }
 
 int SaveNetData(void)
@@ -337,7 +340,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					{
 						case 0:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Настройки применены.");
-							keyBoard.IsFieldChanged = false;
+							keyBoard.isRefreshableFields = true;
 							break;
 						case 1:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан IP.");
@@ -366,7 +369,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         TimerStop();
-				keyBoard.IsFieldChanged = false;
+				keyBoard.isRefreshableFields = true;
 				WindowChange(MenuWindow);
 				break;
       }
@@ -377,7 +380,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         TimerStop();
-				keyBoard.IsFieldChanged = false;
+				keyBoard.isRefreshableFields = true;
 				SetSensorNetEdits();
 				break;
       }

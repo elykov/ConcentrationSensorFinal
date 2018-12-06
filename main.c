@@ -132,9 +132,10 @@ void Exit(void)
 	tcp_close(tcp_soc_SERVER);
 	tcp_close(tcp_soc_PLC);
 	tcp_close(tcp_soc_TECH);
-	SCB->AIRCR  = (uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos)    |
-                           (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) |
-                            SCB_AIRCR_SYSRESETREQ_Msk);
+	SCB->AIRCR  = 
+		(uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+		 (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) |
+			SCB_AIRCR_SYSRESETREQ_Msk);
 }
 
 void HardFault_Handler(void)

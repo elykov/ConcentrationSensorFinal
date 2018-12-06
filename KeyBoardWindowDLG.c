@@ -5,7 +5,7 @@ extern struct GUILogic logic;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { WINDOW_CreateIndirect, "KeyBoardWindow", ID_WINDOW_0, 0, 62, 480, 210, 0, 0x64, 0 },
-	{ TEXT_CreateIndirect, "TextTitle", ID_TEXT_TITLE, 90, 5, 300, 30, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextTitle", ID_TEXT_TITLE, 40, 5, 400, 30, 0, 0x64, 0 },
 	{ EDIT_CreateIndirect, "EditString", ID_EDIT_0, 60, 40, 360, 45, 0, 0x64, 0 },
 	
   { BUTTON_CreateIndirect, "Button1", ID_BUTTON_1, 	 5,  100, 50, 50, 0, 0x0, 0 },

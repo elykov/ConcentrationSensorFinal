@@ -28,12 +28,6 @@
 
 #define ID_TEXT_MODBUS 			(GUI_ID_USER + 0x11)
 
-void RefreshPanelNetConfigsWindow(void)
-{
-	if (isTextErrChangable)
-		TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
-}
-
 void SetPanelNetEdits(void)
 {
 	WM_HWIN window = logic.window;
@@ -79,6 +73,15 @@ void SetPanelNetEdits(void)
 	
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS2), tempStr);
 	}
+}
+
+void RefreshPanelNetConfigsWindow(void)
+{
+	if (isTextErrChangable)
+		TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");   
+
+	if (keyBoard.isRefreshableFields)
+		SetPanelNetEdits();
 }
 
 int SetPanelNetConfigs()
@@ -154,7 +157,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ TEXT_CreateIndirect, "TextTDNS2", ID_TEXT_DNS2, 245, 110, 65, 30, 0, 0x64, 0 },
 	{ EDIT_CreateIndirect, "EditDNS2", 	ID_EDIT_DNS2, 320, 110, 150, 30, 0, 0x10, 0 },
 	
-	{ TEXT_CreateIndirect, "TextPortModbus", ID_TEXT_MODBUS, 10, 200, 140, 30, 0, 0x64, 0 },
+	{ TEXT_CreateIndirect, "TextPortModbus", ID_TEXT_MODBUS, 10, 200, 240, 30, 0, 0x64, 0 },
 	
 	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 245, 160, 220, 60, 0, 0x64, 0 },
 };
@@ -307,6 +310,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					{
 						case 0:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Настройки применены.");
+							keyBoard.isRefreshableFields = true;
 							break;
 						case 1:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНеверно задан IP.");
@@ -325,7 +329,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							break;
 					}
 					TimerStart();
-					keyBoard.IsFieldChanged = false;
 					break;
 				}        
       }
@@ -335,7 +338,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-        keyBoard.IsFieldChanged = false;
+        keyBoard.isRefreshableFields = true;
 				TimerStop();
 				WindowChange(MenuWindow);
 			  break;
@@ -346,7 +349,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
-				keyBoard.IsFieldChanged = false;
+				keyBoard.isRefreshableFields = true;
         TimerStop();
 				SetPanelNetEdits();
 				break;

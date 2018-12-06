@@ -59,6 +59,38 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 258, 165, 222, 60, 0, 0x64, 0 },
 };
 
+static void FillPID(void)
+{
+	WM_HWIN window = logic.window; 
+	char tempStr[9];
+
+	// p
+	sprintf(tempStr, "%.3f", P_factor);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_0), tempStr);
+
+	// i
+	sprintf(tempStr, "%.3f", I_factor);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_1), tempStr);
+	
+	// d
+	sprintf(tempStr, "%.3f", D_factor);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_2), tempStr);
+
+	// Задание
+	if (isnan(referens))
+		sprintf(tempStr, "-");
+	else 
+		sprintf(tempStr, "%.3f", referens);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_3), tempStr);
+
+	// PID(dump_i)
+	sprintf(tempStr, "%u", dump_i);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_4), tempStr);
+
+	sprintf(tempStr, "%u", pid_period);
+	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_5), tempStr);
+}
+
 void RefreshPIDWindow(void)
 {
 	WM_HWIN window = logic.window; 
@@ -94,38 +126,9 @@ void RefreshPIDWindow(void)
 		else
 			TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "");
 	}
-}
 
-static void FillPID(void)
-{
-	WM_HWIN window = logic.window; 
-	char tempStr[9];
-
-	// p
-	sprintf(tempStr, "%.3f", P_factor);
-	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_0), tempStr);
-
-	// i
-	sprintf(tempStr, "%.3f", I_factor);
-	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_1), tempStr);
-	
-	// d
-	sprintf(tempStr, "%.3f", D_factor);
-	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_2), tempStr);
-
-	// Задание
-	if (isnan(referens))
-		sprintf(tempStr, "-");
-	else 
-		sprintf(tempStr, "%.3f", referens);
-	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_3), tempStr);
-
-	// PID(dump_i)
-	sprintf(tempStr, "%u", dump_i);
-	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_4), tempStr);
-
-	sprintf(tempStr, "%u", pid_period);
-	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_5), tempStr);
+	if (keyBoard.isRefreshableFields)
+		FillPID();
 }
 
 static int SavePIDParams(void)
@@ -181,7 +184,6 @@ static int SavePIDParams(void)
 		
 		sendParam = 0x02;
 		Flags.answer_work = 1; 
-		keyBoard.IsFieldChanged = false;
 		return 0;
 	}
 	
@@ -388,6 +390,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					{
 						case 0:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Настройки применены.");
+							keyBoard.isRefreshableFields = true;
 							break;
 						case 10:
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "  Ошибка:\nНет подключения.");
@@ -423,7 +426,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_RELEASED:
         // USER START (Optionally insert code for reacting on notification message)
         TimerStop(); 
-				keyBoard.IsFieldChanged = false;
+				keyBoard.isRefreshableFields = true;
 				WindowChange(MenuWindow);
 				// USER END
         break;
@@ -435,7 +438,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
 				TimerStop();
-				keyBoard.IsFieldChanged = false;
+				keyBoard.isRefreshableFields = true;
         RefreshPIDWindow();
 				FillPID();
         break;

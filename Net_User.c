@@ -7,7 +7,7 @@
 int sendCount = 0;
 int tcp_soc_TECH, tcp_soc_PLC, tcp_soc_WORK;
 
-unsigned char rem_ip[4] = {192,168,99,140};
+unsigned char rem_ip[4] = {192,168,99,200};
 int eth_st, net_st, tcp_st_TECH, tcp_st_PLC, tcp_st_WORK;
 unsigned char state_socket_TECH = 0, state_socket_PLC = 0, state_socket_WORK = 0;
 unsigned char soc_state = 0;

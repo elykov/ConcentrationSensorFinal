@@ -17,6 +17,8 @@
 #define ID_TEXT_Period  	(GUI_ID_USER + 0x14)
 #define ID_TEXT_Offset  	(GUI_ID_USER + 0x15)
 #define ID_TEXT_Gain  		(GUI_ID_USER + 0x16)
+#define ID_TEXT_DumpSum  	(GUI_ID_USER + 0x17)
+#define ID_TEXT_Sum  			(GUI_ID_USER + 0x18)
 
 #define ID_TEXT_Water  		(GUI_ID_USER + 0x21)
 #define ID_TEXT_Air  			(GUI_ID_USER + 0x22)
@@ -42,8 +44,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "ButtonExit", ID_BUTTON_1, 270, 235, 100, 30, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "ButtonReset", ID_BUTTON_2, 375, 235, 100, 30, 0, 0x0, 0 },
 
-	//{ BUTTON_CreateIndirect, "ButtonToModbus", ID_BUTTON_3, 5, 235, 90, 30, 0, 0x0, 0 },
-
 	{ TEXT_CreateIndirect, "TextTrowel", ID_TEXT_Trow, 10, 45, 140, 30, 0, 0x64, 0 },
 	{ EDIT_CreateIndirect, "EditTrowel", ID_EDIT_Trow, 150, 45, 100, 30, 0, 0xa, 0 },
 
@@ -63,57 +63,19 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "TextGain", ID_TEXT_Gain, 265, 111, 100, 30, 0, 0x0, 0 },
 	{ EDIT_CreateIndirect, "EditGain", ID_EDIT_Gain, 370, 111, 100, 30, 0, 0xa, 0 },
 
-  /*
-  { TEXT_CreateIndirect, "TextWater", ID_TEXT_Water, 5, 150, 60, 30, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "EditWater", ID_EDIT_Water, 62, 150, 100, 30, 0, 0xa, 0 },
-
-  { TEXT_CreateIndirect, "TextAir", ID_TEXT_Air, 175, 150, 80, 30, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "EditAir", ID_EDIT_Air, 250, 150, 90, 30, 0, 0xa, 0 },
-
-	{ TEXT_CreateIndirect, "TextTKM", ID_TEXT_TKM, 355, 150, 50, 30, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "TextKM", ID_TEXT_KM, 395, 150, 75, 30, 0, 0xa, 0 },
-  */
-
-	{ TEXT_CreateIndirect, "TextWater", ID_TEXT_Water, 10, 144, 60, 30, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "EditWater", ID_EDIT_Water, 90, 144, 100, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextWater", ID_TEXT_Water, 10, 144, 80, 30, 0, 0x0, 0 },
+  { EDIT_CreateIndirect, "EditWater", ID_EDIT_Water, 90, 144, 110, 30, 0, 0xa, 0 },
 
   { TEXT_CreateIndirect, "TextAir", ID_TEXT_Air, 10, 177, 80, 30, 0, 0x0, 0 },
-  { EDIT_CreateIndirect, "EditAir", ID_EDIT_Air, 90, 177, 90, 30, 0, 0xa, 0 },
+  { EDIT_CreateIndirect, "EditAir", ID_EDIT_Air, 90, 177, 110, 30, 0, 0xa, 0 },
 
-	{ TEXT_CreateIndirect, "TextTKM", ID_TEXT_TKM, 10, 210, 50, 30, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "TextKM", ID_TEXT_KM, 90, 210, 75, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextTKM", ID_TEXT_TKM, 10, 240, 80, 30, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "TextKM", ID_TEXT_KM, 60, 240, 110, 30, 0, 0xa, 0 },
+                                                 
+	{ TEXT_CreateIndirect, "TextDumpSum", ID_TEXT_DumpSum, 10, 207, 160, 30, 0, 0x0, 0 },
 
-
-	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 20, 195, 440, 30, 0, 0x0, 0 },
+	{ TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 220, 155, 250, 60, 0, 0x0, 0 },
 };
-
-void RefreshParamsWindow(void)
-{
-	if (isTextErrChangable)
-	{
-		if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
-		{
-			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение не установлено.");
-		}
-		else
-			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
-	}
-
-	/*
-	char tempStr[15];  
-	// Sum
-	sprintf(tempStr, "%u", sum);
-	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_Sum), tempStr);
-	// DumpSum
-	sprintf(tempStr, "%u", DumpSum);
-	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_DumpSum), tempStr);
-	*/
-
-	char tempStr[15];
-	// km
-	sprintf(tempStr, "%.3f", km);
-	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_KM), tempStr);
-}
 
 void FillParamsEditsWindow(void)
 {
@@ -151,9 +113,31 @@ void FillParamsEditsWindow(void)
 	// air
 	sprintf(tempStr, "%u", air);
 	EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_Air), tempStr);
+}
 
-	isTextErrChangable = true;
-	RefreshParamsWindow();
+void RefreshParamsWindow(void)
+{
+	if (isTextErrChangable)
+	{
+		if (tcp_get_state(tcp_soc_WORK) != tcpStateESTABLISHED)
+		{
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
+		}
+		else
+			TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "");
+	}
+
+	char tempStr[15];
+	// km
+	sprintf(tempStr, "%.3f", km);
+	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_KM), tempStr);
+
+	// DumpSum
+	sprintf(tempStr, "Б: %u; М: %u", DumpSum, sum);
+	TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_DumpSum), tempStr);
+
+	if (keyBoard.isRefreshableFields)
+		FillParamsEditsWindow();
 }
 
 static int SaveParams(void)
@@ -350,40 +334,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_Gain);
     EDIT_SetFont(hItem, &GUI_FontVerdana20);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
-		/*
-		//
-    // Initialization of 'TextTSum'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TSum);
-    TEXT_SetFont(hItem, &GUI_FontVerdana20);
-    TEXT_SetText(hItem, "М:");
-    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
-    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
-    //
-    // Initialization of 'TextSum'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_Sum);
-    TEXT_SetFont(hItem, &GUI_FontVerdana20);
-    TEXT_SetText(hItem, "");
-    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
-    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
-    //
-    // Initialization of 'TextTDumpSum'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TDumpSum);
-    TEXT_SetFont(hItem, &GUI_FontVerdana20);
-    TEXT_SetText(hItem, "Б:");
-    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
-    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
-    //
-    // Initialization of 'TextDumpSum'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DumpSum);
-    TEXT_SetFont(hItem, &GUI_FontVerdana20);
-    TEXT_SetText(hItem, "");
-    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
-    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
-		*/
 		//
     // Initialization of 'TextWater'
     //
@@ -428,6 +378,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
 		//
+    // Initialization of 'TextTDumpSum'
+    //
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DumpSum);
+    TEXT_SetFont(hItem, &GUI_FontVerdana20);
+    TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
+    TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
+		//
     // Initialization of 'TextErr'
     //
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR);
@@ -435,6 +392,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
     TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x0000FFFF));
 	  TEXT_SetText(hItem, "");
+
 		FillParamsEditsWindow();
 		RefreshParamsWindow();
     break;
@@ -462,32 +420,32 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Нет подключения.");
 							break;
 						case 1:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан ток хода.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадан ток хода.");
 							break;
 						case 2:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан ток реверса.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадан ток реверса.");
 							break;
 						case 3:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан буфер.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадан буфер.");
 							break;
 						case 4:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан период ответа.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадан период ответа.");
 							break;
 						case 5:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задано смещение.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадано смещение.");
 							break;
 						case 6:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задано усиление.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадано усиление.");
 							break;	
 						case 7:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задан воздух.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадан воздух.");
 							break;
 						case 8:
-							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно задана вода.");
+							TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_ERR), "Ошибка: Неверно\nзадана вода.");
 							break;
 					}
 					TimerStart();
-					keyBoard.IsFieldChanged = false;
+					keyBoard.isRefreshableFields = true;
 					break;
 				}
       }
@@ -498,7 +456,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
         TimerStop();
-				keyBoard.IsFieldChanged = false;
+				keyBoard.isRefreshableFields = true;
+				isTextErrChangable = true;
 				WindowChange(MenuWindow);
 				break;
       }
@@ -509,24 +468,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
       case WM_NOTIFICATION_RELEASED:
 				TimerStop();
-				keyBoard.IsFieldChanged = false;
-        FillParamsEditsWindow();
+				keyBoard.isRefreshableFields = true;
+				FillParamsEditsWindow();
+				isTextErrChangable = true;
 				break;
       }
       break;
-		/*
-    case ID_BUTTON_3: // Notifications sent by 'ButtonReset'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        break;
-      case WM_NOTIFICATION_RELEASED:
-				TimerStop();
-				keyBoard.IsFieldChanged = false;
-				WindowChange(ModBusWindow);
-				break;
-      }
-      break;
-		*/
     case ID_EDIT_Trow: // Notifications sent by 'EditTrowel'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:

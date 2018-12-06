@@ -103,7 +103,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   case WM_NOTIFY_PARENT:
 		if (keyBoard._keyboard != 0)
 			break;
-		else if (keyBoard.IsFieldChanged) // Просмотр изменились ли данные на главном экране
+		else if (!keyBoard.isRefreshableFields) // Просмотр изменились ли данные на главном экране
 		{
 			char tempTxt[20], err[20];
       size_t len;
@@ -116,7 +116,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				if ((len < 1) || (sscanf(tempTxt, "%f%s", &n_ref, err) != 1) || isnan(n_ref))
 				{
 					// может какую-то надпись
-					keyBoard.IsFieldChanged = false;
+					keyBoard.isRefreshableFields = true;
 					break;
 				}
 				out_referens = n_ref;
@@ -132,7 +132,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				if ((len < 1) || (sscanf(tempTxt, "%f%s", &n_damper, err) != 1) || isnan(n_damper))
 				{
 					// может какую-то надпись
-					keyBoard.IsFieldChanged = false;
+					keyBoard.isRefreshableFields = true;
 					break;
 				}
 				damper_manual = out_damper = n_damper;
@@ -140,7 +140,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				Flags.ch_damper = 1;
 				Flags.answer_work = 1;
 			}
-			keyBoard.IsFieldChanged = false;
+			keyBoard.isRefreshableFields = true;
 		}           
 
     Id    = WM_GetId(pMsg->hWinSrc);
@@ -235,7 +235,7 @@ void RefreshStartWindow(void)
 		TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_0), tempStr);	
 	}
 	
-	if (keyBoard.IsFieldChanged)
+	if (!keyBoard.isRefreshableFields)
 		return;
 		
 	{ // задание

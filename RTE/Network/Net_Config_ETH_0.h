@@ -44,7 +44,7 @@
 
 //     <o>Address byte 6 <0x00-0xff>
 //     <i>Default: 0x5E
-#define ETH0_MAC6               0xF3
+#define ETH0_MAC6               0xF4
 //   </h>
 
 //   <h>IP Address
@@ -65,7 +65,7 @@
 
 //     <o>Address byte 4 <0-255>
 //     <i>Default: 100
-#define ETH0_IP4                197
+#define ETH0_IP4                199
 //   </h>
 
 //   <h>Subnet mask
