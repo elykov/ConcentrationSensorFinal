@@ -44,7 +44,7 @@
 
 //     <o>Address byte 6 <0x00-0xff>
 //     <i>Default: 0x5E
-#define ETH0_MAC6               0xF4
+#define ETH0_MAC6               0xF8
 //   </h>
 
 //   <h>IP Address

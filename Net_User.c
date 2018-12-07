@@ -17,6 +17,7 @@ unsigned int tcp_callback_TECH (int32_t soc, tcpEvent event, const uint8_t *buf,
 {
   // This function is called on TCP event 
 	unsigned short i, _n;
+	const uint8_t* pbuf;
   // ..
   switch (event) 
 	{
@@ -47,10 +48,11 @@ unsigned int tcp_callback_TECH (int32_t soc, tcpEvent event, const uint8_t *buf,
       // Data length is 'len' bytes
 			if(len > 0xff) _n = 0xff;
 			else _n = len;
+			pbuf = buf;
 			for(i = 0; i < _n; ++i)
 			{
-				Recive_TECH[i] = *buf;
-				++buf;
+				Recive_TECH[i] = *pbuf;
+				++pbuf;
 			}
 			Flags.incoming_tech = 1;		
 			tcp_reset_window (soc);
@@ -71,23 +73,17 @@ unsigned int tcp_callback_PLC (int32_t soc, tcpEvent event, const uint8_t *buf, 
       // 'buf' points to Remote IP, 'len' holds the remote port.
 			
 			__nop();
-      // Return 1 to accept connection, or 0 to reject connection 
       return (1);
-    case tcpEventAbort:
-      // Connection was aborted 
+    case tcpEventAbort: // Connection was aborted 
 			__nop();
       break;
-    case tcpEventEstablished:
-      // Socket is connected to remote peer. 
+    case tcpEventEstablished: // Socket is connected to remote peer. 
 			__nop();
       break;
-    case tcpEventClosed:
-      // Connection has been closed 
+    case tcpEventClosed: // Connection has been closed 
 			__nop();
       break;
-    case tcpEventACK:
-      // Our sent data has been acknowledged by remote peer
-			
+    case tcpEventACK: // Our sent data has been acknowledged by remote peer
 			__nop();
       break;
     case tcpEventData:
@@ -125,12 +121,14 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
       // 'buf' points to Remote IP, 'len' holds the remote port. 
 			__nop();
       // Return 1 to accept connection, or 0 to reject connection 
+			__nop();
       return (1);
     case tcpEventAbort:
       // Connection was aborted 
 			i_trowel = i_revers = dump = period_answer = 
 			referens = Cb = Output_I = dump_i = 
 			P_factor = I_factor = D_factor = 0;
+			offset = gain = damper = 0;
 			__nop();
       break;
     case tcpEventEstablished:
@@ -154,7 +152,11 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
     case tcpEventData:
       // TCP data frame has been received, 'buf' points to data 
       // Data length is 'len' bytes
-			_n = (len > 0xff) ? 0xff : len;
+			if (len > 0xff)
+				_n = 0xff;
+			else
+				_n = len;
+			
 			for(i = 0; i < _n; ++i)
 			{
 				Recive_WORK[i] = *buf;
@@ -179,11 +181,11 @@ void NET_init (void)
 		tcp_listen (tcp_soc_TECH, 4001);
 	}	
   
-	tcp_soc_PLC = tcp_get_socket (TCP_TYPE_SERVER, 0, 10, tcp_callback_PLC);
-	if (tcp_soc_PLC >= 0) 
-	{
-		tcp_listen (tcp_soc_PLC, 4003);
-	}		
+	//tcp_soc_PLC = tcp_get_socket (TCP_TYPE_SERVER, 0, 10, tcp_callback_PLC);
+	//if (tcp_soc_PLC >= 0) 
+	//{
+		//tcp_listen (tcp_soc_PLC, 4003);
+	//}		
   tcp_soc_WORK = tcp_get_socket (TCP_TYPE_CLIENT, 0, 10, tcp_callback_WORK);
 	soc_state = 0;
 }
@@ -207,17 +209,23 @@ void send_data (void) //датчик
 		{				
 			if(Flags.answer_work) // желаем отправить пакет
 			{
-				max = tcp_max_data_size (tcp_soc_WORK);
-				maxlen_work = (max > 0xff) ? 0xff : max;
-				Change_Parameters();
-				Form_package_WORK();
-				sendbuf = tcp_get_buf(maxlen_work);
-				memcpy(sendbuf, Send_WORK, maxlen_work);
-				tcp_send(tcp_soc_WORK, sendbuf, maxlen_work);
-				wait_ack = true;
-				Flags.answer_work	= 0;
-			  sendParam = 0;
-				++sendCount;
+				if (tcp_check_send(tcp_soc_WORK))
+				{
+					max = tcp_max_data_size (tcp_soc_WORK);
+					if (max > 0xff)
+						maxlen_work = 0xff;
+          else
+						maxlen_work = max;
+	
+					Change_Parameters();
+					Form_package_WORK();
+					sendbuf = tcp_get_buf(maxlen_work);
+					memcpy(sendbuf, Send_WORK, maxlen_work);
+					tcp_send(tcp_soc_WORK, sendbuf, maxlen_work);
+					wait_ack = true;
+					Flags.answer_work	= 0;
+					sendParam = 0;
+				}
 			}
 		}
 	}

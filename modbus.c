@@ -11,6 +11,7 @@ uint8_t outBuffer[260];
 bool isReversInput = false, isReversOutput = false;
 
 unsigned int modbus_callback(int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len);
+uint8_t junByte, sinByte;
 
 // Создает сервер modbus - создает сокет и включает сервер в прослушивание
 int initModbus(modbus_t* mb)
@@ -25,7 +26,7 @@ int initModbus(modbus_t* mb)
 // Записывает в структуру пакета приходящих данных mbp входящее сообщение message 
 void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp)
 {
-	uint8_t junByte, sinByte;
+	//uint8_t junByte, sinByte;
 	if (!isReversInput)
 	{
 		junByte = 1;
@@ -64,7 +65,6 @@ void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp)
 // Записывает в сообщение message данные из структуры пакета исходящих данных mbp
 void mb_out_packet_form(uint8_t* data, mb_out_packet* mbp)
 {
-	uint8_t junByte, sinByte;
 	if (!isReversOutput) // реверсивная ли передача данных назад
 	{
 		junByte = 1;
@@ -131,28 +131,40 @@ void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 	outPack->commandCode = inPack->commandCode;
 	
 	// Формирование массива данных в панели
-	uint8_t arr[12];
-	converter.fdata = Cb;
-	for(int i = 0; i < 4; i++)
-		arr[i] = converter.cdata[i];
+	uint8_t arr[6];
+	uint16_t iCb = (uint16_t)(Cb * 1000.f);
+  uint16_t iRef = (uint16_t)(referens * 1000.f);
+	uint16_t iDamper = (uint16_t)(damper * 10.f);
 
-	converter.fdata = referens;
-	for(int i = 0; i < 4; i++)
-		arr[i + 4] = converter.cdata[i];
+	if (!isReversOutput) // реверсивная ли передача данных назад
+	{
+		junByte = 1;
+		sinByte = 0;
+	}
+	else
+	{
+		junByte = 0;
+		sinByte = 1;
+	}
 
-	converter.fdata = damper;
-	for(int i = 0; i < 4; i++)
-		arr[i + 8] = converter.cdata[i];
+	arr[junByte] = iCb;
+	arr[sinByte] = iCb >> 8;
+
+  arr[junByte + 2] = iRef;
+	arr[sinByte + 2] = iRef >> 8;
+
+	arr[junByte + 4] = iDamper;
+	arr[sinByte + 4] = iDamper >> 8;
 
 	outPack->answerLength = inPack->registersCount * 2;
 	outPack->header.length = outPack->answerLength + 3;
 
 	// Если пришел запрос на считывание данных и регистры данных в указанных пределах 
-	if (inPack->commandCode == 3 && 
+	if ((inPack->commandCode == 3 || inPack->commandCode == 4) && 
 			inPack->addressFirstRegister > 30000 && 
 			inPack->addressFirstRegister < 39999)
 	{
-    int diff = inPack->addressFirstRegister + outPack->answerLength - 30013; // проверяем зашли ли за границу существующих данных
+    int diff = inPack->addressFirstRegister + outPack->answerLength - 30007; // проверяем зашли ли за границу существующих данных
 		
 		int i = 0;
 		int startIndex = inPack->addressFirstRegister - 30001,

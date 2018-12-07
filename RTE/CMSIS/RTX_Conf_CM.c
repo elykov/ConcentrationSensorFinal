@@ -224,9 +224,9 @@
 /// \brief The idle demon is running when no other thread is ready to run
 void os_idle_demon (void) {
  
-  for (;;) {
+  //for (;;) {
     /* HERE: include optional user code to be executed when no thread runs.*/
-  }
+  //}
 }
  
 #if (OS_SYSTICK == 0)   // Functions for alternative timer as RTX kernel timer
@@ -275,7 +275,8 @@ void os_tick_irqack (void) {
 #define OS_ERROR_TIMER_OVF      4
  
 extern osThreadId svcThreadGetId (void);
- 
+extern void Exit(void); 
+
 /// \brief Called when a runtime error is detected
 /// \param[in]   error_code   actual error code that has been detected
 void os_error (uint32_t error_code) {
@@ -298,7 +299,8 @@ void os_error (uint32_t error_code) {
     default:
       break;
   }
-  for (;;);
+
+	Exit();
 }
  
 

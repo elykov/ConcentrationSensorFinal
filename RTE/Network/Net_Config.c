@@ -65,6 +65,8 @@ void net_sys_error (ERROR_CODE error) {
   /* This function is called when a fatal error is encountered. */
   /* The normal program execution is not possible anymore.      */
 
+	Exit();
+
   switch (error) {
     case ERR_MEM_ALLOC:
       /* Out of memory */
@@ -95,8 +97,6 @@ void net_sys_error (ERROR_CODE error) {
       /* TCP State machine in undefined state */
       break;
   }
-
-  Exit();
 }
 /**
 @}
