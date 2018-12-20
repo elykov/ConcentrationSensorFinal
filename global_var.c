@@ -87,7 +87,7 @@ uint8_t workMode = 1;
 float offset = 0, gain = 0;
 float out_offset = 0, out_gain = 0;
 uint8_t out_workMode;
-float damper_manual = 50.f;
+float damper_manual = -3.f;
 unsigned short pid_period = 0, out_pid_period = 0;
 
 uint32_t water = 0, air = 0;

@@ -28,51 +28,28 @@
 
 #define ID_TEXT_MODBUS 			(GUI_ID_USER + 0x11)
 
+
+	
+void EditTextSetting(uint8_t* address, uint32_t id)
+{
+	char tempStr[25];
+	sprintf(tempStr, "%d.%d.%d.%d", 
+			address[0], address[1],
+			address[2], address[3]);
+		
+	EDIT_SetText(WM_GetDialogItem(logic.window, id), tempStr);
+}
+
 void SetPanelNetEdits(void)
 {
 	WM_HWIN window = logic.window;
 	char tempStr[25];
 	
-	// ip
-	{
-		sprintf(tempStr, "%d.%d.%d.%d", 
-			LocM.IpAddr[0], LocM.IpAddr[1],
-			LocM.IpAddr[2], LocM.IpAddr[3]);
-		
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_IP), tempStr);
-	}
-	// mask                                        
-	{
-		sprintf(tempStr, "%d.%d.%d.%d", 
-			LocM.NetMask[0], LocM.NetMask[1],
-			LocM.NetMask[2], LocM.NetMask[3]);
-	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_MASK), tempStr);
-	}
-	// gateway
-  {
-	  sprintf(tempStr, "%d.%d.%d.%d", 
-			LocM.DefGW[0], LocM.DefGW[1],
-			LocM.DefGW[2], LocM.DefGW[3]);
-	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_GW), tempStr);
-	}
-	// dns1
-  {
-		sprintf(tempStr, "%d.%d.%d.%d", 
-			LocM.PriDNS[0], LocM.PriDNS[1],
-			LocM.PriDNS[2], LocM.PriDNS[3]);
-	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS1), tempStr);
-	}
-	// dns2
-  {
-		sprintf(tempStr, "%d.%d.%d.%d", 
-			LocM.SecDNS[0], LocM.SecDNS[1],
-			LocM.SecDNS[2], LocM.SecDNS[3]);
-	
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS2), tempStr);
-	}
+	EditTextSetting(LocM.IpAddr, ID_EDIT_IP);
+	EditTextSetting(LocM.NetMask, ID_EDIT_MASK);
+	EditTextSetting(LocM.DefGW, ID_EDIT_GW);
+	EditTextSetting(LocM.PriDNS, ID_EDIT_DNS1);
+	EditTextSetting(LocM.SecDNS, ID_EDIT_DNS2);
 }
 
 void RefreshPanelNetConfigsWindow(void)

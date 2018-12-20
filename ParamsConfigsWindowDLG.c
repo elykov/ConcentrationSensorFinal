@@ -69,8 +69,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "TextAir", ID_TEXT_Air, 10, 177, 80, 30, 0, 0x0, 0 },
   { EDIT_CreateIndirect, "EditAir", ID_EDIT_Air, 90, 177, 110, 30, 0, 0xa, 0 },
 
-	{ TEXT_CreateIndirect, "TextTKM", ID_TEXT_TKM, 10, 240, 80, 30, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "TextKM", ID_TEXT_KM, 60, 240, 110, 30, 0, 0xa, 0 },
+	{ TEXT_CreateIndirect, "TextTKM", ID_TEXT_TKM, 10, 235, 80, 30, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "TextKM", ID_TEXT_KM, 60, 235, 110, 30, 0, 0xa, 0 },
                                                  
 	{ TEXT_CreateIndirect, "TextDumpSum", ID_TEXT_DumpSum, 10, 207, 160, 30, 0, 0x0, 0 },
 

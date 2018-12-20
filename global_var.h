@@ -20,6 +20,7 @@ struct TFlags
 	//uint8_t 
 	unsigned int answer_server;
 	unsigned int incoming_server;
+	unsigned int modbus;
 	unsigned int answer_work:					1;
 	unsigned int incoming_work:				1;		
 	unsigned int answer_tech:					1;

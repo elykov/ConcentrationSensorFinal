@@ -9,6 +9,7 @@ mb_out_packet outcomingPack;
 bool isSend;
 uint8_t outBuffer[260];
 bool isReversInput = false, isReversOutput = false;
+uint8_t modBusBuffer[12];
 
 unsigned int modbus_callback(int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len);
 uint8_t junByte, sinByte;
@@ -134,7 +135,7 @@ void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 	uint8_t arr[6];
 	uint16_t iCb = (uint16_t)(Cb * 1000.f);
   uint16_t iRef = (uint16_t)(referens * 1000.f);
-	uint16_t iDamper = (uint16_t)(damper * 10.f);
+	uint16_t iDamper = (uint16_t)(damper * 100.f);
 
 	if (!isReversOutput) // реверсивная ли передача данных назад
 	{
@@ -188,6 +189,8 @@ void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 
 unsigned int modbus_callback (int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len) 
 {
+	const uint8_t* pbuf;
+
   // This function is called on TCP event
   switch (event) 
 	{
@@ -220,27 +223,25 @@ unsigned int modbus_callback (int32_t soc, tcpEvent event, const uint8_t *buf, u
 		}
     case tcpEventData:
 		{
-      // TCP data frame has been received, 'buf' points to data 
-      // Data length is 'len' bytes
-			/*
-			char txt[300];
-			sprintf(txt, "TID: %d, PID: %d, Len: %d, UID: %d, Func: %d, First: %d, RegCnt: %d", 
-				incomingPack.header.transactionID, 
-				incomingPack.header.protocolID, 
-				incomingPack.header.length,
-				incomingPack.header.unitID,
-				incomingPack.commandCode,
-				incomingPack.addressFirstRegister,
-				incomingPack.registersCount);
-      */
-			
-			mb_inc_packet_parse(buf, &incomingPack);
-			mb_answer_handle(&incomingPack, &outcomingPack);
-			mb_out_packet_form(outBuffer, &outcomingPack);
+			//if (len != 12) { tcp_reset_window (soc); __nop(); break; }
+			pbuf = buf;	
+			for(int i = 0; i < 12; i++)
+			{
+				modBusBuffer[i] = *pbuf;
+				++pbuf;
+			}
+			Flags.modbus = 1;
 			tcp_reset_window (soc);
 			__nop();
       break;
 		}
   }
   return 0;
+}
+
+void modbus_handler(void)
+{
+	mb_inc_packet_parse(modBusBuffer, &incomingPack);
+	mb_answer_handle(&incomingPack, &outcomingPack);
+	mb_out_packet_form(outBuffer, &outcomingPack);
 }

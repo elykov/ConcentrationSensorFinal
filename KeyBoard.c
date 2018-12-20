@@ -22,6 +22,7 @@ void ShowKeyBoard(WM_HWIN edit, char* title_text) // done
 void HideKeyBoard(void) // done
 {
 	WM_HideWindow(keyBoard._keyboard);
+	WM_DeleteWindow(keyBoard._keyboard);
 	keyBoard._keyboard = 0;
 }
 

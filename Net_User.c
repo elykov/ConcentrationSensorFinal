@@ -7,7 +7,7 @@
 int sendCount = 0;
 int tcp_soc_TECH, tcp_soc_PLC, tcp_soc_WORK;
 
-unsigned char rem_ip[4] = {192,168,99,200};
+unsigned char rem_ip[4] = {192,168,99,196};
 int eth_st, net_st, tcp_st_TECH, tcp_st_PLC, tcp_st_WORK;
 unsigned char state_socket_TECH = 0, state_socket_PLC = 0, state_socket_WORK = 0;
 unsigned char soc_state = 0;
@@ -127,8 +127,10 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
       // Connection was aborted 
 			i_trowel = i_revers = dump = period_answer = 
 			referens = Cb = Output_I = dump_i = 
-			P_factor = I_factor = D_factor = 0;
-			offset = gain = damper = 0;
+			P_factor = I_factor = D_factor = 
+			offset = gain = damper = 
+			pid_period = water = air = 
+			km = DumpSum = sum = 0;
 			__nop();
       break;
     case tcpEventEstablished:
@@ -141,7 +143,9 @@ unsigned int tcp_callback_WORK (int32_t soc, tcpEvent event, const uint8_t *buf,
 			i_trowel = i_revers = dump = period_answer = 
 			referens = Cb = Output_I = dump_i = 
 			P_factor = I_factor = D_factor = 
-			offset = gain = damper = 0;
+			offset = gain = damper = 
+			pid_period = water = air = 
+			km = DumpSum = sum = 0;
 			__nop();
       break;
     case tcpEventACK:
@@ -219,9 +223,9 @@ void send_data (void) //датчик
 	
 					Change_Parameters();
 					Form_package_WORK();
-					sendbuf = tcp_get_buf(maxlen_work);
-					memcpy(sendbuf, Send_WORK, maxlen_work);
-					tcp_send(tcp_soc_WORK, sendbuf, maxlen_work);
+					sendbuf = tcp_get_buf(maxlen_work + 1);
+					memcpy(sendbuf, Send_WORK, maxlen_work + 1);
+					tcp_send(tcp_soc_WORK, sendbuf, maxlen_work + 1);
 					wait_ack = true;
 					Flags.answer_work	= 0;
 					sendParam = 0;

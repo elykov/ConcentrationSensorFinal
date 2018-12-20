@@ -59,10 +59,11 @@
 	//=================================================
 	//================= Functions =====================
   
-	int initModbus(modbus_t* mb);
-	void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp);
-	void mb_out_packet_form(uint8_t* data, mb_out_packet* mbp);
-	void modbus_send(const uint8_t* message, modbus_t* mb);
+	extern void modbus_handler(void);
+	extern int initModbus(modbus_t* mb);
+	extern void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp);
+	extern void mb_out_packet_form(uint8_t* data, mb_out_packet* mbp);
+	extern void modbus_send(const uint8_t* message, modbus_t* mb);
 	
 	//================ /Functions =====================
   //=================================================

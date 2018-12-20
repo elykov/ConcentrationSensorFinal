@@ -123,6 +123,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				sendParam = 0x02;
 				Flags.ch_ref = 1;
 				Flags.answer_work = 1;
+				keyBoard.isRefreshableFields = true;
 			}
       else if (keyBoard.currentEdit == WM_GetDialogItem(window, ID_EDIT_2)) // заслонка
 			{
@@ -139,8 +140,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				sendParam = 0x01;
 				Flags.ch_damper = 1;
 				Flags.answer_work = 1;
+				keyBoard.isRefreshableFields = true;
 			}
-			keyBoard.isRefreshableFields = true;
 		}           
 
     Id    = WM_GetId(pMsg->hWinSrc);
@@ -170,7 +171,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				else	
 				{
 					out_workMode = 0;
-					out_damper = damper_manual;
+          if (damper_manual < 0.f)
+						out_damper = damper;
+					else
+						out_damper = damper_manual;
 					Flags.ch_damper = 1;
 				}
 				sendParam = 0x01;
@@ -228,7 +232,7 @@ void RefreshStartWindow(void)
 	{ // set big concentracion
 		if (isnan(Cb))
 			sprintf(tempStr, "A/0");
-		else if (Cb < 0.4f || Cb > 8.5f)
+		else if (Cb < 0.001f || Cb > 8.5f)
 			sprintf(tempStr, "---");
 		else
 			sprintf(tempStr, "%1.2f", Cb);  // (round(Cb * 100) / 100) -  округление до тысячных
@@ -252,14 +256,12 @@ void RefreshStartWindow(void)
 	{
 		if (workMode == 0)
 		{
-			//sprintf(tempStr2, "Режим: РУЧН"); 
 			TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_3), "Режим: РУЧН");
 			BUTTON_SetText(WM_GetDialogItem(window, ID_BUTTON_1), "Автомат");
 			EDIT_SetTextColor(WM_GetDialogItem(window, ID_EDIT_2), EDIT_CI_ENABLED, GUI_MAKE_COLOR(0x00000000));
 		}
 		else	
 		{
-			//sprintf(tempStr2, "Режим: АВТО"); 
 			TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_3), "Режим: АВТО");
 			BUTTON_SetText(WM_GetDialogItem(window, ID_BUTTON_1), "Ручной");
 			EDIT_SetTextColor(WM_GetDialogItem(window, ID_EDIT_2), EDIT_CI_ENABLED, GUI_MAKE_COLOR(0x001000FF));

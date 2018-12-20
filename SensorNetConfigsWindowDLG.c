@@ -3,7 +3,6 @@
 #include "Net_User.h"
 #include "settings.h"
 
-
 #define ID_WINDOW_0         (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0         (GUI_ID_USER + 0x01)
 #define ID_BUTTON_1         (GUI_ID_USER + 0x02)
@@ -51,70 +50,30 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "TextErr", ID_TEXT_ERR, 245, 160, 220, 60, 0, 0x64, 0 },
 };
 
+extern void EditTextSetting(uint8_t* address, uint32_t id);
+
 // показывает только IP для подключения если датчик не подключен
 static void SetSensorNetEdits(void) // сделано
 {
 	WM_HWIN window = logic.window;
-	char tempStr[25];
-	
 	if (tcp_get_state(tcp_soc_WORK) == tcpStateESTABLISHED)
 	{
 		// ip
-		{
-			sprintf(tempStr, "%d.%d.%d.%d", 
-				DatIP[0], DatIP[1],
-				DatIP[2], DatIP[3]);
-			
-			EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_IP), tempStr);
-		}
-		// mask                                        
-		{
-			sprintf(tempStr, "%d.%d.%d.%d", 
-				DatMask[0], DatMask[1],
-				DatMask[2], DatMask[3]);
-
-			EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_MASK), tempStr);
-		}
-		// gateway
-		{
-			sprintf(tempStr, "%d.%d.%d.%d", 
-				DatDefGW[0], DatDefGW[1],
-				DatDefGW[2], DatDefGW[3]);
-		
-			EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_GW), tempStr);
-		}
-		// dns1
-		{
-			sprintf(tempStr, "%d.%d.%d.%d", 
-				DatPriDNS[0], DatPriDNS[1],
-				DatPriDNS[2], DatPriDNS[3]);
-
-			EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS1), tempStr);
-		}
-		// dns2
-		{
-			sprintf(tempStr, "%d.%d.%d.%d", 
-				DatSecDNS[0], DatSecDNS[1],
-				DatSecDNS[2], DatSecDNS[3]);
-
-			EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS2), tempStr);
-		}
-		//TEXT_SetText(WM_GetDialogItem(window, ID_TEXT_ERR), "");
+		EditTextSetting(DatIP, ID_EDIT_IP);
+		EditTextSetting(DatMask, ID_EDIT_MASK);
+		EditTextSetting(DatDefGW, ID_EDIT_GW);
+    EditTextSetting(DatPriDNS, ID_EDIT_DNS1);
+		EditTextSetting(DatSecDNS, ID_EDIT_DNS2);
 	}
 	else
 	{
 		// ip
-		sprintf(tempStr, "%d.%d.%d.%d", 
-			rem_ip[0], rem_ip[1],
-			rem_ip[2], rem_ip[3]);
+		EditTextSetting(rem_ip, ID_EDIT_IP);
 		
-		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_IP), tempStr);
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_MASK), "");
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_GW), "");
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS1), "");
 		EDIT_SetText(WM_GetDialogItem(window, ID_EDIT_DNS2), "");
-
-		//TEXT_SetText(WM_GetDialogItem(logic.window, ID_TEXT_ERR), "Соединение\nне установлено.");
 	}
 }
 
@@ -334,7 +293,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					break;
 				case WM_NOTIFICATION_RELEASED:
 				{
-					//HideKeyBoard();
 					int res = SaveNetData();
 					switch(res)
 					{

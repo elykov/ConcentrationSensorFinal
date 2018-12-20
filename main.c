@@ -21,11 +21,6 @@ static void CPU_CACHE_Enable (void);
 
 modbus_t mb;
 
-extern mb_in_packet incomingPack;
-extern mb_out_packet outcomingPack;
-extern bool isSend;
-extern uint8_t outBuffer[];
-
 #ifdef RTE_CMSIS_RTOS_RTX
 extern uint32_t os_time;
 
@@ -34,24 +29,24 @@ uint32_t HAL_GetTick(void) {
 }
 #endif
 
+extern bool isSend;
+extern uint8_t outBuffer[];
 extern  LOCALM localm[];
 #define LocM   localm[NETIF_ETH]
 
-unsigned char flag = 0, read = 0;
-unsigned char Offset = 0;
-//unsigned char s = 0, wr=0;
-unsigned int q, w, t = 0;
+unsigned int q = 0;
 
 int main (void) 
 {
 	Flags.answer_work = 0;
-	
-  MPU_Config();                             /* Configure the MPU              */
-  CPU_CACHE_Enable();                       /* Enable the CPU Cache           */
-  HAL_Init();                               /* Initialize the HAL Library     */
-  BSP_SDRAM_Init();                         /* Initialize BSP SDRAM           */
-  SystemClock_Config();                     /* Configure the System Clock     */
-	
+
+  MPU_Config();
+  CPU_CACHE_Enable();
+  HAL_Init();
+  BSP_SDRAM_Init(); 
+	SystemClock_Config();
+	SystemCoreClockUpdate();
+
 	#if GUI_WINSUPPORT
     WM_SetCreateFlags(WM_CF_MEMDEV);
   #endif 
@@ -76,9 +71,8 @@ int main (void)
 
 	server_init();
 
-  LOOPSTART:
+  do
 	{
-
 		GUI_Exec();                   /* Execute all GUI jobs ... Return 0 if nothing was done. */
 
 		net_st = net_main();
@@ -87,14 +81,18 @@ int main (void)
 		tcp_st_PLC   = tcp_get_state (tcp_soc_PLC); 
 		tcp_st_WORK   = tcp_get_state (tcp_soc_WORK);
 		
-		if (tcp_st_WORK != tcpStateCLOSED) 
-		{ }
-		else
+		if (tcp_st_WORK == tcpStateCLOSED) 
 			soc_state = 0;
 
 		send_data ();	
 
-    if (isSend)
+		if (Flags.modbus)
+		{
+			modbus_handler();
+			Flags.modbus = 0;
+		}
+    
+		if (isSend)
 		{
 			modbus_send(outBuffer, &mb);
 			isSend = false;
@@ -116,17 +114,15 @@ int main (void)
 		} //если пришло от АСУТП
 
 		++q;
-		
 		if (q >= 3000)
 		{
 			RefreshWindow();			
 			q = 0;
 		}
-		goto LOOPSTART;
-	}
+	} while (1);
 }
 
-void Exit(void)
+void Exit(void) // для перезапуска панели при смене IP: для корректного завершения работы с сетью
 {
 	tcp_close(tcp_soc_WORK);
 	tcp_close(tcp_soc_SERVER);
@@ -138,20 +134,17 @@ void Exit(void)
 			SCB_AIRCR_SYSRESETREQ_Msk);
 }
 
+/*
 void HardFault_Handler(void)
-{
-	Exit();
-}
-
 void MemManage_Handler(void)
+void BusFault_Handler(void)
+void NMI_Handler(void)
+void UsageFault_Handler(void)
 {
 	Exit();
 }
 
-void BusFault_Handler(void)
-{
-	Exit();
-}
+*/
 
 /**
   * System Clock Configuration
