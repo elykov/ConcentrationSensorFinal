@@ -39,7 +39,7 @@ unsigned short out_dump = 0;
 unsigned short period_answer = 0;
 unsigned short out_period_answer = 0;
 unsigned short i_trowel = 0;   
-unsigned short i_revers = 500;
+unsigned short i_revers = 0;
 unsigned short out_i_trowel = 0;
 unsigned short out_i_revers = 0;
 unsigned short i_out = 0;
@@ -49,13 +49,13 @@ unsigned short out = 0;
 
 unsigned int up = 0, down = 0, sum = 0, DumpSum = 0;
 
-float a = -1.972;
+float a = 0;
 float b = 0;
-float c = 0.00000000529;
+float c = 0;
 float d = 0;
 float e = 0;
 float n = 0;
-float f = -0.001;
+float f = 0;
 float g = 0;
 float h = 0;
 float C;

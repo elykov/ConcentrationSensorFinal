@@ -42,9 +42,6 @@ void EditTextSetting(uint8_t* address, uint32_t id)
 
 void SetPanelNetEdits(void)
 {
-	WM_HWIN window = logic.window;
-	char tempStr[25];
-	
 	EditTextSetting(LocM.IpAddr, ID_EDIT_IP);
 	EditTextSetting(LocM.NetMask, ID_EDIT_MASK);
 	EditTextSetting(LocM.DefGW, ID_EDIT_GW);

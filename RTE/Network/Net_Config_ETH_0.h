@@ -65,7 +65,7 @@
 
 //     <o>Address byte 4 <0-255>
 //     <i>Default: 100
-#define ETH0_IP4                199
+#define ETH0_IP4                197
 //   </h>
 
 //   <h>Subnet mask
