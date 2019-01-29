@@ -463,10 +463,10 @@ void Change_Parameters (void)//внесение изменений в отправляемую посылку
 	if(!Flags.ch_water) { out_water = water; }
 	else Flags.ch_water = 0;
 
-	OUTremUDPip[0] = remUDPip[0];
-	OUTremUDPip[1] = remUDPip[1];
-	OUTremUDPip[2] = remUDPip[2];
-	OUTremUDPip[3] = remUDPip[3];
+//	OUTremUDPip[0] = remUDPip[0];
+//	OUTremUDPip[1] = remUDPip[1];
+//	OUTremUDPip[2] = remUDPip[2];
+//	OUTremUDPip[3] = remUDPip[3];
 }
 
 /*

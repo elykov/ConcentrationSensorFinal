@@ -29,6 +29,7 @@
 	extern GUI_CONST_STORAGE GUI_FONT GUI_FontVerdana20;
 	
 	// ============= Functions ================
+
 	extern void StartLogic(void); // инициализирует все графические обьекты и создает начальное окно
 	
 	extern void WindowChange(int windowNum); // мен€ет окна на указанные

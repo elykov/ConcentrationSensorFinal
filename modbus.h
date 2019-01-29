@@ -14,11 +14,6 @@
 		#define MODBUS_END_DECLS
 	#endif
 
-	//#define MODBUS_TCP_DEFAULT_PORT   502
-	//#define MODBUS_TCP_SLAVE         0xFF
-  //#define MODBUS_BROADCAST_ADDRESS    0
-  //#define MODBUS_TCP_MAX_ADU_LENGTH  260
-
 	MODBUS_BEGIN_DECLS
 
 	//=================================================

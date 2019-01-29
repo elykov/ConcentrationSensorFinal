@@ -86,9 +86,7 @@ int SetPanelNetConfigs()
 
 	tcp_close(tcp_soc_WORK);
 	tcp_close(tcp_soc_SERVER);
-	tcp_close(tcp_soc_PLC);
-	tcp_close(tcp_soc_TECH);
-
+	
 	for(int i = 0; i < 4; ++i)
 	{
 		LocM.IpAddr[i] = currentIP[i];

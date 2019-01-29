@@ -40,7 +40,7 @@ void QSPI_write_qspi_aTxBuffer (void)/* write buffer*/
 	}
 }
 
-void QSPI_check (void)
+void QSPI_check (void) // Инициализация QSPI
 {
   if (status == QSPI_NOT_SUPPORTED)
 	{

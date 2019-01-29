@@ -4,7 +4,7 @@
 
 union Converter converter;
 
-mb_in_packet incomingPack;
+mb_in_packet incomingPack; // 
 mb_out_packet outcomingPack;
 bool isSend;
 uint8_t outBuffer[260];
@@ -14,7 +14,7 @@ uint8_t modBusBuffer[12];
 unsigned int modbus_callback(int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len);
 uint8_t junByte, sinByte;
 
-// РЎРѕР·РґР°РµС‚ СЃРµСЂРІРµСЂ modbus - СЃРѕР·РґР°РµС‚ СЃРѕРєРµС‚ Рё РІРєР»СЋС‡Р°РµС‚ СЃРµСЂРІРµСЂ РІ РїСЂРѕСЃР»СѓС€РёРІР°РЅРёРµ
+// Создает сервер modbus - создает сокет и включает сервер в прослушивание
 int initModbus(modbus_t* mb)
 {
 	mb->sock = tcp_get_socket (TCP_TYPE_SERVER, 0, 10, modbus_callback);
@@ -24,7 +24,7 @@ int initModbus(modbus_t* mb)
 	return 0;
 }
 
-// Р—Р°РїРёСЃС‹РІР°РµС‚ РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ РїР°РєРµС‚Р° РїСЂРёС…РѕРґСЏС‰РёС… РґР°РЅРЅС‹С… mbp РІС…РѕРґСЏС‰РµРµ СЃРѕРѕР±С‰РµРЅРёРµ message 
+// Записывает в структуру пакета приходящих данных mbp входящее сообщение message 
 void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp)
 {
 	//uint8_t junByte, sinByte;
@@ -63,10 +63,10 @@ void mb_inc_packet_parse(const uint8_t* message, mb_in_packet* mbp)
 	mbp->registersCount = converter.sdata;
 }
 
-// Р—Р°РїРёСЃС‹РІР°РµС‚ РІ СЃРѕРѕР±С‰РµРЅРёРµ message РґР°РЅРЅС‹Рµ РёР· СЃС‚СЂСѓРєС‚СѓСЂС‹ РїР°РєРµС‚Р° РёСЃС…РѕРґСЏС‰РёС… РґР°РЅРЅС‹С… mbp
+// Записывает в сообщение message данные из структуры пакета исходящих данных mbp
 void mb_out_packet_form(uint8_t* data, mb_out_packet* mbp)
 {
-	if (!isReversOutput) // СЂРµРІРµСЂСЃРёРІРЅР°СЏ Р»Рё РїРµСЂРµРґР°С‡Р° РґР°РЅРЅС‹С… РЅР°Р·Р°Рґ
+	if (!isReversOutput) // реверсивная ли передача данных назад
 	{
 		junByte = 1;
 		sinByte = 0;
@@ -109,7 +109,7 @@ void mb_out_packet_form(uint8_t* data, mb_out_packet* mbp)
 	isSend = true;
 }
 
-// РѕС‚РїСЂР°РІРєР° РґР°РЅРЅС‹С… РїРѕ modbus
+// отправка данных по modbus
 void modbus_send(const uint8_t* message, modbus_t* mb)
 {
 	uint8_t* sendbuf;
@@ -122,22 +122,22 @@ void modbus_send(const uint8_t* message, modbus_t* mb)
 	}
 }
 
-// Р Р°Р·Р±РѕСЂ Рё РѕС‚РІРµС‚ РїСЂРёС€РµРґС€РёС… РґР°РЅРЅС‹С…
+// Разбор и ответ пришедших данных
 void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 {
-	// РљРѕРїРёСЂРѕРІР°РЅРёРµ РґР°РЅРЅС‹С… РґР»СЏ С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ РёСЃС…РѕРґСЏС‰РµРіРѕ РїР°РєРµС‚Р°
+	// Копирование данных для формирования исходящего пакета
 	outPack->header.transactionID = inPack->header.transactionID; 
 	outPack->header.protocolID = inPack->header.protocolID; 
 	outPack->header.unitID = inPack->header.unitID;
 	outPack->commandCode = inPack->commandCode;
 	
-	// Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ РјР°СЃСЃРёРІР° РґР°РЅРЅС‹С… РІ РїР°РЅРµР»Рё
+	// Формирование массива данных в панели
 	uint8_t arr[6];
 	uint16_t iCb = (uint16_t)(Cb * 1000.f);
   uint16_t iRef = (uint16_t)(referens * 1000.f);
 	uint16_t iDamper = (uint16_t)(damper * 100.f);
 
-	if (!isReversOutput) // СЂРµРІРµСЂСЃРёРІРЅР°СЏ Р»Рё РїРµСЂРµРґР°С‡Р° РґР°РЅРЅС‹С… РЅР°Р·Р°Рґ
+	if (!isReversOutput) // реверсивная ли передача данных назад
 	{
 		junByte = 1;
 		sinByte = 0;
@@ -160,12 +160,12 @@ void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 	outPack->answerLength = inPack->registersCount * 2;
 	outPack->header.length = outPack->answerLength + 3;
 
-	// Р•СЃР»Рё РїСЂРёС€РµР» Р·Р°РїСЂРѕСЃ РЅР° СЃС‡РёС‚С‹РІР°РЅРёРµ РґР°РЅРЅС‹С… Рё СЂРµРіРёСЃС‚СЂС‹ РґР°РЅРЅС‹С… РІ СѓРєР°Р·Р°РЅРЅС‹С… РїСЂРµРґРµР»Р°С… 
+	// Если пришел запрос на считывание данных и регистры данных в указанных пределах 
 	if ((inPack->commandCode == 3 || inPack->commandCode == 4) && 
 			inPack->addressFirstRegister > 30000 && 
 			inPack->addressFirstRegister < 39999)
 	{
-    int diff = inPack->addressFirstRegister + outPack->answerLength - 30007; // РїСЂРѕРІРµСЂСЏРµРј Р·Р°С€Р»Рё Р»Рё Р·Р° РіСЂР°РЅРёС†Сѓ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… РґР°РЅРЅС‹С…
+    int diff = inPack->addressFirstRegister + outPack->answerLength - 30007; // проверяем зашли ли за границу существующих данных
 		
 		int i = 0;
 		int startIndex = inPack->addressFirstRegister - 30001,
@@ -174,7 +174,7 @@ void mb_answer_handle(mb_in_packet* inPack, mb_out_packet* outPack)
 		for(int j = startIndex; i < lastIndex; i++, j++)
 			outPack->data[i] = arr[j];
 
-		if (diff > 0) // РµСЃР»Рё Р·Р°С€Р»Рё Р·Р° РіСЂР°РЅРёС†Сѓ РґР°РЅРЅС‹С… - Р·Р°РїРѕР»РЅРµРЅРёРµ РґР°РЅРЅС‹С… РЅСѓР»СЏРјРё
+		if (diff > 0) // если зашли за границу данных - заполнение данных нулями
 		{
 			for(diff += i; i < diff; i++)
 				outPack->data[i] = 0;

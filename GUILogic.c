@@ -3,6 +3,7 @@
 #include "global_var.h"
 #include "timer6.h"
 
+// Функции создания окон
 extern WM_HWIN CreateStartWindow(void);
 extern WM_HWIN CreatePasswordWindow(void);
 extern WM_HWIN CreateMenuWindow(void);
@@ -13,7 +14,7 @@ extern WM_HWIN CreateParamsConfigsWindow(void);
 extern WM_HWIN CreateModBusWindow(void);
 
 // =======================================
-// RefreshWindow
+// Функции обновления информации на окнах
 extern void RefreshStartWindow(void);
 extern void RefreshPIDWindow(void);
 extern void RefreshParamsWindow(void);
@@ -47,6 +48,7 @@ void RefreshWindow(void)
 	}   
 }
 
+// Начало работы с окнами
 void StartLogic(void)
 {
 	fWindowCreators[ModBusWindow] = CreateModBusWindow;
@@ -62,10 +64,9 @@ void StartLogic(void)
 	InitTimer6();
 }
 
-void WindowChange(int windowNum)
+void WindowChange(int windowNum) // Функция для смены окна
 {
 	WM_HideWindow(logic.window);
-	//GUI_Clear(); // экран горит красным
 	WM_DeleteWindow(logic.window);
 	logic.currentWindow = windowNum;
 	logic.window = fWindowCreators[logic.currentWindow]();
@@ -73,7 +74,7 @@ void WindowChange(int windowNum)
 	WM_ShowWindow(logic.window);
 }
 
-int get_IP(const char* ip_str, uint8_t* resIP)
+int get_IP(const char* ip_str, uint8_t* resIP) // Функция для расшифровки IP из текста в массив чисел
 {
 	uint32_t inputIP[4];
 	memset(inputIP, 0, sizeof(uint32_t) * 4); // обнуление массива
@@ -83,12 +84,9 @@ int get_IP(const char* ip_str, uint8_t* resIP)
 	for	(int i = 0; i < 4; ++i) // если какой-то элемент больше 255 - неверно
 		if (inputIP[i] > 255)
 			return 1;
-	
+	                           
 	for	(int i = 0; i < 4; ++i)
 		resIP[i] = (uint8_t)inputIP[i];
 
 	return 0;
 }
-
-
-

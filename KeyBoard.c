@@ -4,8 +4,7 @@
 #include <stdbool.h>
 
 extern struct KeyBoard keyBoard;
-char oldEditText[25];
-char txt[25];
+char oldEditText[25], txt[25];
 
 void ShowKeyBoard(WM_HWIN edit, char* title_text) // done
 {

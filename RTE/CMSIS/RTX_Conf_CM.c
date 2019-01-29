@@ -69,7 +69,7 @@
 //   <i> Defines the number of threads with user-provided stack size.
 //   <i> Default: 0
 #ifndef OS_PRIVCNT
- #define OS_PRIVCNT     2
+ #define OS_PRIVCNT     3
 #endif
  
 //   <o>Total stack size [bytes] for threads with user-provided stack size <0-1048576:8><#/4>
@@ -117,7 +117,7 @@
 //   <i> When the Cortex-M SysTick timer is used, the input clock 
 //   <i> is on most systems identical with the core clock.
 #ifndef OS_CLOCK
- #define OS_CLOCK       200000000
+ #define OS_CLOCK       216000000
 #endif
  
 //   <o>RTX Timer tick interval value [us] <1-1000000>

@@ -1,6 +1,8 @@
 #include "stm32f7xx_hal.h"
 #include "timer6.h"
 
+// Нужно для сообщений об ошибках в правом нижнем углу
+
 bool isTextErrChangable, isButton;
 
 extern void ModeChanging(void);

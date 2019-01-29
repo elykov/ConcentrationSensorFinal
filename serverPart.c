@@ -1,12 +1,15 @@
 #include "stm32f7xx_hal.h"
-#include "serverPart.h"
 #include "global_var.h"
 #include <string.h>
 #include "Net_User.h"
 #include "settings.h"
+#include "serverPart.h"
 #include "timer7.h"
 
 int32_t tcp_soc_SERVER, clientsCount = 0;  
+
+unsigned char Send_SERVER[256];
+unsigned char Recive_SERVER[256];
 
 extern union Converter converter;
 
@@ -21,7 +24,8 @@ int server_init(void)
 	return 0;
 }
 
-void Form_package_SERVER(void) // копирует принятый пакет данных, добавляет данные с панели и собирает это в буфер
+// копирует принятый пакет данных, добавляет данные с панели и собирает это в буфер
+void Form_package_SERVER(void) 
 {
 	memcpy(Send_SERVER, Recive_WORK, 256);
 
@@ -30,9 +34,6 @@ void Form_package_SERVER(void) // копирует принятый пакет данных, добавляет данн
 		Send_SERVER[i + 1] = x[1]; \
 		Send_SERVER[i + 2] = x[2]; \
 		Send_SERVER[i + 3] = x[3];
-	
-	//converter.fdata = damper;
-	//CopyNetDataToBuf(converter.cdata, 146);
 
 	CopyNetDataToBuf(LocM.IpAddr, 170);
   CopyNetDataToBuf(LocM.NetMask, 174);
@@ -44,9 +45,75 @@ void Form_package_SERVER(void) // копирует принятый пакет данных, добавляет данн
 	Send_SERVER[194] = (soc_state != 2) ? 0 : 255;
 }
 
+unsigned int tcp_callback_SERVER (int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len) 
+{
+  switch (event) 
+	{
+		case tcpEventData: {
+			int n = (len > 0xff) ? 0xff : len;
+			for(int i = 0; i < n; ++i)
+			{
+				Recive_SERVER[i] = *buf;
+				++buf;
+			}
+			Flags.incoming_server = 1;
+			tcp_reset_window (soc);
+			__nop();
+			break;
+		}
+
+    case tcpEventConnect:
+		{
+			if (clientsCount == 0){
+				Timer7Start();
+			}
+			++clientsCount;
+			__nop();
+      return 1;
+		}
+
+		case tcpEventAbort: 			 
+		case tcpEventClosed: {
+			--clientsCount;
+			if (clientsCount == 0)
+				Timer7Stop();
+			__nop();
+			break;
+		}
+		case tcpEventEstablished:  // Socket is connected to remote peer. 	
+		case tcpEventACK: // Our sent data has been acknowledged by remote peer 
+			__nop();
+			break;
+  }
+  return 0;
+}
+
+int server_working (void)
+{
+	uint8_t* sendbuf;
+  int32_t max, maxlen;
+
+	if (clientsCount > 0)
+	{		
+		if (tcp_check_send(tcp_soc_SERVER) && Flags.answer_server) 
+		{
+			max = tcp_max_data_size (tcp_soc_SERVER);
+			maxlen = (max > 0xff) ? 0xff : max;
+			Form_package_SERVER();
+			sendbuf = tcp_get_buf(maxlen);
+			memcpy(sendbuf, Send_SERVER, maxlen);
+			tcp_send(tcp_soc_SERVER, sendbuf, maxlen);
+			Flags.answer_server = 0;
+		}
+	}
+	return 0;
+}
+
+
+/*
 void Parsing_package_SERVER(void)
 {
-	#define WriteInConverter4Bytes(s/*source*/, ind) \
+	#define WriteInConverter4Bytes(s, ind) \
 		converter.cdata[0] = s[ind]; \
     converter.cdata[1] = s[ind + 1]; \
 		converter.cdata[2] = s[ind + 2]; \
@@ -180,66 +247,4 @@ void Parsing_package_SERVER(void)
 	Flags.ch_f = Flags.ch_g = Flags.ch_h = Flags.ch_n = 1; // change params
 	Flags.ch_period = Flags.ch_ref = 1; // change other
 }
-
-unsigned int tcp_callback_SERVER (int32_t soc, tcpEvent event, const uint8_t *buf, uint32_t len) 
-{
-  switch (event) 
-	{
-		case tcpEventData:
-		{
-			int n = (len > 0xff) ? 0xff : len;
-			for(int i = 0; i < n; ++i)
-			{
-				Recive_SERVER[i] = *buf;
-				++buf;
-			}
-			Flags.incoming_server = 1;
-			tcp_reset_window (soc);
-			__nop();
-			break;
-		}
-
-    case tcpEventConnect:
-			if (clientsCount == 0)
-				Timer7Start();
-			++clientsCount;
-			__nop();
-      return 1;
-		
-		
-		case tcpEventAbort: 			 
-		case tcpEventClosed: 			 		
-			--clientsCount;
-			if (clientsCount == 0)
-				Timer7Stop();
-			__nop();
-			break;
-
-		case tcpEventEstablished:  // Socket is connected to remote peer. 	
-		case tcpEventACK: // Our sent data has been acknowledged by remote peer 
-			__nop();
-			break;
-  }
-  return 0;
-}
-
-int server_working (void)
-{
-	uint8_t* sendbuf;
-  int32_t max, maxlen;
-
-	if (clientsCount > 0)
-	{		
-		if (tcp_check_send(tcp_soc_SERVER) && Flags.answer_server) 
-		{
-			max = tcp_max_data_size (tcp_soc_SERVER);
-			maxlen = (max > 0xff) ? 0xff : max;
-			Form_package_SERVER();
-			sendbuf = tcp_get_buf(maxlen);
-			memcpy(sendbuf, Send_SERVER, maxlen);
-			tcp_send(tcp_soc_SERVER, sendbuf, maxlen);
-			Flags.answer_server = 0;
-		}
-	}
-	return 0;
-}
+*/

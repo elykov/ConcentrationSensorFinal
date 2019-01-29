@@ -39,7 +39,6 @@ unsigned int q = 0;
 int main (void) 
 {
 	Flags.answer_work = 0;
-
   MPU_Config();
   CPU_CACHE_Enable();
   HAL_Init();
@@ -47,6 +46,7 @@ int main (void)
 	SystemClock_Config();
 	SystemCoreClockUpdate();
 
+	// Инициализация дисплея 
 	#if GUI_WINSUPPORT
     WM_SetCreateFlags(WM_CF_MEMDEV);
   #endif 
@@ -54,9 +54,8 @@ int main (void)
 	#if GUI_WINSUPPORT
     WM_MULTIBUF_Enable(1);
   #endif
-
 	GUI_SetBkColor(0xFF2100);
-  
+
 	StartLogic();
 	
   // QSPI device configuration 	
@@ -64,24 +63,21 @@ int main (void)
 	QSPI_check ();
 	
 	NET_init ();
-	Read_settings ();
+	Read_settings (); // Чтение настроек с QSPI
 
 	mb.port = 5000;
 	initModbus(&mb);
 
-	server_init();
+	//server_init();
 
   do
 	{
 		GUI_Exec();                   /* Execute all GUI jobs ... Return 0 if nothing was done. */
-
-		net_st = net_main();
-		osThreadYield ();
-		tcp_st_TECH  = tcp_get_state (tcp_soc_TECH);
-		tcp_st_PLC   = tcp_get_state (tcp_soc_PLC); 
-		tcp_st_WORK   = tcp_get_state (tcp_soc_WORK);
-		
-		if (tcp_st_WORK == tcpStateCLOSED) 
+		//net_st = 
+		net_main();
+		osThreadYield();
+				
+		if (tcp_get_state (tcp_soc_WORK) == tcpStateCLOSED) 
 			soc_state = 0;
 
 		send_data ();	
@@ -98,21 +94,23 @@ int main (void)
 			isSend = false;
 		}
 
-		server_working();
-
-		if (Flags.incoming_work == 1) 
+		if (Flags.incoming_work == 1) //если пришло от датчика
 		{ 
 			Parsing_package_WORK (); 
 			Flags.incoming_work = 0;	
-		} //если пришло от датчика
+		} 
 		
-		if (Flags.incoming_server == 1) 
+		/*
+		server_working(); // Обработка серверной части панели (связь с АСУТП)
+
+		if (Flags.incoming_server == 1) //если пришло от АСУТП
 		{ 
 			Parsing_package_SERVER (); 
 			Flags.incoming_server = 0;	
       Flags.answer_work = 1;
-		} //если пришло от АСУТП
-
+		} 
+		*/
+	
 		++q;
 		if (q >= 3000)
 		{
@@ -126,9 +124,9 @@ void Exit(void) // для перезапуска панели при смене IP: для корректного завершен
 {
 	tcp_close(tcp_soc_WORK);
 	tcp_close(tcp_soc_SERVER);
-	tcp_close(tcp_soc_PLC);
-	tcp_close(tcp_soc_TECH);
-	SCB->AIRCR  = 
+	//tcp_close(tcp_soc_PLC);
+	//tcp_close(tcp_soc_TECH);
+	SCB->AIRCR = 
 		(uint32_t)((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
 		 (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) |
 			SCB_AIRCR_SYSRESETREQ_Msk);
@@ -195,7 +193,7 @@ static void MPU_Config (void) {
   HAL_MPU_Disable();
   /* Configure the MPU attributes for SDRAM */
   MPU_InitStruct.Enable = MPU_REGION_ENABLE;
-  MPU_InitStruct.BaseAddress = 0xC0200000;
+  MPU_InitStruct.BaseAddress = 0x20000000;
   MPU_InitStruct.Size = MPU_REGION_SIZE_2MB;
   MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
   MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
